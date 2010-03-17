@@ -1,0 +1,15 @@
+Author : Rei
+Email  : chloerei@gmail.com
+
+A XMPP GUI client. use QXMPP(http://code.google.com/p/qxmpp/)
+
+Checkout source
+===============
+
+git clone ###
+
+Checkout submodule
+==================
+
+git submodule init
+git submodule update
