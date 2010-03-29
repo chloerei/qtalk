@@ -4,13 +4,41 @@
 #include <QAbstractItemModel>
 
 class QXmppRoster;
-class RosterModelTreeItem;
+class TreeItem;
 
 class RosterModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
+    class TreeItem
+    {
+    public:
+        enum Type
+        {
+            root,
+            group,
+            contact
+        };
+
+        TreeItem(Type type, QString data, TreeItem *parent = 0);
+        ~TreeItem();
+        TreeItem* child(int row);
+        void appendChild(TreeItem *child);
+        int childCount() const;
+        QString data() const;
+        TreeItem* parent();
+        int row() const;
+        Type type() const { return m_type; }
+        QList<TreeItem *> childItems() const { return m_childItems; }
+
+    private:
+        Type m_type;
+        QString m_data;
+        QList<TreeItem*> m_childItems;
+        TreeItem *m_parent;
+    };
+
     RosterModel(QObject *parent = 0);
     ~RosterModel();
 
@@ -25,10 +53,11 @@ public:
 
 public slots:
     void parseRoster();
+
 private:
     QXmppRoster *m_roster;
-    RosterModelTreeItem *m_rootItem;
-    RosterModelTreeItem* findOrCreateGroup(QString group);
+    TreeItem *m_rootItem;
+    TreeItem* findOrCreateGroup(QString group);
 };
 
 #endif

@@ -1,7 +1,10 @@
 #include "MainWindow.h"
 #include "XmppClient.h"
 #include "QXmppRoster.h"
-#include "ChatDialog.h"
+#include "ChatWindow.h"
+#include <QCloseEvent>
+#include "QXmppMessage.h"
+#include "QXmppUtils.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -12,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     
     connect(&m_client->getRoster(), SIGNAL(rosterReceived()),
             this, SLOT(rosterReceived()));
+    connect(m_client, SIGNAL(messageReceived(const QXmppMessage&)),
+            this, SLOT(messageReceived(const QXmppMessage&)));
 
     connect(ui.rosterTreeView, SIGNAL(doubleClicked(const QModelIndex &)),
             this, SLOT(openChatWindow(const QModelIndex &)));
@@ -21,14 +26,51 @@ MainWindow::MainWindow(QWidget *parent)
     m_client->connectToServer("talk.google.com", "chloereixmpp", "19871110rei", "gmail.com");
 }
 
+MainWindow::~MainWindow()
+{
+}
+
 void MainWindow::rosterReceived()
 {
     m_rosterModel->setRoster(&m_client->getRoster());
 }
 
+void MainWindow::messageReceived(const QXmppMessage& message)
+{
+    QString bareJid = jidToBareJid(message.from());
+    if (m_chatWindows[bareJid] == NULL) {
+        m_messageStore[bareJid] << message;
+    } else {
+        m_chatWindows[bareJid]->appendMessage(message);
+    }
+}
+
 void MainWindow::openChatWindow(const QModelIndex &index)
 {
-    ChatDialog *chatDialog = new ChatDialog();
-    chatDialog->setWindowTitle(m_rosterModel->data(index, Qt::DisplayRole).toString());
-    chatDialog->show();
+    RosterModel::TreeItem *item = (RosterModel::TreeItem *)index.internalPointer();
+    if (item->type() == RosterModel::TreeItem::contact) {
+        RosterModel::TreeItem *item = (RosterModel::TreeItem *)index.internalPointer();
+        QString bareJid = item->data();
+
+        ChatWindow *chatWindow;
+        if (m_chatWindows[bareJid] == NULL) {
+            chatWindow = new ChatWindow();
+            chatWindow->setBareJid(bareJid);
+            chatWindow->setClient(m_client);
+
+            m_chatWindows[bareJid] = chatWindow;
+            chatWindow->setWindowTitle(m_rosterModel->data(index, Qt::DisplayRole).toString());
+        } else {
+            chatWindow = m_chatWindows[bareJid];
+        }
+        chatWindow->show();
+        chatWindow->raise();
+        chatWindow->activateWindow();
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    qDeleteAll(m_chatWindows);
+    event->accept();
 }

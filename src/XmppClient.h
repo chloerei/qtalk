@@ -5,6 +5,7 @@
 #include "RosterModel.h"
 
 class QTreeView;
+class QXmppMessage;
 
 class XmppClient : public QXmppClient
 {

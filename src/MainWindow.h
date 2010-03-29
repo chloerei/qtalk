@@ -7,23 +7,30 @@ class XmppClient;
 class RosterModel;
 class RosterTreeView;
 class QModelIndex;
-class ChatDialog;
+class ChatWindow;
+class QXmppMessage;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private slots:
     void rosterReceived();
     void openChatWindow(const QModelIndex &index);
+    void messageReceived(const QXmppMessage&);
+
+protected:
+    void closeEvent(QCloseEvent *event);
 
 private:
     Ui::MainWindow ui;
     XmppClient *m_client;
     RosterModel *m_rosterModel;
-    QMap<QString, ChatDialog*> m_chatDialogs;
+    QMap<QString, ChatWindow*> m_chatWindows;
+    QMap<QString, QList<QXmppMessage> > m_messageStore;
 };
 
 #endif

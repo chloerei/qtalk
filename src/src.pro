@@ -16,12 +16,13 @@ LIBS += -L $${QXMPP_DIR}/release -lQXmppClient
 # Input
 SOURCES += main.cpp \
            MainWindow.cpp \
-           ChatDialog.cpp \
+           ChatWindow.cpp \
            XmppClient.cpp \
            RosterModel.cpp
 HEADERS += MainWindow.h \
-           ChatDialog.h \
+           ChatWindow.h \
            XmppClient.h \
            RosterModel.h
 FORMS   += ui/MainWindow.ui \
-           ui/ChatDialog.ui
+           ui/ChatDialog.ui \
+           ui/ChatWindow.ui
