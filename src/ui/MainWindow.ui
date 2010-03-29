@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>250</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTreeView" name="rosterTreeView"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>250</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Settings">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="action_Account"/>
+    <addaction name="action_Config"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_About"/>
+    <addaction name="action_Qt"/>
+   </widget>
+   <widget class="QMenu" name="menu_X_MPP">
+    <property name="title">
+     <string>&amp;XMPP</string>
+    </property>
+    <addaction name="actionSend_Message"/>
+    <addaction name="actionSend_File"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind_Contact"/>
+   </widget>
+   <addaction name="menu_X_MPP"/>
+   <addaction name="menu_Settings"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionSend_Message">
+   <property name="text">
+    <string>Send &amp;Message</string>
+   </property>
+  </action>
+  <action name="actionSend_File">
+   <property name="text">
+    <string>Send &amp;File</string>
+   </property>
+  </action>
+  <action name="action_Account">
+   <property name="text">
+    <string>&amp;Account</string>
+   </property>
+  </action>
+  <action name="action_Config">
+   <property name="text">
+    <string>&amp;Config</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="action_Qt">
+   <property name="text">
+    <string>&amp;Qt</string>
+   </property>
+  </action>
+  <action name="actionFind_Contact">
+   <property name="text">
+    <string>Add &amp;Contact</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
