@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "ui_ChatWindow.h"
+#include "QXmppMessage.h"
 
 class QXmppClient;
 class QXmppMessage;
@@ -23,5 +24,7 @@ private:
     Ui::ChatWindow ui;
     QString m_bareJid;
     QXmppClient *m_client;
+
+    void changeState(QXmppMessage::State);
 };
 #endif

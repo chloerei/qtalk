@@ -18,11 +18,12 @@ SOURCES += main.cpp \
            MainWindow.cpp \
            ChatWindow.cpp \
            XmppClient.cpp \
+           XmppMessage.cpp \
            RosterModel.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
            XmppClient.h \
+           XmppMessage.h \
            RosterModel.h
 FORMS   += ui/MainWindow.ui \
-           ui/ChatDialog.ui \
            ui/ChatWindow.ui
