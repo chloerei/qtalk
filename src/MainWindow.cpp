@@ -47,10 +47,8 @@ void MainWindow::messageReceived(const QXmppMessage& message)
 
 void MainWindow::openChatWindow(const QModelIndex &index)
 {
-    RosterModel::TreeItem *item = (RosterModel::TreeItem *)index.internalPointer();
-    if (item->type() == RosterModel::TreeItem::contact) {
-        RosterModel::TreeItem *item = (RosterModel::TreeItem *)index.internalPointer();
-        QString bareJid = item->data();
+    if (m_rosterModel->itemTypeAt(index) == RosterModel::contact) {
+        QString bareJid = jidToBareJid(m_rosterModel->jidAt(index));
 
         ChatWindow *chatWindow;
         if (m_chatWindows[bareJid] == NULL) {

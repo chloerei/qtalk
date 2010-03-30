@@ -1,46 +1,67 @@
 #include "RosterModel.h"
 #include "QXmppRoster.h"
 
+class TreeItem
+{
+public:
+    TreeItem(RosterModel::ItemType type, QString data, TreeItem *parent = 0);
+    ~TreeItem();
+    TreeItem* child(int row);
+    void appendChild(TreeItem *child);
+    int childCount() const;
+    QString data() const;
+    TreeItem* parent();
+    int row() const;
+    RosterModel::ItemType type() const { return m_type; }
+    QList<TreeItem *> childItems() const { return m_childItems; }
 
-RosterModel::TreeItem::TreeItem(Type type, QString data, RosterModel::TreeItem *parent)
+private:
+    RosterModel::ItemType m_type;
+    QString m_data;
+    QList<TreeItem*> m_childItems;
+    TreeItem *m_parent;
+};
+
+
+TreeItem::TreeItem(RosterModel::ItemType type, QString data, TreeItem *parent)
     : m_type(type), m_data(data), m_parent(parent)
 {
 }
 
-RosterModel::TreeItem::~TreeItem()
+TreeItem::~TreeItem()
 {
     qDeleteAll(m_childItems);
 }
 
-RosterModel::TreeItem* RosterModel::TreeItem::child(int row)
+TreeItem* TreeItem::child(int row)
 {
     return m_childItems.value(row);
 }
 
-void RosterModel::TreeItem::appendChild(RosterModel::TreeItem *child)
+void TreeItem::appendChild(TreeItem *child)
 {
     m_childItems.append(child);
 }
 
-int RosterModel::TreeItem::childCount() const
+int TreeItem::childCount() const
 {
     return m_childItems.count();
 }
 
-QString RosterModel::TreeItem::data() const
+QString TreeItem::data() const
 {
     return m_data;
 }
 
-RosterModel::TreeItem* RosterModel::TreeItem::parent()
+TreeItem* TreeItem::parent()
 {
     return m_parent;
 }
 
-int RosterModel::TreeItem::row() const
+int TreeItem::row() const
 {
     if (m_parent)
-        return m_parent->childItems().indexOf(const_cast<RosterModel::TreeItem*>(this));
+        return m_parent->childItems().indexOf(const_cast<TreeItem*>(this));
 
     return 0;
 }
@@ -48,7 +69,7 @@ int RosterModel::TreeItem::row() const
 RosterModel::RosterModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
-    m_rootItem = new TreeItem(TreeItem::root, "root");
+    m_rootItem = new TreeItem(root, "root");
 }
 
 RosterModel::~RosterModel()
@@ -60,39 +81,41 @@ void RosterModel::setRoster(QXmppRoster *roster)
 {
     m_roster = roster;
     parseRoster();
+    connect(m_roster, SIGNAL(presenceChanged(const QString, const QString)),
+            this, SLOT(presenceChanged(const QString, const QString)));
     reset();
 }
 
 void RosterModel::parseRoster()
 {
     foreach (QXmppRoster::QXmppRosterEntry entry, m_roster->getRosterEntries()) {
-        qDebug() << entry.groups().count();
+        //qDebug() << entry.groups().count();
         if (entry.groups().isEmpty()) {
             TreeItem *groupItem = findOrCreateGroup("nogroup");
-            TreeItem *item = new TreeItem(TreeItem::contact, entry.bareJid(), groupItem);
+            TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
             groupItem->appendChild(item);
         } else {
             foreach (QString group, entry.groups()) {
                 if (group.isEmpty())
                     group = "nogroup";
                 TreeItem *groupItem = findOrCreateGroup(group);
-                TreeItem *item = new TreeItem(TreeItem::contact, entry.bareJid(), groupItem);
+                TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
                 groupItem->appendChild(item);
             }
         }
     }
 }
 
-RosterModel::TreeItem* RosterModel::findOrCreateGroup(QString group)
+TreeItem* RosterModel::findOrCreateGroup(QString group)
 {
     foreach (TreeItem *item, m_rootItem->childItems()) {
-        if (item->type() == TreeItem::group && item->data() == group) {
+        if (item->type() == RosterModel::group && item->data() == group) {
             return item;
         }
     }
 
     // create
-    TreeItem *newItem = new TreeItem(TreeItem::group, group, m_rootItem);
+    TreeItem *newItem = new TreeItem(RosterModel::group, group, m_rootItem);
     m_rootItem->appendChild(newItem);
     return newItem;
 }
@@ -174,4 +197,22 @@ int RosterModel::rowCount(const QModelIndex &parent) const
 int RosterModel::columnCount(const QModelIndex &parent) const
 {
     return 1;
+}
+
+void RosterModel::presenceChanged(const QString &bareJid, const QString &resource)
+{
+}
+
+RosterModel::ItemType RosterModel::itemTypeAt(const QModelIndex &index) const
+{
+    return ((TreeItem *)index.internalPointer())->type();
+}
+
+QString RosterModel::jidAt(const QModelIndex &index) const
+{
+    TreeItem *item = (TreeItem *)index.internalPointer();
+    if (item->type() == RosterModel::contact) {
+        return item->data();
+    }
+    return "";
 }
