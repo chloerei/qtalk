@@ -55,6 +55,7 @@ void MainWindow::openChatWindow(const QModelIndex &index)
             chatWindow = new ChatWindow();
             chatWindow->setBareJid(bareJid);
             chatWindow->setClient(m_client);
+            chatWindow->setAttribute(Qt::WA_DeleteOnClose);
 
             m_chatWindows[bareJid] = chatWindow;
             chatWindow->setWindowTitle(m_rosterModel->data(index, Qt::DisplayRole).toString());

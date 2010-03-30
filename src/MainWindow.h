@@ -3,6 +3,8 @@
 
 #include "ui_MainWindow.h"
 #include <QMap>
+#include <QPointer>
+
 class XmppClient;
 class RosterModel;
 class RosterTreeView;
@@ -29,7 +31,7 @@ private:
     Ui::MainWindow ui;
     XmppClient *m_client;
     RosterModel *m_rosterModel;
-    QMap<QString, ChatWindow*> m_chatWindows;
+    QMap<QString, QPointer<ChatWindow> > m_chatWindows;
     QMap<QString, QList<QXmppMessage> > m_messageStore;
 };
 
