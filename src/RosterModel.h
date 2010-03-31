@@ -46,7 +46,7 @@ private:
     TreeItem *m_rootItem;
     TreeItem* findOrCreateGroup(QString group);
 
-    void parsePresence(TreeItem *contactItem, const QXmppPresence &presence);
+    void parsePresence(TreeItem *groupItem, TreeItem *contactItem, const QString &resource, const QXmppPresence &presence);
 };
 
 #endif

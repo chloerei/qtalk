@@ -1,5 +1,6 @@
 #include "RosterModel.h"
 #include "QXmppRoster.h"
+#include "QXmppUtils.h"
 
 class TreeItem
 {
@@ -8,6 +9,7 @@ public:
     ~TreeItem();
     TreeItem* child(int row);
     void appendChild(TreeItem *child);
+    bool removeOne(TreeItem *child);
     int childCount() const;
     QString data() const;
     TreeItem* parent();
@@ -41,6 +43,11 @@ TreeItem* TreeItem::child(int row)
 void TreeItem::appendChild(TreeItem *child)
 {
     m_childItems.append(child);
+}
+
+bool TreeItem::removeOne(TreeItem *child)
+{
+    return m_childItems.removeOne(child);
 }
 
 int TreeItem::childCount() const
@@ -207,15 +214,10 @@ void RosterModel::presenceChanged(const QString &bareJid, const QString &resourc
     QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
     if (entry.groups().isEmpty()) {
         TreeItem *groupItem = findOrCreateGroup("nogroup");
-        QModelIndex parentIdex = index(groupItem->row(), 1, QModelIndex());
 
         foreach (TreeItem *bareJidItem, groupItem->childItems()) {
             if (bareJidItem->data() == bareJid) {
-                TreeItem *resourceItem = new TreeItem(RosterModel::resource, resource, bareJidItem);
-                bareJidItem->appendChild(resourceItem);
-
-                QModelIndex currentIndex = index(bareJidItem->row(), 1, parentIdex);
-                emit dataChanged(currentIndex, currentIndex);
+                parsePresence(groupItem, bareJidItem, resource, presence);
                 break;
             }
         }
@@ -224,26 +226,45 @@ void RosterModel::presenceChanged(const QString &bareJid, const QString &resourc
             if (group.isEmpty())
                 group = "nogroup";
             TreeItem *groupItem = findOrCreateGroup(group);
-            QModelIndex parentIdex = index(groupItem->row(), 1, QModelIndex());
 
             foreach (TreeItem *bareJidItem, groupItem->childItems()) {
                 if (bareJidItem->data() == bareJid) {
-                    TreeItem *resourceItem = new TreeItem(RosterModel::resource, resource, bareJidItem);
-                    bareJidItem->appendChild(resourceItem);
-
-                    QModelIndex currentIndex = index(bareJidItem->row(), 1, parentIdex);
-                    emit dataChanged(currentIndex, currentIndex);
+                    parsePresence(groupItem, bareJidItem, resource, presence);
                     break;
                 }
             }
         }
     }
-
-    //reset();
 }
 
-void RosterModel::parsePresence(TreeItem *contactItem, const QXmppPresence &presence)
+void RosterModel::parsePresence(TreeItem *groupItem, TreeItem *contactItem, const QString &resource, const QXmppPresence &presence)
 {
+    QModelIndex groupIndex = index(groupItem->row(), 1, QModelIndex());
+    QModelIndex contactIndex = index(contactItem->row(), 1, groupIndex); 
+
+    if (presence.from().isEmpty()) {
+        // Unavaliable
+        foreach (TreeItem *resourceItem, contactItem->childItems()) {
+            if (resourceItem->data() == resource) {
+                beginRemoveRows(contactIndex, resourceItem->row(), resourceItem->row());
+                contactItem->removeOne(resourceItem);
+                delete resourceItem;
+                endRemoveRows();
+            }
+        }
+    } else {
+        bool exist = false;
+        foreach (TreeItem *resourceItem, contactItem->childItems()) {
+            if (resourceItem->data() == resource) {
+                exist = true;
+            }
+        }
+        if (!exist) {
+            TreeItem *resourceItem = new TreeItem(RosterModel::resource, resource, contactItem);
+            contactItem->appendChild(resourceItem);
+        }
+    }
+    emit dataChanged(groupIndex, groupIndex);
 }
 
 RosterModel::ItemType RosterModel::itemTypeAt(const QModelIndex &index) const
@@ -261,3 +282,4 @@ QString RosterModel::jidAt(const QModelIndex &index) const
     }
     return "";
 }
+
