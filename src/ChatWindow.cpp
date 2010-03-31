@@ -21,9 +21,9 @@ void ChatWindow::setClient(QXmppClient *client)
     m_client = client;
 }
 
-void ChatWindow::setBareJid(QString bareJid)
+void ChatWindow::setJid(QString jid)
 {
-    m_bareJid = bareJid;
+    m_jid = jid;
 }
 
 void ChatWindow::appendMessage(const QXmppMessage &o_message)
@@ -31,8 +31,8 @@ void ChatWindow::appendMessage(const QXmppMessage &o_message)
     XmppMessage message(o_message);
     changeState(message.state());
     if (!message.body().isEmpty()){
-        QString bareJid = jidToBareJid(message.from()); 
-        ui.messageBrowser->append(QString("%1 %2").arg(bareJid).arg(QTime::currentTime().toString()));
+        //QString bareJid = jidToBareJid(message.from()); 
+        ui.messageBrowser->append(QString("%1 %2").arg(message.from()).arg(QTime::currentTime().toString()));
         if (message.html().isEmpty()) {
             ui.messageBrowser->append(message.body());
         } else {
@@ -43,15 +43,10 @@ void ChatWindow::appendMessage(const QXmppMessage &o_message)
 
 void ChatWindow::sendMessage()
 {
-    //m_client->sendMessage(m_bareJid, ui.messageEdit->toPlainText());
     XmppMessage message(m_client->getConfiguration().jid(),
-                        m_bareJid,
+                        m_jid,
                         ui.messageEdit->toPlainText());
     message.setHtml(ui.messageEdit->toHtml());
-    //QDomDocument doc;
-    //doc.setContent(ui.messageEdit->toHtml());
-    //QXmppElement element(doc.documentElement());
-    //message.setExtensions(element);
     m_client->sendPacket(message);
 
     QString c_bareJid = m_client->getConfiguration().jidBare();

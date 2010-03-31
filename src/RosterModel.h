@@ -5,6 +5,7 @@
 
 class QXmppRoster;
 class TreeItem;
+class QXmppPresence;
 
 class RosterModel : public QAbstractItemModel
 {
@@ -14,8 +15,9 @@ public:
     enum ItemType
     {
         root,
-        group,
-        contact
+        group,   // data => group
+        contact, // data => breaJid
+        resource // data => resource
     };
 
 
@@ -43,6 +45,8 @@ private:
     QXmppRoster *m_roster;
     TreeItem *m_rootItem;
     TreeItem* findOrCreateGroup(QString group);
+
+    void parsePresence(TreeItem *contactItem, const QXmppPresence &presence);
 };
 
 #endif

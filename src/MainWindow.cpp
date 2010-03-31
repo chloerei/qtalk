@@ -37,30 +37,35 @@ void MainWindow::rosterReceived()
 
 void MainWindow::messageReceived(const QXmppMessage& message)
 {
-    QString bareJid = jidToBareJid(message.from());
-    if (m_chatWindows[bareJid] == NULL) {
-        m_messageStore[bareJid] << message;
-    } else {
+    QString jid = message.from();
+    QString bareJid = jidToBareJid(jid);
+    if (m_chatWindows[jid] != NULL) {
+        m_chatWindows[jid]->appendMessage(message);
+    } else if (m_chatWindows[bareJid] != NULL) {
         m_chatWindows[bareJid]->appendMessage(message);
+    } else {
+        m_messageStore[jid] << message;
     }
 }
 
 void MainWindow::openChatWindow(const QModelIndex &index)
 {
-    if (m_rosterModel->itemTypeAt(index) == RosterModel::contact) {
-        QString bareJid = jidToBareJid(m_rosterModel->jidAt(index));
+    if (m_rosterModel->itemTypeAt(index) == RosterModel::contact ||
+            m_rosterModel->itemTypeAt(index) == RosterModel::resource) {
+        QString jid = m_rosterModel->jidAt(index);
 
         ChatWindow *chatWindow;
-        if (m_chatWindows[bareJid] == NULL) {
+        if (m_chatWindows[jid] == NULL) {
             chatWindow = new ChatWindow();
-            chatWindow->setBareJid(bareJid);
+            chatWindow->setJid(jid);
             chatWindow->setClient(m_client);
             chatWindow->setAttribute(Qt::WA_DeleteOnClose);
 
-            m_chatWindows[bareJid] = chatWindow;
-            chatWindow->setWindowTitle(m_rosterModel->data(index, Qt::DisplayRole).toString());
+            m_chatWindows[jid] = chatWindow;
+            //chatWindow->setWindowTitle(m_rosterModel->data(index, Qt::DisplayRole).toString());
+            chatWindow->setWindowTitle(jid);
         } else {
-            chatWindow = m_chatWindows[bareJid];
+            chatWindow = m_chatWindows[jid];
         }
         chatWindow->show();
         chatWindow->raise();

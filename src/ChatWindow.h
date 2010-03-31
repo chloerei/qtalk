@@ -14,7 +14,7 @@ class ChatWindow : public QWidget
 public:
     ChatWindow(QWidget *parent = 0);
     void setClient(QXmppClient *client);
-    void setBareJid(QString);
+    void setJid(QString);
     void appendMessage(const QXmppMessage &);
 
 private slots:
@@ -22,7 +22,7 @@ private slots:
 
 private:
     Ui::ChatWindow ui;
-    QString m_bareJid;
+    QString m_jid;
     QXmppClient *m_client;
 
     void changeState(QXmppMessage::State);
