@@ -47,7 +47,10 @@ void TreeItem::appendChild(TreeItem *child)
 
 bool TreeItem::removeOne(TreeItem *child)
 {
-    return m_childItems.removeOne(child);
+    bool check = m_childItems.removeOne(child);
+    if (check)
+        delete child;
+    return check;
 }
 
 int TreeItem::childCount() const
@@ -239,8 +242,8 @@ void RosterModel::presenceChanged(const QString &bareJid, const QString &resourc
 
 void RosterModel::parsePresence(TreeItem *groupItem, TreeItem *contactItem, const QString &resource, const QXmppPresence &presence)
 {
-    QModelIndex groupIndex = index(groupItem->row(), 1, QModelIndex());
-    QModelIndex contactIndex = index(contactItem->row(), 1, groupIndex); 
+    QModelIndex groupIndex = index(groupItem->row(), 0, QModelIndex());
+    QModelIndex contactIndex = index(contactItem->row(), 0, groupIndex); 
 
     if (presence.from().isEmpty()) {
         // Unavaliable
@@ -248,7 +251,6 @@ void RosterModel::parsePresence(TreeItem *groupItem, TreeItem *contactItem, cons
             if (resourceItem->data() == resource) {
                 beginRemoveRows(contactIndex, resourceItem->row(), resourceItem->row());
                 contactItem->removeOne(resourceItem);
-                delete resourceItem;
                 endRemoveRows();
             }
         }
@@ -263,8 +265,8 @@ void RosterModel::parsePresence(TreeItem *groupItem, TreeItem *contactItem, cons
             TreeItem *resourceItem = new TreeItem(RosterModel::resource, resource, contactItem);
             contactItem->appendChild(resourceItem);
         }
+        emit dataChanged(groupIndex, groupIndex);
     }
-    emit dataChanged(groupIndex, groupIndex);
 }
 
 RosterModel::ItemType RosterModel::itemTypeAt(const QModelIndex &index) const
