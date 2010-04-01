@@ -34,6 +34,9 @@ public:
     ItemType itemTypeAt(const QModelIndex &index) const;
     QString jidAt(const QModelIndex &index) const;
 
+signals:
+    void lastOneResource(const QModelIndex &contactIndex);
+
 public slots:
     void parseRoster();
 

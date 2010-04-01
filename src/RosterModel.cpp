@@ -192,6 +192,7 @@ int RosterModel::rowCount(const QModelIndex &parent) const
 
     TreeItem *parentItem = getItem(parent);
 
+    // What to hide resource when there is only one resource?
     //if (parentItem->type() == RosterModel::contact && parentItem->childCount() < 2) 
     //    return 0;
 
@@ -244,6 +245,9 @@ void RosterModel::parsePresence(TreeItem *groupItem, TreeItem *contactItem, cons
                 beginRemoveRows(contactIndex, resourceItem->row(), resourceItem->row());
                 contactItem->removeOne(resourceItem);
                 endRemoveRows();
+                if (contactItem->childCount() == 1) {
+                    emit lastOneResource(contactIndex);
+                }
             }
         }
     } else {
