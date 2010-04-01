@@ -131,14 +131,10 @@ TreeItem* RosterModel::findOrCreateGroup(QString group)
 
 QModelIndex RosterModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!hasIndex(row, column, parent))
+    if (parent.isValid() && parent.row() != 0)
         return QModelIndex();
 
-    TreeItem *parentItem;
-    if (!parent.isValid())
-        parentItem = m_rootItem;
-    else
-        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+    TreeItem *parentItem = getItem(parent);
 
     TreeItem *childItem = parentItem->child(row);
     if (childItem)
@@ -163,7 +159,7 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *item = getItem(index);
 
     return item->data();
 }
@@ -180,7 +176,7 @@ QModelIndex RosterModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+    TreeItem *childItem = getItem(index);
     TreeItem *parentItem = childItem->parent();
 
     if (parentItem == m_rootItem)
@@ -191,17 +187,13 @@ QModelIndex RosterModel::parent(const QModelIndex &index) const
 
 int RosterModel::rowCount(const QModelIndex &parent) const
 {
-    TreeItem *parentItem;
-    if (parent.column() > 1)
+    if (parent.isValid() && parent.column() != 0)
         return 0;
 
-    if (!parent.isValid())
-        parentItem = m_rootItem;
-    else
-        parentItem = static_cast<TreeItem*>(parent.internalPointer());
+    TreeItem *parentItem = getItem(parent);
 
-    if (parentItem->type() == RosterModel::contact && parentItem->childCount() < 2) 
-        return 0;
+    //if (parentItem->type() == RosterModel::contact && parentItem->childCount() < 2) 
+    //    return 0;
 
     return parentItem->childCount();
 }
@@ -262,11 +254,13 @@ void RosterModel::parsePresence(TreeItem *groupItem, TreeItem *contactItem, cons
             }
         }
         if (!exist) {
+            beginInsertRows(contactIndex, contactItem->childCount(), contactItem->childCount());
             TreeItem *resourceItem = new TreeItem(RosterModel::resource, resource, contactItem);
             contactItem->appendChild(resourceItem);
+            endInsertRows();
         }
-        emit dataChanged(groupIndex, groupIndex);
     }
+    emit dataChanged(contactIndex, contactIndex);
 }
 
 RosterModel::ItemType RosterModel::itemTypeAt(const QModelIndex &index) const
@@ -285,3 +279,12 @@ QString RosterModel::jidAt(const QModelIndex &index) const
     return "";
 }
 
+
+TreeItem* RosterModel::getItem(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+        if (item) return item;
+    }
+    return m_rootItem;
+}

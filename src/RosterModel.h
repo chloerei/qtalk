@@ -20,7 +20,6 @@ public:
         resource // data => resource
     };
 
-
     RosterModel(QObject *parent = 0);
     ~RosterModel();
 
@@ -43,10 +42,11 @@ private slots:
 
 private:
     QXmppRoster *m_roster;
-    TreeItem *m_rootItem;
+    TreeItem* m_rootItem;
     TreeItem* findOrCreateGroup(QString group);
 
     void parsePresence(TreeItem *groupItem, TreeItem *contactItem, const QString &resource, const QXmppPresence &presence);
+    TreeItem* getItem(const QModelIndex &index) const;
 };
 
 #endif
