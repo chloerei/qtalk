@@ -50,8 +50,9 @@ void MainWindow::messageReceived(const QXmppMessage& message)
 
 void MainWindow::openChatWindow(const QModelIndex &index)
 {
-    if (m_rosterModel->itemTypeAt(index) == RosterModel::contact ||
-            m_rosterModel->itemTypeAt(index) == RosterModel::resource) {
+    RosterModel::ItemType type = m_rosterModel->itemTypeAt(index);
+    if (type == RosterModel::contact ||
+            type == RosterModel::resource) {
         QString jid = m_rosterModel->jidAt(index);
 
         ChatWindow *chatWindow;
@@ -70,6 +71,12 @@ void MainWindow::openChatWindow(const QModelIndex &index)
         chatWindow->show();
         chatWindow->raise();
         chatWindow->activateWindow();
+    } else if (type == RosterModel::group) {
+        if (ui.rosterTreeView->isExpanded(index)) {
+            ui.rosterTreeView->collapse(index);
+        } else {
+            ui.rosterTreeView->expand(index);
+        }
     }
 }
 
