@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui.rosterTreeView->setModel(m_rosterModel);
 
-    m_client->connectToServer("talk.google.com", "chloereixmpp", "19871110rei", "gmail.com");
+    m_client->connectToServer("talk.google.com", "chloerei", "1110chloerei", "gmail.com");
 }
 
 MainWindow::~MainWindow()

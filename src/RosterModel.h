@@ -50,6 +50,8 @@ private:
 
     void parsePresence(TreeItem *groupItem, TreeItem *contactItem, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;
+    QString presenceStatusTypeStrFor(const QModelIndex &index) const;
+    void sortContact(const QModelIndex &groupIndex);
 };
 
 #endif
