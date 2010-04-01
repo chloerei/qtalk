@@ -39,13 +39,25 @@ void MainWindow::messageReceived(const QXmppMessage& message)
 {
     QString jid = message.from();
     QString bareJid = jidToBareJid(jid);
+    QString resource = jidToResource(jid);
     if (m_chatWindows[jid] != NULL) {
         m_chatWindows[jid]->appendMessage(message);
     } else if (m_chatWindows[bareJid] != NULL) {
         m_chatWindows[bareJid]->appendMessage(message);
     } else {
         m_messageStore[jid] << message;
+        activeContact(bareJid, resource);
     }
+}
+
+void MainWindow::activeContact(const QString &bareJid, const QString &resource)
+{
+    m_rosterModel->activeContact(bareJid, resource);
+}
+
+void MainWindow::unActiveContact(const QString &bareJid, const QString &resource)
+{
+    m_rosterModel->unActiveContact(bareJid, resource);
 }
 
 void MainWindow::openChatWindow(const QModelIndex &index)
@@ -71,6 +83,8 @@ void MainWindow::openChatWindow(const QModelIndex &index)
         chatWindow->show();
         chatWindow->raise();
         chatWindow->activateWindow();
+
+        unActiveContact(jidToBareJid(jid));
     } else if (type == RosterModel::group) {
         if (ui.rosterTreeView->isExpanded(index)) {
             ui.rosterTreeView->collapse(index);

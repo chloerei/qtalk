@@ -23,6 +23,8 @@ private slots:
     void rosterReceived();
     void openChatWindow(const QModelIndex &index);
     void messageReceived(const QXmppMessage&);
+    void activeContact(const QString &bareJid, const QString &resource = "");
+    void unActiveContact(const QString &bareJid, const QString &resource = "");
 
 protected:
     void closeEvent(QCloseEvent *event);

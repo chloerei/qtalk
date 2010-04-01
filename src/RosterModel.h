@@ -33,6 +33,8 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     ItemType itemTypeAt(const QModelIndex &index) const;
     QString jidAt(const QModelIndex &index) const;
+    void activeContact(const QString &bareJid, const QString &resource);
+    void unActiveContact(const QString &bareJid, const QString &resource);
 
 signals:
     void lastOneResource(const QModelIndex &contactIndex);
@@ -48,10 +50,11 @@ private:
     TreeItem* m_rootItem;
     TreeItem* findOrCreateGroup(QString group);
 
-    void parsePresence(TreeItem *groupItem, TreeItem *contactItem, const QString &resource, const QXmppPresence &presence);
+    void parsePresence(TreeItem *contactItem, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;
     QString presenceStatusTypeStrFor(const QModelIndex &index) const;
     void sortContact(const QModelIndex &groupIndex);
+    QList<TreeItem*> findContactIndexForBareJid(const QString &bareJid); // include all resource
 };
 
 #endif

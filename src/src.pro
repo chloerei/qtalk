@@ -12,6 +12,7 @@ OBJECTS_DIR = tmp/obj
 QXMPP_DIR = ../lib/QXmppClient/source
 INCLUDEPATH += $${QXMPP_DIR}
 LIBS += -L $${QXMPP_DIR}/release -lQXmppClient
+PRE_TARGETDEPS += $${QXMPP_DIR}/release/libQXmppClient.a
 
 # Input
 SOURCES += main.cpp \
