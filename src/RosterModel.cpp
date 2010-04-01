@@ -28,7 +28,11 @@ private:
 bool TreeItemCompare(TreeItem *s1, TreeItem *s2)
 {
     if (s1->type() == RosterModel::contact && s2->type() == RosterModel::contact) {
-        return s1->childCount() >= s2->childCount();
+        //return s1->childCount() >= s2->childCount();
+        if (s1->childCount() == s2->childCount())
+            return s1 < s2;
+        else
+            return s1->childCount() >= s2->childCount();
     }
     return true;
 }
