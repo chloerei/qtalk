@@ -28,7 +28,7 @@ private:
 bool TreeItemCompare(TreeItem *s1, TreeItem *s2)
 {
     if (s1->type() == RosterModel::contact && s2->type() == RosterModel::contact) {
-        return s1->childCount() > s2->childCount();
+        return s1->childCount() >= s2->childCount();
     }
     return true;
 }
@@ -144,7 +144,10 @@ TreeItem* RosterModel::findOrCreateGroup(QString group)
 
 QModelIndex RosterModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (parent.isValid() && parent.row() != 0)
+    //if (parent.isValid() && column != 0)
+    //    return QModelIndex();
+
+    if (column != 0)
         return QModelIndex();
 
     TreeItem *parentItem = getItem(parent);
