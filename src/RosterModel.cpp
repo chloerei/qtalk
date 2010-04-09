@@ -13,12 +13,14 @@ public:
     int childCount() const;
     QString data() const;
     TreeItem* parent();
-    int row() const;
+    int childNumber() const;
     RosterModel::ItemType type() const { return m_type; }
     QList<TreeItem *> childItems() const { return m_childItems; }
     void sortChildren();
     void setUnread(bool unread = true);
-    bool isUnread() {return m_unread;}
+    bool isUnread() const;
+    bool hasChlidContain(const QString &data) const;
+    int childIndexOfData(const QString &data) const;
 
 private:
     RosterModel::ItemType m_type;
@@ -83,7 +85,7 @@ TreeItem* TreeItem::parent()
     return m_parent;
 }
 
-int TreeItem::row() const
+int TreeItem::childNumber() const
 {
     if (m_parent)
         return m_parent->childItems().indexOf(const_cast<TreeItem*>(this));
@@ -99,6 +101,43 @@ void TreeItem::sortChildren()
 void TreeItem::setUnread(bool unread)
 {
     m_unread = unread;
+}
+
+bool TreeItem::isUnread() const
+{
+    if (m_type == RosterModel::contact) {
+        if (m_childItems.count() != 0) {
+            foreach (TreeItem *childItem, m_childItems) {
+                if (childItem->isUnread())
+                    return true;
+            }
+        } 
+    } else if (m_type == RosterModel::resource) {
+        return m_unread;
+    }
+    return false;
+}
+
+bool TreeItem::hasChlidContain(const QString &data) const
+{
+    foreach (TreeItem *resourceItem, childItems()) {
+        if (resourceItem->data() == data) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int TreeItem::childIndexOfData(const QString &data) const
+{
+    if (hasChlidContain(data)) {
+        foreach (TreeItem *resourceItem, childItems()) {
+            if (resourceItem->data() == data) {
+                return m_childItems.indexOf(resourceItem);
+            }
+        }
+    }
+    return -1;
 }
 
 RosterModel::RosterModel(QObject *parent)
@@ -123,7 +162,6 @@ void RosterModel::setRoster(QXmppRoster *roster)
 
 void RosterModel::parseRoster()
 {
-    //foreach (QXmppRoster::QXmppRosterEntry entry, m_roster->getRosterEntries()) {
     foreach (QString bareJid, m_roster->getRosterBareJids()) {
         QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
         if (entry.groups().isEmpty()) {
@@ -158,9 +196,6 @@ TreeItem* RosterModel::findOrCreateGroup(QString group)
 
 QModelIndex RosterModel::index(int row, int column, const QModelIndex &parent) const
 {
-    //if (parent.isValid() && column != 0)
-    //    return QModelIndex();
-
     if (column != 0)
         return QModelIndex();
 
@@ -197,8 +232,8 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     return output;
 }
 
-QVariant RosterModel::headerData(int section, Qt::Orientation orientation,
-        int role) const
+QVariant RosterModel::headerData(int /* section */, Qt::Orientation /* orientation */,
+        int /* role */) const
 {
     return QVariant();
 }
@@ -215,7 +250,7 @@ QModelIndex RosterModel::parent(const QModelIndex &index) const
     if (parentItem == m_rootItem)
         return QModelIndex();
 
-    return createIndex(parentItem->row(), 0, parentItem);
+    return createIndex(parentItem->childNumber(), 0, parentItem);
 }
 
 int RosterModel::rowCount(const QModelIndex &parent) const
@@ -232,7 +267,7 @@ int RosterModel::rowCount(const QModelIndex &parent) const
     return parentItem->childCount();
 }
 
-int RosterModel::columnCount(const QModelIndex &parent) const
+int RosterModel::columnCount(const QModelIndex & /* parent */) const
 {
     return 1;
 }
@@ -240,26 +275,24 @@ int RosterModel::columnCount(const QModelIndex &parent) const
 void RosterModel::presenceChanged(const QString &bareJid, const QString &resource)
 {
     QXmppPresence presence = m_roster->getPresence(bareJid, resource);
-    QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
+    //QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
 
-    QList<TreeItem*> contactItemList = findContactIndexForBareJid(bareJid);
-    foreach (TreeItem *item, contactItemList) {
-        parsePresence(item, resource, presence);
+    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    foreach (QModelIndex index, contactIndexList) {
+        parsePresence(index, resource, presence);
     }
 }
 
-void RosterModel::parsePresence(TreeItem *contactItem, const QString &resource, const QXmppPresence &presence)
+void RosterModel::parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence)
 {
-    TreeItem *groupItem = contactItem->parent();
-    QModelIndex groupIndex = index(groupItem->row(), 0, QModelIndex());
-    QModelIndex contactIndex = index(contactItem->row(), 0, groupIndex); 
-    bool contactStateChanged = false;
+    QModelIndex groupIndex = contactIndex.parent();
+    TreeItem *contactItem = getItem(contactIndex);
 
     if (presence.from().isEmpty()) {
         // Unavaliable
         foreach (TreeItem *resourceItem, contactItem->childItems()) {
             if (resourceItem->data() == resource) {
-                beginRemoveRows(contactIndex, resourceItem->row(), resourceItem->row());
+                beginRemoveRows(contactIndex, resourceItem->childNumber(), resourceItem->childNumber());
                 contactItem->removeOne(resourceItem);
                 endRemoveRows();
                 //if (contactItem->childCount() == 1) {
@@ -270,17 +303,14 @@ void RosterModel::parsePresence(TreeItem *contactItem, const QString &resource, 
             }
         }
     } else {
-        bool exist = false;
-        foreach (TreeItem *resourceItem, contactItem->childItems()) {
-            if (resourceItem->data() == resource) {
-                exist = true;
-                QModelIndex currentIndex = index(resourceItem->row(), 0, contactIndex);
-                emit dataChanged(currentIndex, currentIndex);
-            }
-        }
-        emit dataChanged(contactIndex, contactIndex);
-        if (!exist) {
-            beginInsertRows(contactIndex, contactItem->childCount(), contactItem->childCount());
+        if (contactItem->hasChlidContain(resource)){
+            // update resource
+            QModelIndex currentIndex = index(contactItem->childIndexOfData(resource), 0, contactIndex);
+            emit dataChanged(currentIndex, currentIndex);
+        } else {
+            // add resource
+            int row = contactItem->childCount();
+            beginInsertRows(contactIndex, row, row);
             TreeItem *resourceItem = new TreeItem(RosterModel::resource, resource, contactItem);
             contactItem->appendChild(resourceItem);
             endInsertRows();
@@ -342,43 +372,67 @@ void RosterModel::sortContact(const QModelIndex &groupIndex)
     emit layoutChanged();
 }
 
-void RosterModel::activeContact(const QString &bareJid, const QString &resource)
+// a message recevie, mark the reaource unread. if resource is unknow, let the contact mark unread
+void RosterModel::messageUnread(const QString &bareJid, const QString &resource)
 {
-    QList<TreeItem*> contactItemList = findContactIndexForBareJid(bareJid);
-    foreach (TreeItem *contactItem, contactItemList) {
-        contactItem->setUnread();
-        QModelIndex contactIndex = createIndex(contactItem->row(), 0, contactItem);
-        dataChanged(contactIndex, contactIndex);
-
-        if (!resource.isEmpty()) {
+    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    foreach (QModelIndex contactIndex, contactIndexList) {
+        if (getItem(contactIndex)->hasChlidContain(resource)){
+            QModelIndex resourceIndex = index(getItem(contactIndex)->childIndexOfData(resource), 0, contactIndex);
+            getItem(resourceIndex)->setUnread();
+            dataChanged(resourceIndex, resourceIndex);
+        } else {
+            // resource unknow, let contact unread.
+            getItem(contactIndex)->setUnread();
         }
+        dataChanged(contactIndex, contactIndex);
     }
 }
 
-void RosterModel::unActiveContact(const QString &bareJid, const QString &resource)
+// when open the jid chatWindow, clean the resource unread state
+void RosterModel::messageReaded(const QString &bareJid, const QString &resource)
 {
-    QList<TreeItem*> contactItemList = findContactIndexForBareJid(bareJid);
-    foreach (TreeItem *contactItem, contactItemList) {
-        contactItem->setUnread(false);
-        QModelIndex contactIndex = createIndex(contactItem->row(), 0, contactItem);
-        qDebug() << "set unread";
-        dataChanged(contactIndex, contactIndex);
-
-        if (!resource.isEmpty()) {
+    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    foreach (QModelIndex contactIndex, contactIndexList) {
+        if (getItem(contactIndex)->hasChlidContain(resource)){
+            QModelIndex resourceIndex = index(getItem(contactIndex)->childIndexOfData(resource), 0, contactIndex);
+            getItem(resourceIndex)->setUnread(false);
+            dataChanged(resourceIndex, resourceIndex);
         }
+        // resource unknow, do nothng.
+        dataChanged(contactIndex, contactIndex);
     }
 }
 
-QList<TreeItem*> RosterModel::findContactIndexForBareJid(const QString &bareJid)
+// when open the bareJid chatWindow, clean all unread state
+void RosterModel::messageReadedAll(const QString &bareJid)
+{
+    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    foreach (QModelIndex contactIndex, contactIndexList) {
+        getItem(contactIndex)->setUnread(false);
+        foreach(TreeItem *resourceItem, getItem(contactIndex)->childItems()) {
+            resourceItem->setUnread(false);
+        }
+
+        if (getItem(contactIndex)->childCount() != 0) {
+            dataChanged(index(0, 0, contactIndex),
+                        index(rowCount(contactIndex), 0, contactIndex));
+        }
+
+        dataChanged(contactIndex, contactIndex);
+    }
+}
+
+QList<QModelIndex> RosterModel::findContactIndexListForBareJid(const QString &bareJid) 
 {
     QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
-    QList<TreeItem*> results;
+    QList<QModelIndex> results;
     if (entry.groups().isEmpty()) {
         TreeItem *groupItem = findOrCreateGroup("nogroup");
 
         foreach (TreeItem *contactItem, groupItem->childItems()) {
             if (contactItem->data() == bareJid) {
-                results << contactItem;
+                results << createIndex(contactItem->childNumber(), 0, contactItem);
                 break;
             }
         }
@@ -390,7 +444,7 @@ QList<TreeItem*> RosterModel::findContactIndexForBareJid(const QString &bareJid)
 
             foreach (TreeItem *contactItem, groupItem->childItems()) {
                 if (contactItem->data() == bareJid) {
-                    results << contactItem;
+                    results << createIndex(contactItem->childNumber(), 0, contactItem);
                     break;
                 }
             }
