@@ -63,3 +63,8 @@ QString UnreadMessageModel::jidAt(const QModelIndex &index) const
 {
     return m_messageStore.keys().at(index.row());
 }
+
+QList<QString> UnreadMessageModel::bareJids() const
+{
+    return m_messageStore.keys();
+}

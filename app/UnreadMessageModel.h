@@ -21,6 +21,7 @@ public:
 
     bool hasUnread(const QString &jid) const;
     QString jidAt(const QModelIndex &index) const;
+    QList<QString> bareJids() const;
 
 signals:
     void messageCleared();
