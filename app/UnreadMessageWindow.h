@@ -16,6 +16,7 @@ public:
 
 signals:
     void unreadListClicked(const QModelIndex &index);
+    void readAll();
 
 private:
     Ui::UnreadMessageWindow ui;

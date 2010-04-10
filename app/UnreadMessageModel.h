@@ -22,6 +22,9 @@ public:
     bool hasUnread(const QString &jid) const;
     QString jidAt(const QModelIndex &index) const;
 
+signals:
+    void messageCleared();
+
 private:
     QMap<QString, QList<QXmppMessage> > m_messageStore;
 };

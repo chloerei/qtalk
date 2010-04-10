@@ -23,6 +23,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    enum TrayIconType
+    {
+        online,
+        newMessage
+    };
 
 private slots:
     void rosterReceived();
@@ -31,6 +36,9 @@ private slots:
     void openChatWindow(const QString &jid);
     void messageReceived(const QXmppMessage&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
+    void changeTrayIcon(TrayIconType type);
+    void unreadMessageCleared();
+    void readAllUnreadMessage();
 
 protected:
     void closeEvent(QCloseEvent *event);

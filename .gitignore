@@ -1,4 +1,9 @@
 tags
-src/tmp
-src/app
-src/QXmppClientLog.log
+app/app
+app/app_d
+app/QXmppClientLog.log
+app/ui_*.h
+app/release/*
+app/debug/*
+*Makefile*
+project.pro.user*

@@ -16,13 +16,12 @@ QList<QXmppMessage> UnreadMessageModel::take(QString jid)
 {
     QString resource = jidToResource(jid);
     QString bareJid = jidToBareJid(jid);
+    QList<QXmppMessage> results;
+
     if (resource.isEmpty()) {
-        reset();
-        return m_messageStore.take(bareJid);
+        results = m_messageStore.take(bareJid);
     } else {
-        QList<QXmppMessage> mid = m_messageStore[bareJid];
-        QList<QXmppMessage> results;
-        m_messageStore.remove(bareJid);
+        QList<QXmppMessage> mid = m_messageStore.take(bareJid);
         foreach (QXmppMessage message, mid) {
             if (jidToResource(message.from()) == resource) {
                 results << message;
@@ -30,9 +29,14 @@ QList<QXmppMessage> UnreadMessageModel::take(QString jid)
                 add(message);
             }
         }
-        reset();
-        return results;
     }
+    if (m_messageStore.isEmpty()) {
+        emit messageCleared();
+    } else {
+        qDebug("no empty");
+    }
+    reset();
+    return results;
 }
 
 int UnreadMessageModel::rowCount(const QModelIndex &parent) const

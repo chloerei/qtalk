@@ -34,9 +34,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="viewAllButton">
+       <widget class="QPushButton" name="readAllButton">
         <property name="text">
-         <string>View All</string>
+         <string>Read All</string>
         </property>
        </widget>
       </item>
@@ -45,6 +45,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../application.qrc"/>
+ </resources>
  <connections/>
 </ui>
