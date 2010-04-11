@@ -7,6 +7,7 @@
 
 class QXmppClient;
 class QXmppMessage;
+class QTimer;
 
 class ChatWindow : public QWidget
 {
@@ -19,12 +20,24 @@ public:
 
 private slots:
     void sendMessage();
+    void sendComposing();
+    void pausedTimeout();
+    void inactiveTimeout();
+    void goneTimeout();
+
+protected:
+    void closeEvent(QCloseEvent *);
 
 private:
     Ui::ChatWindow ui;
     QString m_jid;
     QXmppClient *m_client;
+    QXmppMessage::State m_selfState; // self state, se for send state message
+    QTimer *m_pausedTimer;
+    QTimer *m_inactiveTimer;
+    QTimer *m_goneTimer;
 
     void changeState(QXmppMessage::State);
+    void changeSelfState(QXmppMessage::State);
 };
 #endif
