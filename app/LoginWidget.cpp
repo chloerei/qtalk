@@ -6,8 +6,16 @@ LoginWidget::LoginWidget(QWidget *parent) :
     ui(new Ui::LoginWidget)
 {
     ui->setupUi(this);
+
+    QRegExp rx(".+@.+\\..+");
+    QValidator *validator = new QRegExpValidator(rx, this);
+    ui->jidLineEdit->setValidator(validator);
+
+    ui->portSpinBox->setValue(5222);
     connect(ui->loginButton, SIGNAL(clicked()),
-            SIGNAL(login()));
+            SLOT(clickedLogin()));
+    connect(ui->jidLineEdit, SIGNAL(editingFinished()),
+            this, SLOT(getHost()));
 }
 
 LoginWidget::~LoginWidget()
@@ -34,7 +42,17 @@ QString LoginWidget::jid() const
 
 QString LoginWidget::password() const
 {
-    return ui->passwordLabel->text();
+    return ui->passwordLineEdit->text();
+}
+
+QString LoginWidget::host() const
+{
+    return ui->hostLineEdit->text();
+}
+
+int LoginWidget::port() const
+{
+    return ui->portSpinBox->value();
 }
 
 bool LoginWidget::isRemember() const
@@ -44,8 +62,34 @@ bool LoginWidget::isRemember() const
 
 void LoginWidget::lock()
 {
-    ui->jidLineEdit->setEnabled(false);
-    ui->passwordLineEdit->setEnabled(false);
-    ui->rememberCheckBox->setEnabled(false);
-    ui->loginButton->setEnabled(false);
+    ui->tabWidget->setEnabled(false);
+}
+
+void LoginWidget::unlock()
+{
+    ui->tabWidget->setEnabled(true);
+}
+
+void LoginWidget::showState(QString str)
+{
+    ui->stateLabel->setText(str);;
+}
+
+void LoginWidget::clickedLogin()
+{
+    if (ui->jidLineEdit->hasAcceptableInput()) {
+        emit login();
+    } else {
+        showState("<b>Notice !</b> Jabber ID is looks like 'username@domain.com'");
+    }
+}
+
+void LoginWidget::getHost()
+{
+    if (!ui->advanceCheckBox->isChecked()) {
+        const int pos = jid().indexOf(QChar('@'));
+        if (pos < 0)
+            return;
+        ui->hostLineEdit->setText(jid().mid(pos + 1));
+    }
 }

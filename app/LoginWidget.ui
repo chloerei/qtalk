@@ -6,120 +6,178 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>226</width>
-    <height>462</height>
+    <width>219</width>
+    <height>505</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Minimum</enum>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>50</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Maximum</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
+     <widget class="QWidget" name="baseTab" native="true">
+      <attribute name="title">
+       <string>Base</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
         <widget class="QLabel" name="jidLabel">
          <property name="text">
           <string>Jabber ID</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0" colspan="2">
         <widget class="QLineEdit" name="jidLineEdit"/>
        </item>
-       <item>
+       <item row="2" column="0">
         <widget class="QLabel" name="passwordLabel">
          <property name="text">
           <string>Password</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="3" column="0" colspan="2">
         <widget class="QLineEdit" name="passwordLineEdit">
          <property name="echoMode">
           <enum>QLineEdit::Password</enum>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="4" column="0">
         <widget class="QCheckBox" name="rememberCheckBox">
          <property name="text">
-          <string>Remember</string>
+          <string>Store</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Auto</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
         <widget class="QPushButton" name="loginButton">
          <property name="text">
           <string>Login</string>
          </property>
+         <property name="shortcut">
+          <string>Return</string>
+         </property>
         </widget>
        </item>
       </layout>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Maximum</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+     </widget>
+     <widget class="QWidget" name="Advancetab">
+      <attribute name="title">
+       <string>Advance</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0" colspan="2">
+        <widget class="QCheckBox" name="advanceCheckBox">
+         <property name="text">
+          <string>Use Advance Setting</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="hostLabel">
+         <property name="text">
+          <string>Host</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLineEdit" name="hostLineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="portLlabel">
+         <property name="text">
+          <string>Port</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QSpinBox" name="portSpinBox">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximum">
+          <number>9999</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>122</width>
+           <height>25</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="stateLabel">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>137</height>
+       <height>249</height>
       </size>
      </property>
     </spacer>
@@ -127,5 +185,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>advanceCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>hostLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>121</x>
+     <y>85</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advanceCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>portSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>146</x>
+     <y>218</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

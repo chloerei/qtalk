@@ -14,10 +14,18 @@ public:
     ~LoginWidget();
     QString jid() const;
     QString password() const;
+    QString host() const;
+    int port() const;
     bool isRemember() const;
 
 public slots:
     void lock();
+    void unlock();
+    void showState(QString);
+
+private slots:
+    void clickedLogin();
+    void getHost();
 
 signals:
     void login();

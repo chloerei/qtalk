@@ -6,6 +6,7 @@
 #include <QPointer>
 #include <QSystemTrayIcon>
 #include <QStringListModel>
+#include <QXmppClient.h>
 
 class XmppClient;
 class RosterModel;
@@ -42,6 +43,8 @@ private slots:
     void changeTrayIcon(TrayIconType type);
     void unreadMessageCleared();
     void readAllUnreadMessage();
+    void clientDisconnect();
+    void clientError(QXmppClient::Error);
 
 protected:
     void closeEvent(QCloseEvent *event);
