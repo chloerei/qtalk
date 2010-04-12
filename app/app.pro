@@ -47,6 +47,6 @@ HEADERS += MainWindow.h \
            UnreadMessageModel.h \
            LoginWidget.h
 FORMS   += MainWindow.ui \
-           ChatWindow.ui \
            UnreadMessageWindow.ui \
-           LoginWidget.ui
+           LoginWidget.ui \
+           ChatWindow.ui

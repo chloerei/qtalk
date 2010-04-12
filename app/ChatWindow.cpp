@@ -10,7 +10,7 @@
 #include <QTimer>
 
 ChatWindow::ChatWindow(QWidget *parent)
-    : QWidget(parent), m_selfState(QXmppMessage::Active), m_pausedTimer(new QTimer),
+    : QMainWindow(parent), m_selfState(QXmppMessage::Active), m_pausedTimer(new QTimer),
     m_inactiveTimer(new QTimer), m_goneTimer(new QTimer)
 {
     ui.setupUi(this);

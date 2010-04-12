@@ -1,7 +1,7 @@
 #ifndef CHATWINDOW_H
 #define CHATWINDOW_H
 
-#include <QWidget>
+#include <QMainWindow>
 #include "ui_ChatWindow.h"
 #include "QXmppMessage.h"
 
@@ -9,7 +9,7 @@ class QXmppClient;
 class QXmppMessage;
 class QTimer;
 
-class ChatWindow : public QWidget
+class ChatWindow : public QMainWindow
 {
     Q_OBJECT
 public:
