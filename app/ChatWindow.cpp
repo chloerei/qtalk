@@ -26,6 +26,8 @@ ChatWindow::ChatWindow(QWidget *parent)
             this, SLOT(inactiveTimeout()));
     connect(m_goneTimer, SIGNAL(timeout()),
             this, SLOT(goneTimeout()));
+
+    setAttribute(Qt::WA_QuitOnClose, false);
 }
 
 void ChatWindow::setClient(QXmppClient *client)
