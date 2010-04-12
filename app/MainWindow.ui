@@ -14,21 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QTreeView" name="rosterTreeView">
-      <property name="animated">
-       <bool>true</bool>
-      </property>
-      <property name="headerHidden">
-       <bool>true</bool>
-      </property>
-      <property name="expandsOnDoubleClick">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <layout class="QVBoxLayout" name="verticalLayout"/>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

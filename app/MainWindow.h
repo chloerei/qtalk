@@ -16,6 +16,8 @@ class QXmppMessage;
 class QListView;
 class UnreadMessageWindow;
 class UnreadMessageModel;
+class LoginWidget;
+class QTreeView;
 
 class MainWindow : public QMainWindow
 {
@@ -30,6 +32,7 @@ public:
     };
 
 private slots:
+    void login();
     void rosterReceived();
     void rosterDoubleClicked(const QModelIndex &index);
     void getUnreadListClicked(const QModelIndex &index);
@@ -47,17 +50,19 @@ private:
     Ui::MainWindow ui;
     XmppClient *m_client;
     RosterModel *m_rosterModel;
+    QTreeView *m_rosterTreeView;
     QMap<QString, QPointer<ChatWindow> > m_chatWindows;
     QSystemTrayIcon *m_trayIcon;
     QMenu *m_trayIconMenu;
     QAction *m_quitAction;
+    UnreadMessageModel *m_unreadMessageModel;
+    UnreadMessageWindow *m_unreadMessageWindow;
+    LoginWidget *m_loginWidget;
 
     // <bareJid, QList[mess1, mess2 ...]>
     //QMap<QString, QList<QXmppMessage> > m_messageStore;
-    UnreadMessageModel *m_unreadMessageModel;
     QStringListModel stringModel;
     
-    UnreadMessageWindow *m_unreadMessageWindow;
     void setupTrayIcon();
 };
 

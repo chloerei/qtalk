@@ -36,14 +36,17 @@ SOURCES += main.cpp \
            XmppMessage.cpp \
            RosterModel.cpp \
            UnreadMessageWindow.cpp \
-           UnreadMessageModel.cpp
+           UnreadMessageModel.cpp \
+           LoginWidget.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
            XmppClient.h \
            XmppMessage.h \
            RosterModel.h  \
            UnreadMessageWindow.h \
-           UnreadMessageModel.h
+           UnreadMessageModel.h \
+           LoginWidget.h
 FORMS   += MainWindow.ui \
            ChatWindow.ui \
-           UnreadMessageWindow.ui
+           UnreadMessageWindow.ui \
+           LoginWidget.ui
