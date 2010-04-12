@@ -20,6 +20,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
     bool hasUnread(const QString &jid) const;
+    bool hasAnyUnread() const;
     QString jidAt(const QModelIndex &index) const;
     QList<QString> bareJids() const;
 

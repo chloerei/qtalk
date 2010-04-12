@@ -59,6 +59,11 @@ bool UnreadMessageModel::hasUnread(const QString &jid) const
     return m_messageStore.contains(jidToBareJid(jid));
 }
 
+bool UnreadMessageModel::hasAnyUnread() const
+{
+    return !m_messageStore.isEmpty();
+}
+
 QString UnreadMessageModel::jidAt(const QModelIndex &index) const
 {
     return m_messageStore.keys().at(index.row());

@@ -16,7 +16,15 @@ public:
     QString password() const;
     QString host() const;
     int port() const;
-    bool isRemember() const;
+    bool isStorePassword() const;
+    bool isAutoLogin() const;
+
+    void setJid(QString);
+    void setPassword(QString);
+    void setHost(QString);
+    void setPort(int);
+    void setStorePassword(bool);
+    void setAutoLogin(bool);
 
 public slots:
     void lock();

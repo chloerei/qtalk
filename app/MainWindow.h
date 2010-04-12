@@ -33,7 +33,12 @@ public:
     };
 
 private slots:
+    void readSetting();
+    void readAccountSetting();
+    void writeSetting();
+    void writeAccountSetting();
     void login();
+    void clientConnected();
     void rosterReceived();
     void rosterDoubleClicked(const QModelIndex &index);
     void getUnreadListClicked(const QModelIndex &index);

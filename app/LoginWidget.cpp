@@ -55,9 +55,44 @@ int LoginWidget::port() const
     return ui->portSpinBox->value();
 }
 
-bool LoginWidget::isRemember() const
+bool LoginWidget::isStorePassword() const
 {
-    return ui->rememberCheckBox->isChecked();
+    return ui->storePasswordCheckBox->isChecked();
+}
+
+bool LoginWidget::isAutoLogin() const
+{
+    return ui->autoLoginCheckBox->isChecked();
+}
+
+void LoginWidget::setJid(QString jid)
+{
+    ui->jidLineEdit->setText(jid);
+}
+
+void LoginWidget::setPassword(QString password)
+{
+    ui->passwordLineEdit->setText(password);
+}
+
+void LoginWidget::setHost(QString host)
+{
+    ui->hostLineEdit->setText(host);
+}
+
+void LoginWidget::setPort(int port)
+{
+    ui->portSpinBox->setValue(port);
+}
+
+void LoginWidget::setStorePassword(bool b)
+{
+    ui->storePasswordCheckBox->setChecked(b);
+}
+
+void LoginWidget::setAutoLogin(bool b)
+{
+    ui->autoLoginCheckBox->setChecked(b);
 }
 
 void LoginWidget::lock()
