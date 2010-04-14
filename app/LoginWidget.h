@@ -30,6 +30,8 @@ public slots:
     void lock();
     void unlock();
     void showState(QString);
+    void readSetting();
+    void writeSetting();
 
 private slots:
     void clickedLogin();

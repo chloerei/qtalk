@@ -1,5 +1,6 @@
 #include "LoginWidget.h"
 #include "ui_LoginWidget.h"
+#include <QSettings>
 
 LoginWidget::LoginWidget(QWidget *parent) :
     QWidget(parent),
@@ -16,11 +17,44 @@ LoginWidget::LoginWidget(QWidget *parent) :
             SLOT(clickedLogin()));
     connect(ui->jidLineEdit, SIGNAL(editingFinished()),
             this, SLOT(getHost()));
+
+    readSetting();
 }
 
 LoginWidget::~LoginWidget()
 {
     delete ui;
+}
+
+void LoginWidget::readSetting()
+{
+    QSettings setting;
+    setting.beginGroup("account");
+    setJid(setting.value("jid").toString());
+    ui->passwordLineEdit->clear();
+    if (setting.value("isStorePassword", false).toBool())
+        setPassword(setting.value("password").toString());
+    setHost(setting.value("host").toString());
+    setPort(setting.value("port", 5222).toInt());
+    setStorePassword(setting.value("isStorePassword", false).toBool());
+    setAutoLogin(setting.value("isAutoLogin", false).toBool());
+    setting.endGroup();
+}
+
+void LoginWidget::writeSetting()
+{
+    QSettings setting;
+    setting.beginGroup("account");
+    setting.setValue("jid", jid());
+    if (isStorePassword())
+        setting.setValue("password", password());
+    else
+        setting.remove("password");
+    setting.setValue("host", host());
+    setting.setValue("port", port());
+    setting.setValue("isStorePassword", isStorePassword());
+    setting.setValue("isAutoLogin", isAutoLogin());
+    setting.endGroup();
 }
 
 void LoginWidget::changeEvent(QEvent *e)

@@ -7,14 +7,18 @@
     <x>0</x>
     <y>0</y>
     <width>250</width>
-    <height>500</height>
+    <height>499</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout"/>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QWidget" name="widget" native="true"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -25,28 +29,29 @@
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_Settings">
-    <property name="title">
-     <string>&amp;Settings</string>
-    </property>
-    <addaction name="action_Account"/>
-    <addaction name="action_Config"/>
-   </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="action_About"/>
-    <addaction name="action_Qt"/>
+    <addaction name="actionAbout"/>
+    <addaction name="actionQt"/>
    </widget>
    <widget class="QMenu" name="menu_X_MPP">
     <property name="title">
-     <string>&amp;XMPP</string>
+     <string>&amp;Action</string>
     </property>
-    <addaction name="actionSend_Message"/>
-    <addaction name="actionSend_File"/>
     <addaction name="separator"/>
-    <addaction name="actionFind_Contact"/>
+    <addaction name="actionFindContact"/>
+    <addaction name="separator"/>
+    <addaction name="actionLogout"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Settings">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actionShowOffline"/>
+    <addaction name="actionConfig"/>
    </widget>
    <addaction name="menu_X_MPP"/>
    <addaction name="menu_Settings"/>
@@ -64,39 +69,42 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="actionSend_Message">
-   <property name="text">
-    <string>Send &amp;Message</string>
-   </property>
-  </action>
-  <action name="actionSend_File">
-   <property name="text">
-    <string>Send &amp;File</string>
-   </property>
-  </action>
-  <action name="action_Account">
-   <property name="text">
-    <string>&amp;Account</string>
-   </property>
-  </action>
-  <action name="action_Config">
+  <action name="actionConfig">
    <property name="text">
     <string>&amp;Config</string>
    </property>
   </action>
-  <action name="action_About">
+  <action name="actionAbout">
    <property name="text">
     <string>&amp;About</string>
    </property>
   </action>
-  <action name="action_Qt">
+  <action name="actionQt">
    <property name="text">
     <string>&amp;Qt</string>
    </property>
   </action>
-  <action name="actionFind_Contact">
+  <action name="actionFindContact">
    <property name="text">
-    <string>Add &amp;Contact</string>
+    <string>&amp;Search Contact</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+  </action>
+  <action name="actionShowOffline">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Offline</string>
+   </property>
+  </action>
+  <action name="actionLogout">
+   <property name="text">
+    <string>&amp;Logout</string>
    </property>
   </action>
  </widget>

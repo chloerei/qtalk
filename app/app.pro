@@ -37,7 +37,9 @@ SOURCES += main.cpp \
            RosterModel.cpp \
            UnreadMessageWindow.cpp \
            UnreadMessageModel.cpp \
-           LoginWidget.cpp
+           LoginWidget.cpp \
+    ConfigDialog.cpp \
+    AccountConfigWidget.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
            XmppClient.h \
@@ -45,8 +47,12 @@ HEADERS += MainWindow.h \
            RosterModel.h  \
            UnreadMessageWindow.h \
            UnreadMessageModel.h \
-           LoginWidget.h
+           LoginWidget.h \
+    ConfigDialog.h \
+    AccountConfigWidget.h
 FORMS   += MainWindow.ui \
            UnreadMessageWindow.ui \
            LoginWidget.ui \
-           ChatWindow.ui
+           ChatWindow.ui \
+    ConfigDialog.ui \
+    AccountConfigWidget.ui

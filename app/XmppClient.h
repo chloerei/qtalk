@@ -15,6 +15,9 @@ public:
     XmppClient(QObject *parent = 0);
     ~XmppClient();
 
+public slots:
+    void disconnect();
+
 private:
     RosterModel *m_rosterModel;
     QTreeView *view;

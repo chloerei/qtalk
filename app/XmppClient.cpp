@@ -15,3 +15,8 @@ XmppClient::~XmppClient()
 {
 
 }
+
+void XmppClient::disconnect()
+{
+    QXmppClient::disconnect();
+}
