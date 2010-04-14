@@ -29,13 +29,6 @@
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_Help">
-    <property name="title">
-     <string>&amp;Help</string>
-    </property>
-    <addaction name="actionAbout"/>
-    <addaction name="actionQt"/>
-   </widget>
    <widget class="QMenu" name="menu_X_MPP">
     <property name="title">
      <string>&amp;Action</string>
@@ -51,7 +44,14 @@
      <string>&amp;Settings</string>
     </property>
     <addaction name="actionShowOffline"/>
-    <addaction name="actionConfig"/>
+    <addaction name="actionPreferences"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+    <addaction name="actionQt"/>
    </widget>
    <addaction name="menu_X_MPP"/>
    <addaction name="menu_Settings"/>
@@ -69,9 +69,9 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <action name="actionConfig">
+  <action name="actionPreferences">
    <property name="text">
-    <string>&amp;Config</string>
+    <string>&amp;Preferences</string>
    </property>
   </action>
   <action name="actionAbout">

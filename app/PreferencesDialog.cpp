@@ -1,44 +1,44 @@
-#include "ConfigDialog.h"
-#include "ui_ConfigDialog.h"
-#include "AccountConfigWidget.h"
+#include "PreferencesDialog.h"
+#include "ui_PreferencesDialog.h"
+#include "PrefAccount.h"
 #include <QVBoxLayout>
 
-ConfigDialog::ConfigDialog(QWidget *parent) :
+PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ConfigDialog),
-    m_accountConfigWidget(new AccountConfigWidget(this))
+    ui(new Ui::PreferencesDialog),
+    m_prefAccount(new PrefAccount(this))
 {
     ui->setupUi(this);
-    m_accountConfigWidget->hide();
+    m_prefAccount->hide();
 
-    connect(m_accountConfigWidget, SIGNAL(settingChanged()),
+    connect(m_prefAccount, SIGNAL(settingChanged()),
             this, SIGNAL(accountSettingChanged()));
     connect(ui->configList, SIGNAL(currentRowChanged(int)),
             this, SLOT(changeConfig(int)));
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton *)),
             this, SLOT(buttonBoxClicked(QAbstractButton*)));
     QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(m_accountConfigWidget);
+    layout->addWidget(m_prefAccount);
     ui->configWidget->setLayout(layout);
-    m_accountConfigWidget->show();
+    m_prefAccount->show();
 }
 
-ConfigDialog::~ConfigDialog()
+PreferencesDialog::~PreferencesDialog()
 {
     delete ui;
 }
 
-void ConfigDialog::readSetting()
+void PreferencesDialog::readSetting()
 {
-    m_accountConfigWidget->readSetting();
+    m_prefAccount->readSetting();
 }
 
-void ConfigDialog::writeSetting()
+void PreferencesDialog::writeSetting()
 {
-    m_accountConfigWidget->writeSetting();
+    m_prefAccount->writeSetting();
 }
 
-void ConfigDialog::buttonBoxClicked(QAbstractButton *button)
+void PreferencesDialog::buttonBoxClicked(QAbstractButton *button)
 {
     switch (ui->buttonBox->buttonRole(button)) {
     case QDialogButtonBox::AcceptRole:
@@ -50,7 +50,7 @@ void ConfigDialog::buttonBoxClicked(QAbstractButton *button)
     }
 }
 
-void ConfigDialog::changeEvent(QEvent *e)
+void PreferencesDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
@@ -62,14 +62,14 @@ void ConfigDialog::changeEvent(QEvent *e)
     }
 }
 
-void ConfigDialog::changeConfig(int row)
+void PreferencesDialog::changeConfig(int row)
 {
     if (ui->configList->currentRow() != row) {
         if (ui->configWidget->layout()->count() != 0 )
             ui->configWidget->layout()->removeItem(ui->configWidget->layout()->takeAt(0));
         switch (row) {
         case 0:
-            ui->configWidget->layout()->addWidget(m_accountConfigWidget);
+            ui->configWidget->layout()->addWidget(m_prefAccount);
             break;
         default:
             break;

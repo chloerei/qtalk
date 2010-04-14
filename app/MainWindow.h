@@ -19,7 +19,7 @@ class UnreadMessageWindow;
 class UnreadMessageModel;
 class LoginWidget;
 class QTreeView;
-class ConfigDialog;
+class PreferencesDialog;
 class QVBoxLayout;
 
 class MainWindow : public QMainWindow
@@ -52,7 +52,7 @@ private slots:
     void readAllUnreadMessage();
     void clientDisconnect();
     void clientError(QXmppClient::Error);
-    void openConfigDialog();
+    void openPreferencesDialog();
     void changeToLogin();
     void changeToRoster();
 
@@ -72,7 +72,7 @@ private:
     UnreadMessageModel *m_unreadMessageModel;
     UnreadMessageWindow *m_unreadMessageWindow;
     LoginWidget *m_loginWidget;
-    ConfigDialog *m_configDialog;
+    PreferencesDialog *m_preferencesDialog;
 
     // <bareJid, QList[mess1, mess2 ...]>
     //QMap<QString, QList<QXmppMessage> > m_messageStore;

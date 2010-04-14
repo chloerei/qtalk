@@ -1,20 +1,20 @@
-#ifndef CONFIGDIALOG_H
-#define CONFIGDIALOG_H
+#ifndef PREFERENCESDIALOG_H
+#define PREFERENCESDIALOG_H
 
 #include <QDialog>
 
 namespace Ui {
-    class ConfigDialog;
+    class PreferencesDialog;
 }
 
-class AccountConfigWidget;
+class PrefAccount;
 class QAbstractButton;
 
-class ConfigDialog : public QDialog {
+class PreferencesDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit ConfigDialog(QWidget *parent = 0);
-    ~ConfigDialog();
+    explicit PreferencesDialog(QWidget *parent = 0);
+    ~PreferencesDialog();
 
 public slots:
     void readSetting();
@@ -31,8 +31,8 @@ private slots:
     void changeConfig(int row);
 
 private:
-    Ui::ConfigDialog *ui;
-    AccountConfigWidget *m_accountConfigWidget;
+    Ui::PreferencesDialog *ui;
+    PrefAccount *m_prefAccount;
 };
 
-#endif // CONFIGDIALOG_H
+#endif // PREFERENCESDIALOG_H

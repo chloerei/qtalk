@@ -1,20 +1,20 @@
-#include "AccountConfigWidget.h"
-#include "ui_AccountConfigWidget.h"
+#include "PrefAccount.h"
+#include "ui_PrefAccount.h"
 #include <QSettings>
 
-AccountConfigWidget::AccountConfigWidget(QWidget *parent) :
+PrefAccount::PrefAccount(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::AccountConfigWidget)
+    ui(new Ui::PrefAccount())
 {
     ui->setupUi(this);
 }
 
-AccountConfigWidget::~AccountConfigWidget()
+PrefAccount::~PrefAccount()
 {
     delete ui;
 }
 
-void AccountConfigWidget::changeEvent(QEvent *e)
+void PrefAccount::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -26,7 +26,7 @@ void AccountConfigWidget::changeEvent(QEvent *e)
     }
 }
 
-void AccountConfigWidget::readSetting()
+void PrefAccount::readSetting()
 {
     QSettings setting;
     setting.beginGroup("account");
@@ -41,7 +41,7 @@ void AccountConfigWidget::readSetting()
     setting.endGroup();
 }
 
-void AccountConfigWidget::writeSetting()
+void PrefAccount::writeSetting()
 {
     QSettings setting;
     setting.beginGroup("account");
