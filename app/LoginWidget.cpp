@@ -18,7 +18,6 @@ LoginWidget::LoginWidget(QWidget *parent) :
     connect(ui->jidLineEdit, SIGNAL(editingFinished()),
             this, SLOT(getHost()));
 
-    readSetting();
 }
 
 LoginWidget::~LoginWidget()
@@ -26,35 +25,30 @@ LoginWidget::~LoginWidget()
     delete ui;
 }
 
-void LoginWidget::readSetting()
+void LoginWidget::readData(Preferences *pref)
 {
-    QSettings setting;
-    setting.beginGroup("account");
-    setJid(setting.value("jid").toString());
-    ui->passwordLineEdit->clear();
-    if (setting.value("isStorePassword", false).toBool())
-        setPassword(setting.value("password").toString());
-    setHost(setting.value("host").toString());
-    setPort(setting.value("port", 5222).toInt());
-    setStorePassword(setting.value("isStorePassword", false).toBool());
-    setAutoLogin(setting.value("isAutoLogin", false).toBool());
-    setting.endGroup();
+    ui->jidLineEdit->setText(pref->jid);
+    if (pref->storePassword)
+        ui->passwordLineEdit->setText(pref->password);
+    else
+        ui->passwordLineEdit->clear();
+    ui->hostLineEdit->setText(pref->host);
+    ui->portSpinBox->setValue(pref->port);
+    ui->storePasswordCheckBox->setChecked(pref->storePassword);
+    ui->autoLoginCheckBox->setChecked(pref->autoLogin);
 }
 
-void LoginWidget::writeSetting()
+void LoginWidget::writeData(Preferences *pref)
 {
-    QSettings setting;
-    setting.beginGroup("account");
-    setting.setValue("jid", jid());
-    if (isStorePassword())
-        setting.setValue("password", password());
+    pref->jid = ui->jidLineEdit->text();
+    if (ui->storePasswordCheckBox->isChecked())
+        pref->password = ui->passwordLineEdit->text();
     else
-        setting.remove("password");
-    setting.setValue("host", host());
-    setting.setValue("port", port());
-    setting.setValue("isStorePassword", isStorePassword());
-    setting.setValue("isAutoLogin", isAutoLogin());
-    setting.endGroup();
+        pref->password.clear();
+    pref->host = ui->hostLineEdit->text();
+    pref->port = ui->portSpinBox->value();
+    pref->storePassword = ui->storePasswordCheckBox->isChecked();
+    pref->autoLogin = ui->autoLoginCheckBox->isChecked();
 }
 
 void LoginWidget::changeEvent(QEvent *e)

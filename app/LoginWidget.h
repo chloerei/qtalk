@@ -2,6 +2,7 @@
 #define LOGINWINDOW_H
 
 #include <QWidget>
+#include <Preferences.h>
 
 namespace Ui {
     class LoginWidget;
@@ -30,8 +31,8 @@ public slots:
     void lock();
     void unlock();
     void showState(QString);
-    void readSetting();
-    void writeSetting();
+    void readData(Preferences *pref);
+    void writeData(Preferences *pref);
 
 private slots:
     void clickedLogin();

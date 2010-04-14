@@ -7,6 +7,7 @@
 #include <QSystemTrayIcon>
 #include <QStringListModel>
 #include <QXmppClient.h>
+#include <Preferences.h>
 
 class XmppClient;
 class RosterModel;
@@ -53,6 +54,7 @@ private slots:
     void clientDisconnect();
     void clientError(QXmppClient::Error);
     void openPreferencesDialog();
+    void preferencesApplied();
     void changeToLogin();
     void changeToRoster();
 
@@ -61,6 +63,7 @@ protected:
 
 private:
     Ui::MainWindow ui;
+    Preferences m_preferences;
     QVBoxLayout *m_centralLayout;
     XmppClient *m_client;
     RosterModel *m_rosterModel;

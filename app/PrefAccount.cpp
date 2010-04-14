@@ -3,7 +3,7 @@
 #include <QSettings>
 
 PrefAccount::PrefAccount(QWidget *parent) :
-    QWidget(parent),
+    PrefWidget(parent),
     ui(new Ui::PrefAccount())
 {
     ui->setupUi(this);
@@ -12,6 +12,11 @@ PrefAccount::PrefAccount(QWidget *parent) :
 PrefAccount::~PrefAccount()
 {
     delete ui;
+}
+
+QString PrefAccount::sectionName()
+{
+    return "Account";
 }
 
 void PrefAccount::changeEvent(QEvent *e)
@@ -26,34 +31,31 @@ void PrefAccount::changeEvent(QEvent *e)
     }
 }
 
-void PrefAccount::readSetting()
+void PrefAccount::readData(Preferences *pref)
 {
-    QSettings setting;
-    setting.beginGroup("account");
-    ui->jidLineEdit->setText(setting.value("jid").toString());
-    ui->passwordLineEdit->clear();
-    if (setting.value("isStorePassword", false).toBool())
-        ui->passwordLineEdit->setText(setting.value("password").toString());
-    ui->hostLineEdit->setText(setting.value("host").toString());
-    ui->portSpinBox->setValue(setting.value("port", 5222).toInt());
-    ui->storePasswordCheckBox->setChecked(setting.value("isStorePassword", false).toBool());
-    ui->autoLoginCheckBox->setChecked(setting.value("isAutoLogin", false).toBool());;
-    setting.endGroup();
+    m_changed = false;
+    ui->jidLineEdit->setText(pref->jid);
+    if (pref->storePassword)
+        ui->passwordLineEdit->setText(pref->password);
+    else
+        ui->passwordLineEdit->clear();
+    ui->hostLineEdit->setText(pref->host);
+    ui->portSpinBox->setValue(pref->port);
+    ui->storePasswordCheckBox->setChecked(pref->storePassword);
+    ui->autoLoginCheckBox->setChecked(pref->autoLogin);
 }
 
-void PrefAccount::writeSetting()
+void PrefAccount::writeData(Preferences *pref)
 {
-    QSettings setting;
-    setting.beginGroup("account");
-    setting.setValue("jid", ui->jidLineEdit->text());
+    m_changed = true;
+    pref->jid = ui->jidLineEdit->text();
     if (ui->storePasswordCheckBox->isChecked())
-        setting.setValue("password", ui->passwordLineEdit->text());
+        pref->password = ui->passwordLineEdit->text();
     else
-        setting.remove("password");
-    setting.setValue("host", ui->hostLineEdit->text());
-    setting.setValue("port", ui->portSpinBox->value());
-    setting.setValue("isStorePassword", ui->storePasswordCheckBox->isChecked());
-    setting.setValue("isAutoLogin", ui->autoLoginCheckBox->isChecked());
-    setting.endGroup();
-    emit settingChanged();
+        pref->password.clear();
+    pref->host = ui->hostLineEdit->text();
+    pref->port = ui->portSpinBox->value();
+    pref->storePassword = ui->storePasswordCheckBox->isChecked();
+    pref->autoLogin = ui->autoLoginCheckBox->isChecked();
 }
+

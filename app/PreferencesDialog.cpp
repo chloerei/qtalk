@@ -2,6 +2,7 @@
 #include "ui_PreferencesDialog.h"
 #include "PrefAccount.h"
 #include <QVBoxLayout>
+#include <QPushButton>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
@@ -11,12 +12,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     ui->setupUi(this);
     m_prefAccount->hide();
 
-    connect(m_prefAccount, SIGNAL(settingChanged()),
-            this, SIGNAL(accountSettingChanged()));
     connect(ui->configList, SIGNAL(currentRowChanged(int)),
             this, SLOT(changeConfig(int)));
-    connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton *)),
-            this, SLOT(buttonBoxClicked(QAbstractButton*)));
+
+    connect(ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()),
+            this, SIGNAL(applied()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SIGNAL(applied()));
+
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(m_prefAccount);
     ui->configWidget->setLayout(layout);
@@ -28,26 +31,19 @@ PreferencesDialog::~PreferencesDialog()
     delete ui;
 }
 
-void PreferencesDialog::readSetting()
+bool PreferencesDialog::isAccountChanged()
 {
-    m_prefAccount->readSetting();
+    return m_prefAccount->isChanged();
 }
 
-void PreferencesDialog::writeSetting()
+void PreferencesDialog::readData(Preferences *pref)
 {
-    m_prefAccount->writeSetting();
+    m_prefAccount->readData(pref);
 }
 
-void PreferencesDialog::buttonBoxClicked(QAbstractButton *button)
+void PreferencesDialog::writeData(Preferences *pref)
 {
-    switch (ui->buttonBox->buttonRole(button)) {
-    case QDialogButtonBox::AcceptRole:
-    case QDialogButtonBox::ApplyRole :
-        writeSetting();
-        break;
-    default:
-        break;
-    }
+    m_prefAccount->writeData(pref);
 }
 
 void PreferencesDialog::changeEvent(QEvent *e)

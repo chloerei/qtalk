@@ -1,0 +1,42 @@
+#include "Preferences.h"
+#include <QSettings>
+
+Preferences::Preferences()
+{
+    load();
+}
+
+void Preferences::load()
+{
+    QSettings settings;
+
+    // Account
+    settings.beginGroup("account");
+    jid = settings.value("jid").toString();
+    storePassword = settings.value("storePassword", false).toBool();
+    if (storePassword)
+        password = settings.value("password").toString();
+    else
+        password.clear();
+    host = settings.value("host").toString();
+    port = settings.value("port", 5222).toInt();
+    autoLogin = settings.value("autoLogin", false).toBool();
+    settings.endGroup();
+}
+
+void Preferences::save()
+{
+    QSettings settings;
+
+    settings.beginGroup("account");
+    settings.setValue("jid", jid);
+    if (storePassword)
+        settings.setValue("password", password);
+    else
+        settings.remove("password");
+    settings.setValue("host", host);
+    settings.setValue("port", port);
+    settings.setValue("storePassword", storePassword);
+    settings.setValue("autoLogin", autoLogin);
+    settings.endGroup();
+}
