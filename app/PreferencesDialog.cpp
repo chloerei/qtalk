@@ -1,7 +1,7 @@
 #include "PreferencesDialog.h"
 #include "ui_PreferencesDialog.h"
 #include "PrefAccount.h"
-#include <QVBoxLayout>
+#include "PrefWidget.h"
 #include <QPushButton>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
@@ -12,18 +12,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     ui->setupUi(this);
     m_prefAccount->hide();
 
-    connect(ui->configList, SIGNAL(currentRowChanged(int)),
-            this, SLOT(changeConfig(int)));
-
     connect(ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()),
             this, SIGNAL(applied()));
     connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SIGNAL(applied()));
 
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(m_prefAccount);
-    ui->configWidget->setLayout(layout);
-    m_prefAccount->show();
+    addSection(m_prefAccount);
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -58,17 +52,8 @@ void PreferencesDialog::changeEvent(QEvent *e)
     }
 }
 
-void PreferencesDialog::changeConfig(int row)
+void PreferencesDialog::addSection(PrefWidget *widget)
 {
-    if (ui->configList->currentRow() != row) {
-        if (ui->configWidget->layout()->count() != 0 )
-            ui->configWidget->layout()->removeItem(ui->configWidget->layout()->takeAt(0));
-        switch (row) {
-        case 0:
-            ui->configWidget->layout()->addWidget(m_prefAccount);
-            break;
-        default:
-            break;
-        }
-    }
+    ui->sections->addItem(new QListWidgetItem(widget->sectionName()));
+    ui->pages->addWidget(widget);
 }

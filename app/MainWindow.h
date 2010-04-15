@@ -36,10 +36,8 @@ public:
     };
 
 private slots:
-    void readSetting();
-    void readAccountSetting();
-    void writeSetting();
-    void writeAccountSetting();
+    void readPreferences();
+    void writePreferences();
     void login();
     void clientConnected();
     void rosterReceived();
@@ -76,10 +74,6 @@ private:
     UnreadMessageWindow *m_unreadMessageWindow;
     LoginWidget *m_loginWidget;
     PreferencesDialog *m_preferencesDialog;
-
-    // <bareJid, QList[mess1, mess2 ...]>
-    //QMap<QString, QList<QXmppMessage> > m_messageStore;
-    QStringListModel stringModel;
     
     void setupTrayIcon();
 };

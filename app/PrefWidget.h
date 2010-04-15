@@ -7,7 +7,7 @@
 class PrefWidget : public QWidget
 {
 public:
-    PrefWidget(QWidget *parent = 0);
+    explicit PrefWidget(QWidget *parent = 0);
     virtual QString sectionName() = 0;
     virtual void readData(Preferences *pref) = 0;
     virtual void writeData(Preferences *pref) = 0;

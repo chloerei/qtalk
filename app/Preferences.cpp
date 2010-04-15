@@ -3,7 +3,6 @@
 
 Preferences::Preferences()
 {
-    load();
 }
 
 void Preferences::load()

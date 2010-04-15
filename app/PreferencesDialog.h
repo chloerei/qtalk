@@ -8,13 +8,14 @@ namespace Ui {
     class PreferencesDialog;
 }
 
+class PrefWidget;
 class PrefAccount;
 class QAbstractButton;
 
 class PreferencesDialog : public QDialog {
     Q_OBJECT
 public:
-    PreferencesDialog(QWidget *parent = 0);
+    explicit PreferencesDialog(QWidget *parent = 0);
     ~PreferencesDialog();
     bool isAccountChanged();
 
@@ -29,12 +30,12 @@ protected:
     void changeEvent(QEvent *e);
 
 private slots:
-    void changeConfig(int row);
 
 private:
     Ui::PreferencesDialog *ui;
     PrefAccount *m_prefAccount;
-    QPushButton *m_applyButton;
+
+    void addSection(PrefWidget *widget);
 };
 
 #endif // PREFERENCESDIALOG_H

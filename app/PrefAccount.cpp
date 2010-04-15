@@ -4,7 +4,7 @@
 
 PrefAccount::PrefAccount(QWidget *parent) :
     PrefWidget(parent),
-    ui(new Ui::PrefAccount())
+    ui(new Ui::PrefAccount)
 {
     ui->setupUi(this);
 }
@@ -35,10 +35,7 @@ void PrefAccount::readData(Preferences *pref)
 {
     m_changed = false;
     ui->jidLineEdit->setText(pref->jid);
-    if (pref->storePassword)
-        ui->passwordLineEdit->setText(pref->password);
-    else
-        ui->passwordLineEdit->clear();
+    ui->passwordLineEdit->setText(pref->password);
     ui->hostLineEdit->setText(pref->host);
     ui->portSpinBox->setValue(pref->port);
     ui->storePasswordCheckBox->setChecked(pref->storePassword);
@@ -47,15 +44,19 @@ void PrefAccount::readData(Preferences *pref)
 
 void PrefAccount::writeData(Preferences *pref)
 {
-    m_changed = true;
-    pref->jid = ui->jidLineEdit->text();
-    if (ui->storePasswordCheckBox->isChecked())
+    if ( pref->jid != ui->jidLineEdit->text() ||
+         pref->password != ui->passwordLineEdit->text() ||
+         pref->host != ui->hostLineEdit->text() ||
+         pref->port != ui->portSpinBox->value() ||
+         pref->storePassword != ui->storePasswordCheckBox->isChecked() ||
+         pref->autoLogin != ui->autoLoginCheckBox->isChecked() ) {
+        m_changed = true;
+        pref->jid = ui->jidLineEdit->text();
         pref->password = ui->passwordLineEdit->text();
-    else
-        pref->password.clear();
-    pref->host = ui->hostLineEdit->text();
-    pref->port = ui->portSpinBox->value();
-    pref->storePassword = ui->storePasswordCheckBox->isChecked();
-    pref->autoLogin = ui->autoLoginCheckBox->isChecked();
+        pref->host = ui->hostLineEdit->text();
+        pref->port = ui->portSpinBox->value();
+        pref->storePassword = ui->storePasswordCheckBox->isChecked();
+        pref->autoLogin = ui->autoLoginCheckBox->isChecked();
+    }
 }
 

@@ -28,10 +28,7 @@ LoginWidget::~LoginWidget()
 void LoginWidget::readData(Preferences *pref)
 {
     ui->jidLineEdit->setText(pref->jid);
-    if (pref->storePassword)
-        ui->passwordLineEdit->setText(pref->password);
-    else
-        ui->passwordLineEdit->clear();
+    ui->passwordLineEdit->setText(pref->password);
     ui->hostLineEdit->setText(pref->host);
     ui->portSpinBox->setValue(pref->port);
     ui->storePasswordCheckBox->setChecked(pref->storePassword);
@@ -41,10 +38,7 @@ void LoginWidget::readData(Preferences *pref)
 void LoginWidget::writeData(Preferences *pref)
 {
     pref->jid = ui->jidLineEdit->text();
-    if (ui->storePasswordCheckBox->isChecked())
-        pref->password = ui->passwordLineEdit->text();
-    else
-        pref->password.clear();
+    pref->password = ui->passwordLineEdit->text();
     pref->host = ui->hostLineEdit->text();
     pref->port = ui->portSpinBox->value();
     pref->storePassword = ui->storePasswordCheckBox->isChecked();

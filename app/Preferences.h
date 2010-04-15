@@ -10,7 +10,6 @@ public:
     void load();
     void save();
 
-
     // Account
     QString jid;
     QString password;
