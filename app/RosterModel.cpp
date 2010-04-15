@@ -7,15 +7,16 @@ class TreeItem
 public:
     TreeItem(RosterModel::ItemType type, QString data, TreeItem *parent = 0);
     ~TreeItem();
-    TreeItem* child(int row);
+    TreeItem* child(int row, bool hideOnline = false);
     void appendChild(TreeItem *child);
     bool removeOne(TreeItem *child);
-    int childCount() const;
+    int childCount(bool hideOffline = false) const;
     QString data() const;
     TreeItem* parent();
     int childNumber() const;
     RosterModel::ItemType type() const { return m_type; }
     QList<TreeItem *> childItems() const { return m_childItems; }
+    QList<TreeItem *> onlineChildItems() const; // only use for group
     void sortChildren();
     void setUnread(bool unread = true);
     bool isUnread() const;
@@ -52,8 +53,11 @@ TreeItem::~TreeItem()
     qDeleteAll(m_childItems);
 }
 
-TreeItem* TreeItem::child(int row)
+TreeItem* TreeItem::child(int row, bool hideOnline)
 {
+    if (hideOnline && m_type == RosterModel::group)
+        return onlineChildItems().value(row);
+
     return m_childItems.value(row);
 }
 
@@ -70,8 +74,12 @@ bool TreeItem::removeOne(TreeItem *child)
     return check;
 }
 
-int TreeItem::childCount() const
+int TreeItem::childCount(bool hideOffline) const
 {
+    if (hideOffline && m_type == RosterModel::group) {
+        return onlineChildItems().count();
+    }
+
     return m_childItems.count();
 }
 
@@ -91,6 +99,20 @@ int TreeItem::childNumber() const
         return m_parent->childItems().indexOf(const_cast<TreeItem*>(this));
 
     return 0;
+}
+
+QList<TreeItem *> TreeItem::onlineChildItems() const
+{
+    QList<TreeItem *> items;
+    if (m_type != RosterModel::group)
+        return items;
+    foreach (TreeItem *item, m_childItems) {
+        if (item->childCount() != 0) {
+            items.append(item);
+        }
+    }
+
+    return items;
 }
 
 void TreeItem::sortChildren()
@@ -140,8 +162,9 @@ int TreeItem::childIndexOfData(const QString &data) const
     return -1;
 }
 
-RosterModel::RosterModel(QObject *parent)
-    : QAbstractItemModel(parent)
+RosterModel::RosterModel(QObject *parent) :
+    QAbstractItemModel(parent),
+    m_hideOffline(false)
 {
     m_rootItem = new TreeItem(root, "root");
 }
@@ -180,6 +203,15 @@ void RosterModel::parseRoster()
     }
 }
 
+void RosterModel::hideOffline(bool hide)
+{
+    if (m_hideOffline == hide)
+        return;
+
+    m_hideOffline = hide;
+    reset();
+}
+
 TreeItem* RosterModel::findOrCreateGroup(QString group)
 {
     foreach (TreeItem *item, m_rootItem->childItems()) {
@@ -201,7 +233,7 @@ QModelIndex RosterModel::index(int row, int column, const QModelIndex &parent) c
 
     TreeItem *parentItem = getItem(parent);
 
-    TreeItem *childItem = parentItem->child(row);
+    TreeItem *childItem = parentItem->child(row, m_hideOffline);
     if (childItem)
         return createIndex(row, column, childItem);
     else
@@ -348,7 +380,9 @@ TreeItem* RosterModel::getItem(const QModelIndex &index) const
 QString RosterModel::presenceStatusTypeStrFor(const QModelIndex &index) const
 {
     TreeItem *item = getItem(index);
-    if (item->type() == RosterModel::contact) {
+    if (item->type() == RosterModel::group) {
+        return QString("[ %1 / %2 ]").arg(item->childCount(true)).arg(item->childCount());
+    } else if (item->type() == RosterModel::contact) {
         if (item->childCount() >0) {
             return " [Available]";
         } else {

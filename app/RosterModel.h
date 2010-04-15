@@ -42,6 +42,7 @@ signals:
 
 public slots:
     void parseRoster();
+    void hideOffline(bool hide);
 
 private slots:
     void presenceChanged(const QString &bareJid, const QString &resource);
@@ -50,6 +51,7 @@ private:
     QXmppRoster *m_roster;
     TreeItem* m_rootItem;
     TreeItem* findOrCreateGroup(QString group);
+    bool m_hideOffline;
 
     void parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;
