@@ -53,6 +53,7 @@ private slots:
     void clientError(QXmppClient::Error);
     void openPreferencesDialog();
     void preferencesApplied();
+    void hideOffline(bool hide);
     void changeToLogin();
     void changeToRoster();
 

@@ -99,7 +99,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Show Offline</string>
+    <string>Hide Offline Contact</string>
    </property>
   </action>
   <action name="actionLogout">

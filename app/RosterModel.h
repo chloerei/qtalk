@@ -42,7 +42,7 @@ signals:
 
 public slots:
     void parseRoster();
-    void hideOffline(bool hide);
+    void setHideOffline(bool hide);
 
 private slots:
     void presenceChanged(const QString &bareJid, const QString &resource);

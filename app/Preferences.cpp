@@ -9,6 +9,11 @@ void Preferences::load()
 {
     QSettings settings;
 
+    // General
+    settings.beginGroup("general");
+    hideOffline = settings.value("hideOffline").toBool();
+    settings.endGroup();
+
     // Account
     settings.beginGroup("account");
     jid = settings.value("jid").toString();
@@ -26,6 +31,11 @@ void Preferences::load()
 void Preferences::save()
 {
     QSettings settings;
+
+    // General
+    settings.beginGroup("general");
+    settings.setValue("hideOffline", hideOffline);
+    settings.endGroup();
 
     settings.beginGroup("account");
     settings.setValue("jid", jid);

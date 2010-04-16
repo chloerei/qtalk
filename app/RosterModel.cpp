@@ -203,7 +203,7 @@ void RosterModel::parseRoster()
     }
 }
 
-void RosterModel::hideOffline(bool hide)
+void RosterModel::setHideOffline(bool hide)
 {
     if (m_hideOffline == hide)
         return;

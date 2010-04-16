@@ -10,7 +10,7 @@ namespace Ui {
 
 class PrefWidget;
 class PrefAccount;
-class QAbstractButton;
+class PrefGeneral;
 
 class PreferencesDialog : public QDialog {
     Q_OBJECT
@@ -18,6 +18,7 @@ public:
     explicit PreferencesDialog(QWidget *parent = 0);
     ~PreferencesDialog();
     bool isAccountChanged();
+    bool isHideOfflineChanged();
 
 public slots:
     void readData(Preferences *pref);
@@ -34,6 +35,7 @@ private slots:
 private:
     Ui::PreferencesDialog *ui;
     PrefAccount *m_prefAccount;
+    PrefGeneral *m_prefGeneral;
 
     void addSection(PrefWidget *widget);
 };

@@ -15,7 +15,7 @@ class PrefAccount : public PrefWidget
 public:
     explicit PrefAccount(QWidget *parent = 0);
     ~PrefAccount();
-    QString sectionName();
+    QString sectionName() const;
     void readData(Preferences *pref);
     void writeData(Preferences *pref);
     bool isChanged() { return m_changed; }

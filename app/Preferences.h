@@ -10,6 +10,9 @@ public:
     void load();
     void save();
 
+    // General
+    bool hideOffline;
+
     // Account
     QString jid;
     QString password;

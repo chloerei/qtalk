@@ -14,7 +14,7 @@ PrefAccount::~PrefAccount()
     delete ui;
 }
 
-QString PrefAccount::sectionName()
+QString PrefAccount::sectionName() const
 {
     return "Account";
 }

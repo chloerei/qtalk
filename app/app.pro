@@ -40,8 +40,9 @@ SOURCES += main.cpp \
            LoginWidget.cpp \
            PreferencesDialog.cpp \
            PrefAccount.cpp \
-    Preferences.cpp \
-    PrefWidget.cpp
+           Preferences.cpp \
+           PrefWidget.cpp \
+           PrefGeneral.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
            XmppClient.h \
@@ -52,11 +53,13 @@ HEADERS += MainWindow.h \
            LoginWidget.h \
            PreferencesDialog.h \
            PrefAccount.h \
-    Preferences.h \
-    PrefWidget.h
+           Preferences.h \
+           PrefWidget.h \
+           PrefGeneral.h
 FORMS   += MainWindow.ui \
            UnreadMessageWindow.ui \
            LoginWidget.ui \
            ChatWindow.ui \
            PreferencesDialog.ui \
-           PrefAccount.ui
+           PrefAccount.ui \
+           PrefGeneral.ui
