@@ -21,7 +21,6 @@ class UnreadMessageModel;
 class LoginWidget;
 class QTreeView;
 class PreferencesDialog;
-class QVBoxLayout;
 
 class MainWindow : public QMainWindow
 {
@@ -63,7 +62,6 @@ protected:
 private:
     Ui::MainWindow ui;
     Preferences m_preferences;
-    QVBoxLayout *m_centralLayout;
     XmppClient *m_client;
     RosterModel *m_rosterModel;
     QTreeView *m_rosterTreeView;
