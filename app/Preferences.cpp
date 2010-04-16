@@ -11,7 +11,9 @@ void Preferences::load()
 
     // General
     settings.beginGroup("general");
-    hideOffline = settings.value("hideOffline").toBool();
+    hideOffline = settings.value("hideOffline", false).toBool();
+    closeToTray = settings.value("closeToTray", true).toBool();
+    closeToTrayNotice = settings.value("closeToTrayNotice", true).toBool();
     settings.endGroup();
 
     // Account
@@ -35,6 +37,8 @@ void Preferences::save()
     // General
     settings.beginGroup("general");
     settings.setValue("hideOffline", hideOffline);
+    settings.setValue("closeToTray", closeToTray);
+    settings.setValue("closeToTrayNotice", closeToTrayNotice);
     settings.endGroup();
 
     settings.beginGroup("account");

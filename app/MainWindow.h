@@ -21,6 +21,7 @@ class UnreadMessageModel;
 class LoginWidget;
 class QTreeView;
 class PreferencesDialog;
+class CloseNoticeDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -55,6 +56,7 @@ private slots:
     void hideOffline(bool hide);
     void changeToLogin();
     void changeToRoster();
+    void quit();
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -73,6 +75,7 @@ private:
     UnreadMessageWindow *m_unreadMessageWindow;
     LoginWidget *m_loginWidget;
     PreferencesDialog *m_preferencesDialog;
+    CloseNoticeDialog *m_closeToTrayDialog;
     
     void setupTrayIcon();
 };

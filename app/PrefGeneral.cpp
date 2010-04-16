@@ -34,6 +34,8 @@ void PrefGeneral::readData(Preferences *pref)
 {
     m_hideOfflineChange = false;
     ui->hideOfflineCheckBox->setChecked(pref->hideOffline);
+    ui->closeToTrayCheckBox->setChecked(pref->closeToTray);
+    ui->closeToTrayNoticeCheckBox->setChecked(pref->closeToTrayNotice);
 }
 
 void PrefGeneral::writeData(Preferences *pref)
@@ -42,6 +44,8 @@ void PrefGeneral::writeData(Preferences *pref)
         m_hideOfflineChange = true;
         pref->hideOffline = ui->hideOfflineCheckBox->isChecked();
     }
+    pref->closeToTray = ui->closeToTrayCheckBox->isChecked();
+    pref->closeToTrayNotice = ui->closeToTrayNoticeCheckBox->isChecked();
 }
 
 bool PrefGeneral::isHideOfflineChanged() const

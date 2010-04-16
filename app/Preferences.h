@@ -12,6 +12,8 @@ public:
 
     // General
     bool hideOffline;
+    bool closeToTray;
+    bool closeToTrayNotice;
 
     // Account
     QString jid;
