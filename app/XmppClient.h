@@ -2,7 +2,6 @@
 #define XMPPCLIENT_H
 
 #include "QXmppClient.h"
-#include "RosterModel.h"
 
 class QTreeView;
 class QXmppMessage;
@@ -19,7 +18,6 @@ public slots:
     void disconnect();
 
 private:
-    RosterModel *m_rosterModel;
     QTreeView *view;
 };
 

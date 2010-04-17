@@ -3,9 +3,11 @@
 
 #include <QAbstractItemModel>
 
-class QXmppRoster;
 class TreeItem;
+class QXmppClient;
+class QXmppRoster;
 class QXmppPresence;
+class QXmppVCardManager;
 
 class RosterModel : public QAbstractItemModel
 {
@@ -23,7 +25,7 @@ public:
     RosterModel(QObject *parent = 0);
     ~RosterModel();
 
-    void setRoster(QXmppRoster *roster);
+    void setClient(QXmppClient *client);
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -48,7 +50,9 @@ private slots:
     void presenceChanged(const QString &bareJid, const QString &resource);
 
 private:
+    QXmppClient *m_client;
     QXmppRoster *m_roster;
+    QXmppVCardManager *m_vCardManager;
     TreeItem* m_rootItem;
     TreeItem* findOrCreateGroup(QString group);
     bool m_hideOffline;

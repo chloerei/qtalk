@@ -175,12 +175,15 @@ RosterModel::~RosterModel()
     delete m_rootItem;
 }
 
-void RosterModel::setRoster(QXmppRoster *roster)
+void RosterModel::setClient(QXmppClient *client)
 {
-    m_roster = roster;
-    parseRoster();
+    m_client = client;
+    m_roster = &client->getRoster();
+    m_vCardManager = &client->getVCardManager();
     connect(m_roster, SIGNAL(presenceChanged(const QString, const QString)),
             this, SLOT(presenceChanged(const QString, const QString)));
+    connect(m_roster, SIGNAL(rosterReceived()),
+            this, SLOT(parseRoster()) );
     reset();
 }
 
