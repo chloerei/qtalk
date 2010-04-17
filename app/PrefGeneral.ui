@@ -27,7 +27,7 @@
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>View</string>
+          <string>Roster View</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
@@ -36,6 +36,40 @@
              <string>Hide offline contact</string>
             </property>
            </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="showResourcesCheckBox">
+            <property name="text">
+             <string>Show resources</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Preferred</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="showSingleResourceCheckBox">
+              <property name="text">
+               <string>Contain single resource</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>
@@ -103,5 +137,22 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>showResourcesCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>showSingleResourceCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>115</x>
+     <y>114</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>138</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

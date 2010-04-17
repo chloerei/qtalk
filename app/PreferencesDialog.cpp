@@ -33,9 +33,9 @@ bool PreferencesDialog::isAccountChanged()
     return m_prefAccount->isChanged();
 }
 
-bool PreferencesDialog::isHideOfflineChanged()
+bool PreferencesDialog::isRosterPrefChanged()
 {
-    return m_prefGeneral->isHideOfflineChanged();
+    return m_prefGeneral->isRosterPrefChanged();
 }
 
 void PreferencesDialog::readData(Preferences *pref)

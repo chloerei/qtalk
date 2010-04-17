@@ -12,6 +12,8 @@ void Preferences::load()
     // General
     settings.beginGroup("general");
     hideOffline = settings.value("hideOffline", false).toBool();
+    showResources = settings.value("showResources", true).toBool();
+    showSingleResource = settings.value("showSingleResource", false).toBool();
     closeToTray = settings.value("closeToTray", true).toBool();
     closeToTrayNotice = settings.value("closeToTrayNotice", true).toBool();
     settings.endGroup();
@@ -37,6 +39,8 @@ void Preferences::save()
     // General
     settings.beginGroup("general");
     settings.setValue("hideOffline", hideOffline);
+    settings.setValue("showResources", showResources);
+    settings.setValue("showSingleResource", showSingleResource);
     settings.setValue("closeToTray", closeToTray);
     settings.setValue("closeToTrayNotice", closeToTrayNotice);
     settings.endGroup();

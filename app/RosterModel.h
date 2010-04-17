@@ -2,6 +2,7 @@
 #define ROSTERMODEL_H
 
 #include <QAbstractItemModel>
+#include "Preferences.h"
 
 class TreeItem;
 class QXmppClient;
@@ -39,13 +40,13 @@ public:
     void messageUnread(const QString &bareJid, const QString &resource);
     void messageReaded(const QString &bareJid, const QString &resource);
     void messageReadedAll(const QString &bareJid);
+    void readPref(Preferences *pref);
 
 signals:
     void lastOneResource(const QModelIndex &contactIndex);
 
 public slots:
     void parseRoster();
-    void setHideOffline(bool hide);
 
 private slots:
     void presenceChanged(const QString &bareJid, const QString &resource);
@@ -58,6 +59,8 @@ private:
     TreeItem* m_rootItem;
     TreeItem* findOrCreateGroup(QString group);
     bool m_hideOffline;
+    bool m_showResources;
+    bool m_showSingleResource;
 
     void parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;

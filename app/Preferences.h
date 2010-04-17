@@ -12,6 +12,8 @@ public:
 
     // General
     bool hideOffline;
+    bool showResources;
+    bool showSingleResource;
     bool closeToTray;
     bool closeToTrayNotice;
 

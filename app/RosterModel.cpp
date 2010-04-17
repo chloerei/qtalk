@@ -167,7 +167,8 @@ int TreeItem::childIndexOfData(const QString &data) const
 
 RosterModel::RosterModel(QObject *parent) :
     QAbstractItemModel(parent),
-    m_hideOffline(false)
+    m_hideOffline(false),
+    m_showResources(false)
 {
     m_rootItem = new TreeItem(root, "root");
 }
@@ -217,15 +218,6 @@ void RosterModel::vCardRecived(const QXmppVCard &vCard)
     foreach (QModelIndex index, findContactIndexListForBareJid(vCard.from())) {
         dataChanged(index, index);
     }
-}
-
-void RosterModel::setHideOffline(bool hide)
-{
-    if (m_hideOffline == hide)
-        return;
-
-    m_hideOffline = hide;
-    reset();
 }
 
 TreeItem* RosterModel::findOrCreateGroup(QString group)
@@ -330,6 +322,17 @@ int RosterModel::rowCount(const QModelIndex &parent) const
     // What to hide resource when there is only one resource?
     //if (parentItem->type() == RosterModel::contact && parentItem->childCount() < 2) 
     //    return 0;
+
+    if (parentItem->type() == contact) {
+        if (!m_showResources)
+            return 0;
+
+        if (m_showResources
+            && !m_showSingleResource
+            && parentItem->childCount() < 2) {
+            return 0;
+        }
+    }
 
     return parentItem->childCount();
 }
@@ -494,6 +497,18 @@ void RosterModel::messageReadedAll(const QString &bareJid)
         }
 
         dataChanged(contactIndex, contactIndex);
+    }
+}
+
+void RosterModel::readPref(Preferences *pref)
+{
+    if (pref->hideOffline != m_hideOffline
+        || pref->showResources != m_showResources
+        || pref->showSingleResource != m_showSingleResource) {
+        m_hideOffline = pref->hideOffline;
+        m_showResources = pref->showResources;
+        m_showSingleResource = pref->showSingleResource;
+        reset();
     }
 }
 

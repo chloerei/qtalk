@@ -17,7 +17,7 @@ public:
     QString sectionName() const;
     void readData(Preferences *pref);
     void writeData(Preferences *pref);
-    bool isHideOfflineChanged() const;
+    bool isRosterPrefChanged() const;
 
 protected:
     void changeEvent(QEvent *e);
@@ -25,6 +25,8 @@ protected:
 private:
     Ui::PrefGeneral *ui;
     bool m_hideOfflineChange;
+    bool m_showResourcesChange;
+    bool m_showSingleResourceChange;
 };
 
 #endif // PREFGENERAL_H

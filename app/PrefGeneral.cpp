@@ -33,7 +33,12 @@ QString PrefGeneral::sectionName() const
 void PrefGeneral::readData(Preferences *pref)
 {
     m_hideOfflineChange = false;
+    m_showResourcesChange = false;
+    m_showSingleResourceChange = false;
     ui->hideOfflineCheckBox->setChecked(pref->hideOffline);
+    ui->showResourcesCheckBox->setChecked(pref->showResources);
+    ui->showSingleResourceCheckBox->setEnabled(pref->showResources);
+    ui->showSingleResourceCheckBox->setChecked(pref->showSingleResource);
     ui->closeToTrayCheckBox->setChecked(pref->closeToTray);
     ui->closeToTrayNoticeCheckBox->setChecked(pref->closeToTrayNotice);
 }
@@ -44,11 +49,24 @@ void PrefGeneral::writeData(Preferences *pref)
         m_hideOfflineChange = true;
         pref->hideOffline = ui->hideOfflineCheckBox->isChecked();
     }
+
+    if (pref->showResources != ui->showResourcesCheckBox->isChecked()) {
+        m_showResourcesChange = true;
+        pref->showResources = ui->showResourcesCheckBox->isChecked();
+    }
+
+    if (pref->showSingleResource != ui->showSingleResourceCheckBox->isChecked()) {
+        m_showSingleResourceChange = true;
+        pref->showSingleResource= ui->showSingleResourceCheckBox->isChecked();
+    }
+
     pref->closeToTray = ui->closeToTrayCheckBox->isChecked();
     pref->closeToTrayNotice = ui->closeToTrayNoticeCheckBox->isChecked();
 }
 
-bool PrefGeneral::isHideOfflineChanged() const
+bool PrefGeneral::isRosterPrefChanged() const
 {
-    return m_hideOfflineChange;
+    return m_hideOfflineChange
+            || m_showResourcesChange
+            || m_showSingleResourceChange;
 }
