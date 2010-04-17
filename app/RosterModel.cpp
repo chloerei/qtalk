@@ -1,6 +1,7 @@
 #include "RosterModel.h"
 #include "QXmppRoster.h"
 #include "QXmppUtils.h"
+#include <QIcon>
 
 class TreeItem
 {
@@ -253,15 +254,24 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
+    if (role == Qt::DisplayRole) {
 
-    TreeItem *item = getItem(index);
+        TreeItem *item = getItem(index);
 
-    QString output = item->data() + presenceStatusTypeStrFor(index);
-    if (item->isUnread())
-        output = QString("[*] ") + output;
-    return output;
+        QString output = item->data() + presenceStatusTypeStrFor(index);
+        if (item->isUnread())
+            output = QString("[*] ") + output;
+        return output;
+    }
+
+    if (role == Qt::DecorationRole) {
+        if (getItem(index)->type() != RosterModel::group)
+            return QIcon(":/image/contact.png");
+        else
+            return QIcon(":/image/folder-small.png");
+    }
+
+    return QVariant();
 }
 
 QVariant RosterModel::headerData(int /* section */, Qt::Orientation /* orientation */,

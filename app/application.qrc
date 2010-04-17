@@ -1,6 +1,9 @@
 <RCC>
-  <qresource prefix="/">
-    <file>image/user-online.png</file>
-    <file>image/mail-unread-new.png</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>image/user-online.png</file>
+        <file>image/mail-unread-new.png</file>
+        <file>image/folder.png</file>
+        <file>image/contact.png</file>
+        <file>image/folder-small.png</file>
+    </qresource>
 </RCC>
