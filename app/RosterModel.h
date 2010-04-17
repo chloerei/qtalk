@@ -8,6 +8,7 @@ class QXmppClient;
 class QXmppRoster;
 class QXmppPresence;
 class QXmppVCardManager;
+class QXmppVCard;
 
 class RosterModel : public QAbstractItemModel
 {
@@ -48,6 +49,7 @@ public slots:
 
 private slots:
     void presenceChanged(const QString &bareJid, const QString &resource);
+    void vCardRecived(const QXmppVCard&);
 
 private:
     QXmppClient *m_client;
@@ -62,6 +64,7 @@ private:
     QString presenceStatusTypeStrFor(const QModelIndex &index) const;
     void sortContact(const QModelIndex &groupIndex);
     QList<QModelIndex> findContactIndexListForBareJid(const QString &bareJid); // include all resource
+    QMap<QString, QXmppVCard> m_vCards; // <bareJid, vcard>
 };
 
 #endif

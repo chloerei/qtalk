@@ -1,6 +1,8 @@
 #include "RosterModel.h"
 #include "QXmppRoster.h"
 #include "QXmppUtils.h"
+#include "QXmppVCardManager.h"
+#include "QXmppVCard.h"
 #include <QIcon>
 
 class TreeItem
@@ -184,6 +186,8 @@ void RosterModel::setClient(QXmppClient *client)
             this, SLOT(presenceChanged(const QString, const QString)));
     connect(m_roster, SIGNAL(rosterReceived()),
             this, SLOT(parseRoster()) );
+    connect(m_vCardManager, SIGNAL(vCardReceived(const QXmppVCard&)),
+            this, SLOT(vCardRecived(const QXmppVCard&)) );
     reset();
 }
 
@@ -204,6 +208,14 @@ void RosterModel::parseRoster()
                 groupItem->appendChild(item);
             }
         }
+    }
+}
+
+void RosterModel::vCardRecived(const QXmppVCard &vCard)
+{
+    m_vCards[vCard.from()] = vCard;
+    foreach (QModelIndex index, findContactIndexListForBareJid(vCard.from())) {
+        dataChanged(index, index);
     }
 }
 
@@ -268,10 +280,20 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     }
 
     if (role == Qt::DecorationRole) {
-        if (getItem(index)->type() != RosterModel::group)
-            return QIcon(":/image/contact.png");
-        else
+        ItemType type = getItem(index)->type();
+        if (type == group) {
             return QIcon(":/image/folder-small.png");
+        } else if (type == contact) {
+            if (m_vCards.contains(jidAt(index))
+                && !m_vCards[jidAt(index)].photoAsImage().isNull()) {
+                QImage image = m_vCards[jidAt(index)].photoAsImage().scaled(QSize(64, 64));
+                return QIcon(QPixmap::fromImage(image));
+            } else {
+                return QIcon(":/image/contact.png");
+            }
+        } else {
+            return QVariant();
+        }
     }
 
     return QVariant();
@@ -325,6 +347,11 @@ void RosterModel::presenceChanged(const QString &bareJid, const QString &resourc
     QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
     foreach (QModelIndex index, contactIndexList) {
         parsePresence(index, resource, presence);
+    }
+
+    // request vcard if no exist
+    if (!m_vCards.contains(bareJid)) {
+        m_vCardManager->requestVCard(bareJid);
     }
 }
 
