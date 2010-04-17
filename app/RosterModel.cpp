@@ -210,6 +210,7 @@ void RosterModel::parseRoster()
             }
         }
     }
+    emit parseDone();
 }
 
 void RosterModel::vCardRecived(const QXmppVCard &vCard)

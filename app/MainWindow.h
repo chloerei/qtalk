@@ -40,7 +40,6 @@ private slots:
     void writePreferences();
     void login();
     void clientConnected();
-    void rosterReceived();
     void rosterDoubleClicked(const QModelIndex &index);
     void getUnreadListClicked(const QModelIndex &index);
     void openChatWindow(const QString &jid);

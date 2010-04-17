@@ -44,6 +44,7 @@ public:
 
 signals:
     void lastOneResource(const QModelIndex &contactIndex);
+    void parseDone();
 
 public slots:
     void parseRoster();
