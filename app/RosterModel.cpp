@@ -10,7 +10,7 @@ class TreeItem
 public:
     TreeItem(RosterModel::ItemType type, QString data, TreeItem *parent = 0);
     ~TreeItem();
-    TreeItem* child(int row, bool hideOnline = false);
+    TreeItem* child(int row);
     void appendChild(TreeItem *child);
     bool removeOne(TreeItem *child);
     int childCount(bool hideOffline = false) const;
@@ -19,7 +19,6 @@ public:
     int childNumber() const;
     RosterModel::ItemType type() const { return m_type; }
     QList<TreeItem *> childItems() const { return m_childItems; }
-    QList<TreeItem *> onlineChildItems() const; // only use for group
     void sortChildren();
     void setUnread(bool unread = true);
     bool isUnread() const;
@@ -32,6 +31,8 @@ private:
     QList<TreeItem*> m_childItems;
     TreeItem *m_parent;
     bool m_unread;
+
+    QList<TreeItem *> onlineChildItems() const; // only use for group
 };
 
 bool TreeItemCompare(TreeItem *s1, TreeItem *s2)
@@ -56,11 +57,8 @@ TreeItem::~TreeItem()
     qDeleteAll(m_childItems);
 }
 
-TreeItem* TreeItem::child(int row, bool hideOnline)
+TreeItem* TreeItem::child(int row)
 {
-    if (hideOnline && m_type == RosterModel::group)
-        return onlineChildItems().value(row);
-
     return m_childItems.value(row);
 }
 
@@ -189,7 +187,6 @@ void RosterModel::setClient(QXmppClient *client)
             this, SLOT(parseRoster()) );
     connect(m_vCardManager, SIGNAL(vCardReceived(const QXmppVCard&)),
             this, SLOT(vCardRecived(const QXmppVCard&)) );
-    reset();
 }
 
 void RosterModel::parseRoster()
@@ -210,6 +207,7 @@ void RosterModel::parseRoster()
             }
         }
     }
+    reset();
     emit parseDone();
 }
 
@@ -242,7 +240,7 @@ QModelIndex RosterModel::index(int row, int column, const QModelIndex &parent) c
 
     TreeItem *parentItem = getItem(parent);
 
-    TreeItem *childItem = parentItem->child(row, m_hideOffline);
+    TreeItem *childItem = parentItem->child(row);
     if (childItem)
         return createIndex(row, column, childItem);
     else
@@ -325,6 +323,7 @@ int RosterModel::rowCount(const QModelIndex &parent) const
     //if (parentItem->type() == RosterModel::contact && parentItem->childCount() < 2) 
     //    return 0;
 
+    /*
     if (parentItem->type() == contact) {
         if (!m_showResources)
             return 0;
@@ -335,6 +334,7 @@ int RosterModel::rowCount(const QModelIndex &parent) const
             return 0;
         }
     }
+    */
 
     return parentItem->childCount();
 }
@@ -372,13 +372,11 @@ void RosterModel::parsePresence(const QModelIndex &contactIndex, const QString &
                 beginRemoveRows(contactIndex, resourceItem->childNumber(), resourceItem->childNumber());
                 contactItem->removeOne(resourceItem);
                 endRemoveRows();
-                //if (contactItem->childCount() == 1) {
-                //    emit lastOneResource(contactIndex);
-                //}
                 emit dataChanged(contactIndex, contactIndex);
                 sortContact(groupIndex);
             }
         }
+        emit hiddenUpdate();
     } else {
         if (contactItem->hasChlidContain(resource)){
             // update resource
@@ -392,6 +390,7 @@ void RosterModel::parsePresence(const QModelIndex &contactIndex, const QString &
             contactItem->appendChild(resourceItem);
             endInsertRows();
             sortContact(groupIndex);
+            emit hiddenUpdate();
         }
     }
 }
@@ -510,8 +509,75 @@ void RosterModel::readPref(Preferences *pref)
         m_hideOffline = pref->hideOffline;
         m_showResources = pref->showResources;
         m_showSingleResource = pref->showSingleResource;
-        reset();
+        //reset();
     }
+}
+
+QList<QModelIndex> RosterModel::allGroups() const
+{
+    QList<QModelIndex> results;
+    for(int i = 0; i < rowCount(QModelIndex()); i++) {
+        results << index(i, 0);
+    }
+    return results;
+}
+
+QList<QModelIndex> RosterModel::allContacts() const
+{
+    QList<QModelIndex> results;
+    foreach (QModelIndex groupIndex, allGroups()) {
+        for (int i = 0; i < rowCount(groupIndex); i++) {
+            QModelIndex newindex = groupIndex.child(i, 0);
+            results << newindex;
+        }
+    }
+    return results;
+}
+
+QList<QModelIndex> RosterModel::allIndex(const QModelIndex &parent) const
+{
+    QList<QModelIndex> results;
+    for (int i = 0; i < rowCount(parent); i++) {
+        QModelIndex child = index(i, 0, parent);
+        results << child;
+        if (rowCount(child) != 0)
+            results << allIndex(child);
+    }
+    return results;
+}
+
+bool RosterModel::isIndexHidden(const QModelIndex &index)
+{
+    if (index == QModelIndex())
+        return false;
+
+    TreeItem *item = getItem(index);
+    switch (item->type()) {
+    case root:
+        return false;
+    case group:
+        if (item->childCount(m_hideOffline) == 0)
+            return true;
+        else
+            return false;
+        // will return
+    case contact:
+        if (m_hideOffline && item->childCount() == 0) {
+            return true;
+        } else {
+            return false;
+        } // will be return
+    case resource:
+        if (!m_showResources) {
+            return true;
+        } else if (!m_showSingleResource
+                   && item->parent()->childCount() < 2) {
+            return true;
+        } else {
+            return false;
+        } // will be return
+    }
+    return false;
 }
 
 QList<QModelIndex> RosterModel::findContactIndexListForBareJid(const QString &bareJid) 
