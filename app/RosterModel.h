@@ -41,8 +41,6 @@ public:
     void messageReaded(const QString &bareJid, const QString &resource);
     void messageReadedAll(const QString &bareJid);
     void readPref(Preferences *pref);
-    QList<QModelIndex> allGroups() const;
-    QList<QModelIndex> allContacts() const;
     QList<QModelIndex> allIndex(const QModelIndex &index = QModelIndex()) const;
     bool isIndexHidden(const QModelIndex &index);
 

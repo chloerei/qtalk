@@ -57,7 +57,7 @@ private slots:
     void changeToRoster();
     void setRosterIconSize(int);
     void rosterIconResize();
-    void rosterViewChanged();
+    void rosterViewHiddenUpdate();
     void quit();
 
 protected:

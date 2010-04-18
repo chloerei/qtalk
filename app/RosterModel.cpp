@@ -319,23 +319,6 @@ int RosterModel::rowCount(const QModelIndex &parent) const
 
     TreeItem *parentItem = getItem(parent);
 
-    // What to hide resource when there is only one resource?
-    //if (parentItem->type() == RosterModel::contact && parentItem->childCount() < 2) 
-    //    return 0;
-
-    /*
-    if (parentItem->type() == contact) {
-        if (!m_showResources)
-            return 0;
-
-        if (m_showResources
-            && !m_showSingleResource
-            && parentItem->childCount() < 2) {
-            return 0;
-        }
-    }
-    */
-
     return parentItem->childCount();
 }
 
@@ -509,29 +492,7 @@ void RosterModel::readPref(Preferences *pref)
         m_hideOffline = pref->hideOffline;
         m_showResources = pref->showResources;
         m_showSingleResource = pref->showSingleResource;
-        //reset();
     }
-}
-
-QList<QModelIndex> RosterModel::allGroups() const
-{
-    QList<QModelIndex> results;
-    for(int i = 0; i < rowCount(QModelIndex()); i++) {
-        results << index(i, 0);
-    }
-    return results;
-}
-
-QList<QModelIndex> RosterModel::allContacts() const
-{
-    QList<QModelIndex> results;
-    foreach (QModelIndex groupIndex, allGroups()) {
-        for (int i = 0; i < rowCount(groupIndex); i++) {
-            QModelIndex newindex = groupIndex.child(i, 0);
-            results << newindex;
-        }
-    }
-    return results;
 }
 
 QList<QModelIndex> RosterModel::allIndex(const QModelIndex &parent) const
