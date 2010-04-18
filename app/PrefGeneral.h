@@ -18,6 +18,13 @@ public:
     void readData(Preferences *pref);
     void writeData(Preferences *pref);
     bool isRosterPrefChanged() const;
+    bool isRosterIconSizeChanged() const;
+
+signals:
+    void rosterIconSizeChanged(int);
+
+private slots:
+    void iconSizeChanged();
 
 protected:
     void changeEvent(QEvent *e);
@@ -27,6 +34,7 @@ private:
     bool m_hideOfflineChange;
     bool m_showResourcesChange;
     bool m_showSingleResourceChange;
+    bool m_rosterIconSizeChange;
 };
 
 #endif // PREFGENERAL_H

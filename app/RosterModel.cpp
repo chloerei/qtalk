@@ -275,7 +275,8 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DecorationRole) {
         ItemType type = getItem(index)->type();
         if (type == group) {
-            return QIcon(":/image/folder-small.png");
+            QImage image(":/image/folder.png");
+            return QIcon(QPixmap::fromImage(image.scaled(QSize(24, 24))));
         } else if (type == contact) {
             if (m_vCards.contains(jidAt(index))
                 && !m_vCards[jidAt(index)].photoAsImage().isNull()) {

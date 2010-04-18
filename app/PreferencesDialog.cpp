@@ -18,6 +18,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             this, SIGNAL(applied()));
     connect(ui->buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SIGNAL(applied()));
+    connect(m_prefGeneral, SIGNAL(rosterIconSizeChanged(int)),
+            this, SIGNAL(rosterIconSizeChanged(int)) );
+    connect(ui->buttonBox, SIGNAL(rejected()),
+            this, SLOT(prefRejected()) );
 
     addSection(m_prefGeneral);
     addSection(m_prefAccount);
@@ -48,6 +52,13 @@ void PreferencesDialog::writeData(Preferences *pref)
 {
     m_prefGeneral->writeData(pref);
     m_prefAccount->writeData(pref);
+}
+
+void PreferencesDialog::prefRejected()
+{
+    if (m_prefGeneral->isRosterIconSizeChanged()) {
+        emit rosterIconReseze();
+    }
 }
 
 void PreferencesDialog::changeEvent(QEvent *e)

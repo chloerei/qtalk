@@ -14,6 +14,7 @@ public:
     bool hideOffline;
     bool showResources;
     bool showSingleResource;
+    int rosterIconSize;
     bool closeToTray;
     bool closeToTrayNotice;
 

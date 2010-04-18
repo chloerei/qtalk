@@ -55,6 +55,8 @@ private slots:
     void hideOffline(bool hide);
     void changeToLogin();
     void changeToRoster();
+    void setRosterIconSize(int);
+    void rosterIconResize();
     void quit();
 
 protected:

@@ -23,9 +23,12 @@ public:
 public slots:
     void readData(Preferences *pref);
     void writeData(Preferences *pref);
+    void prefRejected();
 
 signals:
     void applied();
+    void rosterIconSizeChanged(int);
+    void rosterIconReseze();
 
 protected:
     void changeEvent(QEvent *e);

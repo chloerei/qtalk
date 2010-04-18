@@ -6,6 +6,10 @@ PrefGeneral::PrefGeneral(QWidget *parent) :
     ui(new Ui::PrefGeneral)
 {
     ui->setupUi(this);
+    connect(ui->iconSizeSpinBox, SIGNAL(valueChanged(int)),
+            this, SIGNAL(rosterIconSizeChanged(int)) );
+    connect(ui->iconSizeSpinBox, SIGNAL(valueChanged(int)),
+            this, SLOT(iconSizeChanged()) );
 }
 
 PrefGeneral::~PrefGeneral()
@@ -35,8 +39,10 @@ void PrefGeneral::readData(Preferences *pref)
     m_hideOfflineChange = false;
     m_showResourcesChange = false;
     m_showSingleResourceChange = false;
+    m_rosterIconSizeChange = false;
     ui->hideOfflineCheckBox->setChecked(pref->hideOffline);
     ui->showResourcesCheckBox->setChecked(pref->showResources);
+    ui->iconSizeSpinBox->setValue(pref->rosterIconSize);
     ui->showSingleResourceCheckBox->setEnabled(pref->showResources);
     ui->showSingleResourceCheckBox->setChecked(pref->showSingleResource);
     ui->closeToTrayCheckBox->setChecked(pref->closeToTray);
@@ -60,6 +66,7 @@ void PrefGeneral::writeData(Preferences *pref)
         pref->showSingleResource= ui->showSingleResourceCheckBox->isChecked();
     }
 
+    pref->rosterIconSize = ui->iconSizeSpinBox->value();
     pref->closeToTray = ui->closeToTrayCheckBox->isChecked();
     pref->closeToTrayNotice = ui->closeToTrayNoticeCheckBox->isChecked();
 }
@@ -69,4 +76,14 @@ bool PrefGeneral::isRosterPrefChanged() const
     return m_hideOfflineChange
             || m_showResourcesChange
             || m_showSingleResourceChange;
+}
+
+bool PrefGeneral::isRosterIconSizeChanged() const
+{
+    return m_rosterIconSizeChange;
+}
+
+void PrefGeneral::iconSizeChanged()
+{
+    m_rosterIconSizeChange = true;
 }

@@ -14,6 +14,7 @@ void Preferences::load()
     hideOffline = settings.value("hideOffline", false).toBool();
     showResources = settings.value("showResources", true).toBool();
     showSingleResource = settings.value("showSingleResource", false).toBool();
+    rosterIconSize = settings.value("rosterIconSize", 32).toInt();
     closeToTray = settings.value("closeToTray", true).toBool();
     closeToTrayNotice = settings.value("closeToTrayNotice", true).toBool();
     settings.endGroup();
@@ -41,6 +42,7 @@ void Preferences::save()
     settings.setValue("hideOffline", hideOffline);
     settings.setValue("showResources", showResources);
     settings.setValue("showSingleResource", showSingleResource);
+    settings.setValue("rosterIconSize", rosterIconSize);
     settings.setValue("closeToTray", closeToTray);
     settings.setValue("closeToTrayNotice", closeToTrayNotice);
     settings.endGroup();

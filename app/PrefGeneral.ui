@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>500</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,6 +68,53 @@
                <string>Contain single resource</string>
               </property>
              </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QSlider" name="iconSizeHorizontalSlider">
+              <property name="minimum">
+               <number>24</number>
+              </property>
+              <property name="maximum">
+               <number>64</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="iconSizeSpinBox">
+              <property name="minimum">
+               <number>24</number>
+              </property>
+              <property name="maximum">
+               <number>64</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Icon size (px)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </item>
@@ -151,6 +198,38 @@
     <hint type="destinationlabel">
      <x>260</x>
      <y>138</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>iconSizeHorizontalSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>iconSizeSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>209</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>iconSizeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>iconSizeHorizontalSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>192</x>
+     <y>162</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>144</x>
+     <y>164</y>
     </hint>
    </hints>
   </connection>
