@@ -62,8 +62,19 @@ void ChatWindow::appendMessage(const QXmppMessage &o_message)
     }
 }
 
+void ChatWindow::readPref(Preferences *pref)
+{
+    if (pref->enterToSendMessage) {
+        ui.sendButton->setShortcut(QKeySequence("Return"));
+    } else {
+        ui.sendButton->setShortcut(QKeySequence("Ctrl+Return"));
+    }
+}
+
 void ChatWindow::sendMessage()
 {
+    if (m_editor->toPlainText().isEmpty())
+        return;
     XmppMessage message(m_client->getConfiguration().jid(),
                         m_jid,
                         m_editor->toPlainText());

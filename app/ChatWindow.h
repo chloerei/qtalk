@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "ui_ChatWindow.h"
 #include "QXmppMessage.h"
+#include "Preferences.h"
 
 class QXmppClient;
 class QXmppMessage;
@@ -18,6 +19,7 @@ public:
     void setClient(QXmppClient *client);
     void setJid(QString);
     void appendMessage(const QXmppMessage &);
+    void readPref(Preferences *pref);
 
 private slots:
     void sendMessage();
