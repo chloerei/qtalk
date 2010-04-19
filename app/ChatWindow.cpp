@@ -9,10 +9,17 @@
 #include <QCloseEvent>
 #include <QTimer>
 #include <MessageEdit.h>
+#include <QStatusBar>
+#include <QPushButton>
 
-ChatWindow::ChatWindow(QWidget *parent)
-    : QMainWindow(parent), m_selfState(QXmppMessage::Active), m_pausedTimer(new QTimer),
-    m_inactiveTimer(new QTimer), m_goneTimer(new QTimer)
+ChatWindow::ChatWindow(QWidget *parent) :
+    QMainWindow(parent),
+    m_selfState(QXmppMessage::Active),
+    m_pausedTimer(new QTimer),
+    m_inactiveTimer(new QTimer),
+    m_goneTimer(new QTimer),
+    m_statusBar(new QStatusBar),
+    m_sendButton(new QPushButton)
 {
     ui.setupUi(this);
 
@@ -23,7 +30,12 @@ ChatWindow::ChatWindow(QWidget *parent)
     ui.editorWarpwidget->setLayout(layout);
     m_editor->setFocus();
 
-    connect(ui.sendButton, SIGNAL(clicked()),
+    m_sendButton->setText("Send");
+    m_sendButton->setFixedHeight(m_statusBar->sizeHint().height());
+    m_statusBar->addPermanentWidget(m_sendButton);
+    setStatusBar(m_statusBar);
+
+    connect(m_sendButton, SIGNAL(clicked()),
             this, SLOT(sendMessage()));
     connect(m_editor, SIGNAL(textChanged()),
             this, SLOT(sendComposing()));
@@ -65,9 +77,9 @@ void ChatWindow::appendMessage(const QXmppMessage &o_message)
 void ChatWindow::readPref(Preferences *pref)
 {
     if (pref->enterToSendMessage)
-        ui.sendButton->setShortcut(QKeySequence("Return"));
+        m_sendButton->setShortcut(QKeySequence("Return"));
     else
-        ui.sendButton->setShortcut(QKeySequence("Ctrl+Return"));
+        m_sendButton->setShortcut(QKeySequence("Ctrl+Return"));
     m_editor->setIgnoreEnter(pref->enterToSendMessage);
 }
 
@@ -113,7 +125,7 @@ void ChatWindow::changeState(QXmppMessage::State state)
         default:
             break;
     }
-    ui.stateLabel->setText(QString("State: %1").arg(stateStr));
+    m_statusBar->showMessage(QString("State: %1").arg(stateStr));
 }
 
 void ChatWindow::sendComposing()
