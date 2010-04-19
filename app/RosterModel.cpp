@@ -273,7 +273,7 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DecorationRole) {
         ItemType type = getItem(index)->type();
         if (type == group) {
-            QImage image(":/image/folder.png");
+            QImage image(":/images/folder.png");
             return QIcon(QPixmap::fromImage(image.scaled(QSize(24, 24))));
         } else if (type == contact) {
             if (m_vCards.contains(jidAt(index))
@@ -281,7 +281,10 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
                 QImage image = m_vCards[jidAt(index)].photoAsImage().scaled(QSize(64, 64));
                 return QIcon(QPixmap::fromImage(image));
             } else {
-                return QIcon(":/image/user-identity.png");
+                if (getItem(index)->childCount() == 0)
+                    return QIcon(":/images/user-identity-grey.png");
+                else
+                    return QIcon(":/images/user-identity.png");
             }
         } else {
             return QVariant();

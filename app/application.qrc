@@ -1,16 +1,18 @@
 <RCC>
     <qresource prefix="/">
-        <file>image/folder.png</file>
-        <file>image/im-ban-kick-user.png</file>
-        <file>image/im-ban-user.png</file>
-        <file>image/im-invisible-user.png</file>
-        <file>image/im-kick-user.png</file>
-        <file>image/im-user-away.png</file>
-        <file>image/im-user-busy.png</file>
-        <file>image/im-user-offline.png</file>
-        <file>image/im-user.png</file>
-        <file>image/mail-unread-new.png</file>
-        <file>image/user-identity.png</file>
-        <file>image/user-identity-100.png</file>
+        <file>images/folder.png</file>
+        <file>images/im-ban-kick-user.png</file>
+        <file>images/im-ban-user.png</file>
+        <file>images/im-invisible-user.png</file>
+        <file>images/im-kick-user.png</file>
+        <file>images/im-user-away.png</file>
+        <file>images/im-user-busy.png</file>
+        <file>images/im-user-offline.png</file>
+        <file>images/im-user.png</file>
+        <file>images/mail-unread-new.png</file>
+        <file>images/user-identity.png</file>
+        <file>images/user-identity-100.png</file>
+        <file>images/user-identity-grey.png</file>
+        <file>images/user-identity-grey-100.png</file>
     </qresource>
 </RCC>

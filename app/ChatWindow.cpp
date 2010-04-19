@@ -31,8 +31,6 @@ ChatWindow::ChatWindow(QWidget *parent) :
     ui.editorWarpwidget->setLayout(layout);
     m_editor->setFocus();
 
-    ui.photo->setPixmap(QPixmap(":/image/user-identity-100.png"));
-
     m_sendButton->setText("Send");
     m_sendButton->setFixedHeight(m_statusBar->sizeHint().height());
     m_statusBar->addPermanentWidget(m_sendButton);
@@ -63,6 +61,10 @@ void ChatWindow::setJid(QString jid)
     QXmppRoster::QXmppRosterEntry entry = m_client->getRoster().getRosterEntry(jidToBareJid(jid));
     ui.name->setText(entry.name());
     ui.jid->setText(jid);
+    if (m_client->getRoster().getResources(jidToBareJid(jid)).isEmpty())
+        ui.photo->setPixmap(QPixmap(":/images/user-identity-grey-100.png"));
+    else
+        ui.photo->setPixmap(QPixmap(":/images/user-identity-100.png"));
 }
 
 void ChatWindow::appendMessage(const QXmppMessage &o_message)
