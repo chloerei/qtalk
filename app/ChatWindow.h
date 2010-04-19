@@ -12,6 +12,7 @@ class QTimer;
 class QStatusBar;
 class QPushButton;
 class MessageEdit;
+class QXmppVCard;
 
 class ChatWindow : public QMainWindow
 {
@@ -22,6 +23,7 @@ public:
     void setJid(QString);
     void appendMessage(const QXmppMessage &);
     void readPref(Preferences *pref);
+    void setVCard(QXmppVCard vCard);
 
 private slots:
     void sendMessage();

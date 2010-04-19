@@ -11,6 +11,7 @@
 #include <MessageEdit.h>
 #include <QStatusBar>
 #include <QPushButton>
+#include <QXmppVCard.h>
 
 ChatWindow::ChatWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,6 +30,8 @@ ChatWindow::ChatWindow(QWidget *parent) :
     layout->setMargin(0);
     ui.editorWarpwidget->setLayout(layout);
     m_editor->setFocus();
+
+    ui.photo->setPixmap(QPixmap(":/image/user-identity-100.png"));
 
     m_sendButton->setText("Send");
     m_sendButton->setFixedHeight(m_statusBar->sizeHint().height());
@@ -57,6 +60,9 @@ void ChatWindow::setClient(QXmppClient *client)
 void ChatWindow::setJid(QString jid)
 {
     m_jid = jid;
+    QXmppRoster::QXmppRosterEntry entry = m_client->getRoster().getRosterEntry(jidToBareJid(jid));
+    ui.name->setText(entry.name());
+    ui.jid->setText(jid);
 }
 
 void ChatWindow::appendMessage(const QXmppMessage &o_message)
@@ -81,6 +87,12 @@ void ChatWindow::readPref(Preferences *pref)
     else
         m_sendButton->setShortcut(QKeySequence("Ctrl+Return"));
     m_editor->setIgnoreEnter(pref->enterToSendMessage);
+}
+
+void ChatWindow::setVCard(QXmppVCard vCard)
+{
+    if (!vCard.photo().isEmpty())
+        ui.photo->setPixmap(QPixmap::fromImage(vCard.photoAsImage()));
 }
 
 void ChatWindow::sendMessage()

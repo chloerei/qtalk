@@ -281,7 +281,7 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
                 QImage image = m_vCards[jidAt(index)].photoAsImage().scaled(QSize(64, 64));
                 return QIcon(QPixmap::fromImage(image));
             } else {
-                return QIcon(":/image/contact.png");
+                return QIcon(":/image/user-identity.png");
             }
         } else {
             return QVariant();
@@ -539,6 +539,19 @@ bool RosterModel::isIndexHidden(const QModelIndex &index)
         } // will be return
     }
     return false;
+}
+
+bool RosterModel::hasVCard(const QString &bareJid)
+{
+    return m_vCards.contains(bareJid);
+}
+
+QXmppVCard RosterModel::getVCard(const QString &bareJid)
+{
+    if (hasVCard(bareJid))
+        return m_vCards[bareJid];
+    else
+        return QXmppVCard();
 }
 
 QList<QModelIndex> RosterModel::findContactIndexListForBareJid(const QString &bareJid) 
