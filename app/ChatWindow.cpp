@@ -8,17 +8,24 @@
 #include <QXmppRoster.h>
 #include <QCloseEvent>
 #include <QTimer>
+#include <MessageEditor.h>
 
 ChatWindow::ChatWindow(QWidget *parent)
     : QMainWindow(parent), m_selfState(QXmppMessage::Active), m_pausedTimer(new QTimer),
     m_inactiveTimer(new QTimer), m_goneTimer(new QTimer)
 {
     ui.setupUi(this);
-    ui.messageEdit->setFocus();
+
+    m_editor = new MessageEditor();
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(m_editor);
+    layout->setMargin(0);
+    ui.editorWarpWidget->setLayout(layout);
+    m_editor->setFocus();
 
     connect(ui.sendButton, SIGNAL(clicked()),
             this, SLOT(sendMessage()));
-    connect(ui.messageEdit, SIGNAL(textChanged()),
+    connect(m_editor, SIGNAL(textChanged()),
             this, SLOT(sendComposing()));
     connect(m_pausedTimer, SIGNAL(timeout()),
             this, SLOT(pausedTimeout()));
@@ -59,14 +66,14 @@ void ChatWindow::sendMessage()
 {
     XmppMessage message(m_client->getConfiguration().jid(),
                         m_jid,
-                        ui.messageEdit->toPlainText());
-    message.setHtml(ui.messageEdit->toHtml());
+                        m_editor->toPlainText());
+    message.setHtml(m_editor->toHtml());
     m_client->sendPacket(message);
 
     QString c_bareJid = m_client->getConfiguration().jidBare();
     ui.messageBrowser->append(QString("%1 %2").arg(c_bareJid).arg(QTime::currentTime().toString()));
-    ui.messageBrowser->append(ui.messageEdit->toHtml());
-    ui.messageEdit->clear();
+    ui.messageBrowser->append(m_editor->toHtml());
+    m_editor->clear();
     m_selfState = QXmppMessage::Active;
 }
 
