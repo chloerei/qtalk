@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
       </widget>
-      <widget class="QWidget" name="editorWarpWidget" native="true">
+      <widget class="QWidget" name="editorWarpwidget" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>

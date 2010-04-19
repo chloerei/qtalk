@@ -9,7 +9,7 @@
 class QXmppClient;
 class QXmppMessage;
 class QTimer;
-class MessageEditor;
+class MessageEdit;
 
 class ChatWindow : public QMainWindow
 {
@@ -39,7 +39,7 @@ private:
     QTimer *m_pausedTimer;
     QTimer *m_inactiveTimer;
     QTimer *m_goneTimer;
-    MessageEditor *m_editor;
+    MessageEdit *m_editor;
 
     void changeState(QXmppMessage::State);
     void changeSelfState(QXmppMessage::State);

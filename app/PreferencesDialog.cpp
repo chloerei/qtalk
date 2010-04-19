@@ -47,10 +47,6 @@ bool PreferencesDialog::isRosterPrefChanged()
 
 void PreferencesDialog::readData(Preferences *pref)
 {
-    /*
-    m_prefGeneral->readData(pref);
-    m_prefAccount->readData(pref);
-    */
     foreach (PrefWidget *widget, m_sections) {
         widget->readData(pref);
     }
@@ -58,10 +54,6 @@ void PreferencesDialog::readData(Preferences *pref)
 
 void PreferencesDialog::writeData(Preferences *pref)
 {
-    /*
-    m_prefGeneral->writeData(pref);
-    m_prefAccount->writeData(pref);
-    */
     foreach (PrefWidget *widget, m_sections) {
         widget->writeData(pref);
     }

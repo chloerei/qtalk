@@ -44,8 +44,8 @@ SOURCES += main.cpp \
            PrefWidget.cpp \
            PrefGeneral.cpp \
            CloseNoticeDialog.cpp \
-    MessageEditor.cpp \
-    PrefChatWindow.cpp
+           PrefChatWindow.cpp \
+    MessageEdit.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
            XmppClient.h \
@@ -60,8 +60,8 @@ HEADERS += MainWindow.h \
            PrefWidget.h \
            PrefGeneral.h \
            CloseNoticeDialog.h \
-    MessageEditor.h \
-    PrefChatWindow.h
+           PrefChatWindow.h \
+    MessageEdit.h
 FORMS   += MainWindow.ui \
            UnreadMessageWindow.ui \
            LoginWidget.ui \
@@ -70,5 +70,4 @@ FORMS   += MainWindow.ui \
            PrefAccount.ui \
            PrefGeneral.ui \
            CloseNoticeDialog.ui \
-    MessageEditor.ui \
-    PrefChatWindow.ui
+           PrefChatWindow.ui

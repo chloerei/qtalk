@@ -8,7 +8,7 @@
 #include <QXmppRoster.h>
 #include <QCloseEvent>
 #include <QTimer>
-#include <MessageEditor.h>
+#include <MessageEdit.h>
 
 ChatWindow::ChatWindow(QWidget *parent)
     : QMainWindow(parent), m_selfState(QXmppMessage::Active), m_pausedTimer(new QTimer),
@@ -16,11 +16,11 @@ ChatWindow::ChatWindow(QWidget *parent)
 {
     ui.setupUi(this);
 
-    m_editor = new MessageEditor();
+    m_editor = new MessageEdit();
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(m_editor);
     layout->setMargin(0);
-    ui.editorWarpWidget->setLayout(layout);
+    ui.editorWarpwidget->setLayout(layout);
     m_editor->setFocus();
 
     connect(ui.sendButton, SIGNAL(clicked()),
@@ -64,11 +64,11 @@ void ChatWindow::appendMessage(const QXmppMessage &o_message)
 
 void ChatWindow::readPref(Preferences *pref)
 {
-    if (pref->enterToSendMessage) {
+    if (pref->enterToSendMessage)
         ui.sendButton->setShortcut(QKeySequence("Return"));
-    } else {
+    else
         ui.sendButton->setShortcut(QKeySequence("Ctrl+Return"));
-    }
+    m_editor->setIgnoreEnter(pref->enterToSendMessage);
 }
 
 void ChatWindow::sendMessage()
