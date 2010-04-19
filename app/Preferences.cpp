@@ -31,6 +31,11 @@ void Preferences::load()
     port = settings.value("port", 5222).toInt();
     autoLogin = settings.value("autoLogin", false).toBool();
     settings.endGroup();
+
+    // ChatWindow
+    settings.beginGroup("chatwindow");
+    enterToSendMessage = settings.value("enterToSendMessage", false).toBool();
+    settings.endGroup();
 }
 
 void Preferences::save()
@@ -47,6 +52,7 @@ void Preferences::save()
     settings.setValue("closeToTrayNotice", closeToTrayNotice);
     settings.endGroup();
 
+    // Account
     settings.beginGroup("account");
     settings.setValue("jid", jid);
     if (storePassword)
@@ -57,5 +63,10 @@ void Preferences::save()
     settings.setValue("port", port);
     settings.setValue("storePassword", storePassword);
     settings.setValue("autoLogin", autoLogin);
+    settings.endGroup();
+
+    // ChatWindow
+    settings.beginGroup("chatwindow");
+    settings.setValue("enterToSendMessage", enterToSendMessage);
     settings.endGroup();
 }

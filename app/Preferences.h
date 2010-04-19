@@ -26,6 +26,8 @@ public:
     bool storePassword;
     bool autoLogin;
 
+    // ChatWindow
+    bool enterToSendMessage;
 };
 
 #endif // PREFERENCES_H

@@ -11,6 +11,7 @@ namespace Ui {
 class PrefWidget;
 class PrefAccount;
 class PrefGeneral;
+class PrefChatWindow;
 
 class PreferencesDialog : public QDialog {
     Q_OBJECT
@@ -37,8 +38,10 @@ private slots:
 
 private:
     Ui::PreferencesDialog *ui;
+    QList<PrefWidget *> m_sections;
     PrefAccount *m_prefAccount;
     PrefGeneral *m_prefGeneral;
+    PrefChatWindow *m_prefChatWindow;
 
     void addSection(PrefWidget *widget);
 };

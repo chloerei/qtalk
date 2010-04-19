@@ -3,13 +3,15 @@
 #include "PrefWidget.h"
 #include "PrefAccount.h"
 #include "PrefGeneral.h"
+#include "PrefChatWindow.h"
 #include <QPushButton>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PreferencesDialog),
     m_prefAccount(new PrefAccount(this)),
-    m_prefGeneral(new PrefGeneral(this))
+    m_prefGeneral(new PrefGeneral(this)),
+    m_prefChatWindow(new PrefChatWindow(this))
 {
     ui->setupUi(this);
     m_prefAccount->hide();
@@ -25,6 +27,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     addSection(m_prefGeneral);
     addSection(m_prefAccount);
+    addSection(m_prefChatWindow);
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -44,14 +47,24 @@ bool PreferencesDialog::isRosterPrefChanged()
 
 void PreferencesDialog::readData(Preferences *pref)
 {
+    /*
     m_prefGeneral->readData(pref);
     m_prefAccount->readData(pref);
+    */
+    foreach (PrefWidget *widget, m_sections) {
+        widget->readData(pref);
+    }
 }
 
 void PreferencesDialog::writeData(Preferences *pref)
 {
+    /*
     m_prefGeneral->writeData(pref);
     m_prefAccount->writeData(pref);
+    */
+    foreach (PrefWidget *widget, m_sections) {
+        widget->writeData(pref);
+    }
 }
 
 void PreferencesDialog::prefRejected()
@@ -77,4 +90,5 @@ void PreferencesDialog::addSection(PrefWidget *widget)
 {
     ui->sections->addItem(new QListWidgetItem(widget->sectionName()));
     ui->pages->addWidget(widget);
+    m_sections << widget;
 }
