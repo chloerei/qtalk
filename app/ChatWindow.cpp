@@ -53,6 +53,7 @@ ChatWindow::ChatWindow(QWidget *parent) :
             this, SLOT(openContactInfoDialog()) );
 
     setAttribute(Qt::WA_QuitOnClose, false);
+    setAttribute(Qt::WA_DeleteOnClose, true);
 }
 
 void ChatWindow::setClient(QXmppClient *client)
