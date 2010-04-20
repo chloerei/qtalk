@@ -8,6 +8,7 @@
 #include <QStringListModel>
 #include <QXmppClient.h>
 #include <Preferences.h>
+#include <QXmppVCard.h>
 
 class XmppClient;
 class RosterModel;
@@ -58,6 +59,7 @@ private slots:
     void setRosterIconSize(int);
     void rosterIconResize();
     void rosterViewHiddenUpdate();
+    void vCardReveived(const QXmppVCard &vCard);
     void quit();
 
 protected:
