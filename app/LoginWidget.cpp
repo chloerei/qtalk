@@ -120,11 +120,13 @@ void LoginWidget::setAutoLogin(bool b)
 void LoginWidget::lock()
 {
     ui->tabWidget->setEnabled(false);
+    ui->loginButton->setEnabled(false);
 }
 
 void LoginWidget::unlock()
 {
     ui->tabWidget->setEnabled(true);
+    ui->loginButton->setEnabled(true);
 }
 
 void LoginWidget::showState(QString str)
