@@ -149,6 +149,9 @@ void LoginWidget::getHost()
         const int pos = jid().indexOf(QChar('@'));
         if (pos < 0)
             return;
-        ui->hostLineEdit->setText(jid().mid(pos + 1));
+        QString host = jid().mid(pos+1);
+        if (host == "gmail.com")
+            host = "talk.google.com";
+        ui->hostLineEdit->setText(host);
     }
 }

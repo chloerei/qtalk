@@ -278,6 +278,9 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
             QImage image(":/images/folder.png");
             return QIcon(QPixmap::fromImage(image.scaled(QSize(24, 24))));
         } else if (type == contact) {
+            if (item->isUnread()) {
+                return QIcon(":/images/mail-unread-new.png");
+            }
             if (m_vCards.contains(jidAt(index))
                 && !m_vCards[jidAt(index)].photoAsImage().isNull()) {
                 QImage image = m_vCards[jidAt(index)].photoAsImage().scaled(QSize(64, 64));
