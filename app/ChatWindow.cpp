@@ -20,7 +20,8 @@ ChatWindow::ChatWindow(QWidget *parent) :
     m_inactiveTimer(new QTimer),
     m_goneTimer(new QTimer),
     m_statusBar(new QStatusBar),
-    m_sendButton(new QPushButton)
+    m_sendButton(new QPushButton),
+    m_sendTip(new QLabel)
 {
     ui.setupUi(this);
 
@@ -33,7 +34,9 @@ ChatWindow::ChatWindow(QWidget *parent) :
 
     m_sendButton->setText("Send");
     m_sendButton->setFixedHeight(m_statusBar->sizeHint().height());
+    m_statusBar->addPermanentWidget(m_sendTip);
     m_statusBar->addPermanentWidget(m_sendButton);
+    m_statusBar->setSizeGripEnabled(false);
     setStatusBar(m_statusBar);
 
     connect(m_sendButton, SIGNAL(clicked()),
@@ -84,10 +87,13 @@ void ChatWindow::appendMessage(const QXmppMessage &o_message)
 
 void ChatWindow::readPref(Preferences *pref)
 {
-    if (pref->enterToSendMessage)
+    if (pref->enterToSendMessage) {
         m_sendButton->setShortcut(QKeySequence("Return"));
-    else
+        m_sendTip->setText("Enter");
+    } else {
         m_sendButton->setShortcut(QKeySequence("Ctrl+Return"));
+        m_sendTip->setText("Ctrl+Enter");
+    }
     m_editor->setIgnoreEnter(pref->enterToSendMessage);
 }
 

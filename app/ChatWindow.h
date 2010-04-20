@@ -46,6 +46,7 @@ private:
     MessageEdit *m_editor;
     QStatusBar *m_statusBar;
     QPushButton *m_sendButton;
+    QLabel *m_sendTip;
 
     void changeState(QXmppMessage::State);
     void changeSelfState(QXmppMessage::State);
