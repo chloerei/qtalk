@@ -12,6 +12,8 @@
 #include <QStatusBar>
 #include <QPushButton>
 #include "ContactInfoDialog.h"
+#include <QFileDialog>
+#include <QDesktopServices>
 
 ChatWindow::ChatWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -51,6 +53,10 @@ ChatWindow::ChatWindow(QWidget *parent) :
             this, SLOT(goneTimeout()));
     connect(ui.detailButton, SIGNAL(clicked()),
             this, SLOT(openContactInfoDialog()) );
+
+    // action
+    connect(ui.actionSendFile, SIGNAL(triggered()),
+            this, SLOT(sendFileSlot()) );
 
     setAttribute(Qt::WA_QuitOnClose, false);
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -221,4 +227,15 @@ void ChatWindow::openContactInfoDialog()
     m_contactInfoDialog->show();
     m_contactInfoDialog->raise();
     m_contactInfoDialog->activateWindow();
+}
+
+void ChatWindow::sendFileSlot()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    "Select File",
+                                                    QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
+
+    if (fileName.isEmpty())
+        return;
+    emit sendFile(m_jid, fileName);
 }

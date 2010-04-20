@@ -28,6 +28,9 @@ public:
     void readPref(Preferences *pref);
     void setVCard(QXmppVCard vCard);
 
+signals:
+    void sendFile(QString jid, QString fileName);
+
 private slots:
     void sendMessage();
     void sendComposing();
@@ -35,6 +38,7 @@ private slots:
     void inactiveTimeout();
     void goneTimeout();
     void openContactInfoDialog();
+    void sendFileSlot();
 
 protected:
     void closeEvent(QCloseEvent *);
