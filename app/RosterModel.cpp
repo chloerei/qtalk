@@ -260,18 +260,20 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
+    TreeItem *item = getItem(index);
+    ItemType type = item->type();
+
     if (role == Qt::DisplayRole) {
 
         TreeItem *item = getItem(index);
 
-        QString output = item->data() + presenceStatusTypeStrFor(index);
+        QString output = displayData(index);
         if (item->isUnread())
             output = QString("[*] ") + output;
         return output;
     }
 
     if (role == Qt::DecorationRole) {
-        ItemType type = getItem(index)->type();
         if (type == group) {
             QImage image(":/images/folder.png");
             return QIcon(QPixmap::fromImage(image.scaled(QSize(24, 24))));
@@ -281,7 +283,7 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
                 QImage image = m_vCards[jidAt(index)].photoAsImage().scaled(QSize(64, 64));
                 return QIcon(QPixmap::fromImage(image));
             } else {
-                if (getItem(index)->childCount() == 0)
+                if (item->childCount() == 0)
                     return QIcon(":/images/user-identity-grey.png");
                 else
                     return QIcon(":/images/user-identity.png");
@@ -407,19 +409,34 @@ TreeItem* RosterModel::getItem(const QModelIndex &index) const
     return m_rootItem;
 }
 
-QString RosterModel::presenceStatusTypeStrFor(const QModelIndex &index) const
+QString RosterModel::displayData(const QModelIndex &index) const
 {
     TreeItem *item = getItem(index);
     if (item->type() == RosterModel::group) {
-        return QString("[ %1 / %2 ]").arg(item->childCount(true)).arg(item->childCount());
+        return QString("%1 [ %2 / %3 ]").arg(item->data()).arg(item->childCount(true)).arg(item->childCount());
     } else if (item->type() == RosterModel::contact) {
-        if (item->childCount() >0) {
-            return " [Available]";
+        QString name = m_roster->getRosterEntry(item->data()).name();
+        if (name.isEmpty())
+            name = item->data();
+
+        QString status;
+        if (item->childCount() == 0) {
+            // offline
+            status = "Offline";
+        } else if (item->childCount() == 1) {
+            // single resource
+            status = m_roster->getPresence(item->data(), item->child(0)->data()).getStatus().getTypeStr();
+            if (status.isEmpty())
+                status = "Online";
         } else {
-            return " [Unavailable]";
+            // multi resources
+            status = "multi";
         }
+        return QString("%1 \n%2")
+                .arg(name)
+                .arg(status);
     } else if (item->type() == RosterModel::resource) {
-        return m_roster->getPresence(item->parent()->data(), item->data()).getStatus().getTypeStr();
+        return item->data() + " " + m_roster->getPresence(item->parent()->data(), item->data()).getStatus().getTypeStr();
     } else {
         return QString();
     }
