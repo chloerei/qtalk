@@ -264,13 +264,7 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
     ItemType type = item->type();
 
     if (role == Qt::DisplayRole) {
-
-        TreeItem *item = getItem(index);
-
-        QString output = displayData(index);
-        if (item->isUnread())
-            output = QString("[*] ") + output;
-        return output;
+        return displayData(index);
     }
 
     if (role == Qt::DecorationRole) {
@@ -439,7 +433,10 @@ QString RosterModel::displayData(const QModelIndex &index) const
                 .arg(name)
                 .arg(status);
     } else if (item->type() == RosterModel::resource) {
-        return item->data() + " " + m_roster->getPresence(item->parent()->data(), item->data()).getStatus().getTypeStr();
+        QString str = item->data() + " " + m_roster->getPresence(item->parent()->data(), item->data()).getStatus().getTypeStr();
+        if (item->isUnread())
+            str = "[*]" + str;
+        return str;
     } else {
         return QString();
     }
