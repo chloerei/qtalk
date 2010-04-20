@@ -5,6 +5,8 @@
 #include "ui_ChatWindow.h"
 #include "QXmppMessage.h"
 #include "Preferences.h"
+#include "QXmppVCard.h"
+#include <QPointer>
 
 class QXmppClient;
 class QXmppMessage;
@@ -13,6 +15,7 @@ class QStatusBar;
 class QPushButton;
 class MessageEdit;
 class QXmppVCard;
+class ContactInfoDialog;
 
 class ChatWindow : public QMainWindow
 {
@@ -31,6 +34,7 @@ private slots:
     void pausedTimeout();
     void inactiveTimeout();
     void goneTimeout();
+    void openContactInfoDialog();
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -47,6 +51,8 @@ private:
     QStatusBar *m_statusBar;
     QPushButton *m_sendButton;
     QLabel *m_sendTip;
+    QXmppVCard m_vCard;
+    QPointer<ContactInfoDialog> m_contactInfoDialog;
 
     void changeState(QXmppMessage::State);
     void changeSelfState(QXmppMessage::State);

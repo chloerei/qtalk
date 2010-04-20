@@ -11,7 +11,7 @@
 #include <MessageEdit.h>
 #include <QStatusBar>
 #include <QPushButton>
-#include <QXmppVCard.h>
+#include "ContactInfoDialog.h"
 
 ChatWindow::ChatWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -49,6 +49,8 @@ ChatWindow::ChatWindow(QWidget *parent) :
             this, SLOT(inactiveTimeout()));
     connect(m_goneTimer, SIGNAL(timeout()),
             this, SLOT(goneTimeout()));
+    connect(ui.detailButton, SIGNAL(clicked()),
+            this, SLOT(openContactInfoDialog()) );
 
     setAttribute(Qt::WA_QuitOnClose, false);
 }
@@ -99,6 +101,7 @@ void ChatWindow::readPref(Preferences *pref)
 
 void ChatWindow::setVCard(QXmppVCard vCard)
 {
+    m_vCard = vCard;
     if (!vCard.photo().isEmpty())
         ui.photo->setPixmap(QPixmap::fromImage(vCard.photoAsImage()));
 }
@@ -202,4 +205,19 @@ void ChatWindow::goneTimeout()
 {
     changeSelfState(QXmppMessage::Gone);
     m_goneTimer->stop();
+}
+
+void ChatWindow::openContactInfoDialog()
+{
+    if (m_contactInfoDialog == NULL) {
+        m_contactInfoDialog = new ContactInfoDialog(this);
+        m_contactInfoDialog->setData(
+                m_client->getRoster().getRosterEntry(jidToBareJid(m_jid)).name(),
+                m_jid,
+                m_vCard
+                );
+    }
+    m_contactInfoDialog->show();
+    m_contactInfoDialog->raise();
+    m_contactInfoDialog->activateWindow();
 }
