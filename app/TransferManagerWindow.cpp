@@ -8,7 +8,7 @@ TransferManagerWindow::TransferManagerWindow(QXmppTransferManager *transferManag
     m_transferManager(transferManager)
 {
     ui->setupUi(this);
-    m_transferManagerModel = new TransferManagerModel(m_transferManager, this);
+    m_transferManagerModel = new TransferManagerModel(this);
     ui->tableView->setModel(m_transferManagerModel);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
 }

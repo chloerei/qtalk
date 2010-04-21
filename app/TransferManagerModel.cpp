@@ -1,8 +1,7 @@
 #include "TransferManagerModel.h"
 
-TransferManagerModel::TransferManagerModel(QXmppTransferManager *transferManager, QObject *parent) :
-    QAbstractTableModel(parent),
-    m_transferManager(transferManager)
+TransferManagerModel::TransferManagerModel(QObject *parent) :
+    QAbstractTableModel(parent)
 {
 }
 
