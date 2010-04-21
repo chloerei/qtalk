@@ -20,19 +20,19 @@ QVariant TransferManagerModel::headerData(int section, Qt::Orientation orientati
     if (role == Qt::DisplayRole) {
         if (orientation == Qt::Horizontal) {
             switch (section) {
-            case 0:
+            case Direction:
                 return QString(tr("Direction"));
-            case 1:
+            case Jid:
                 return QString(tr("Jabber ID"));
-            case 2:
+            case FileName:
                 return QString(tr("File Name"));
-            case 3:
+            case State:
                 return QString(tr("State"));
-            case 4:
+            case Method:
                 return QString(tr("Method"));
-            case 5:
+            case FileSize:
                 return QString(tr("File Size"));
-            case 6:
+            case Process:
                 return QString(tr("Process"));
             default:
                 break;
@@ -55,19 +55,19 @@ QVariant TransferManagerModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole) {
         QXmppTransferJob *job = m_jobList[index.row()];
         switch (index.column()) {
-        case 0:
+        case Direction:
             return job->direction();
-        case 1:
+        case Jid:
             return job->jid();
-        case 2:
+        case FileName:
             return job->fileName();
-        case 3:
+        case State:
             return job->state();
-        case 4:
+        case Method:
             return job->method();
-        case 5:
+        case FileSize:
             return job->fileSize();
-        case 6:
+        case Process:
             return "precess";
         default:
             break;

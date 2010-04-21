@@ -8,6 +8,16 @@ class TransferManagerModel : public QAbstractTableModel
 {
 Q_OBJECT
 public:
+    enum ColumnName
+    {
+        Jid       = 0,
+        FileName  = 1,
+        Process   = 2,
+        FileSize  = 3,
+        State     = 4,
+        Method    = 5,
+        Direction = 6
+    };
     explicit TransferManagerModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
