@@ -15,6 +15,7 @@ class TransferManagerWindow : public QMainWindow {
 public:
     explicit TransferManagerWindow(QXmppTransferManager *transferManager, QWidget *parent = 0);
     ~TransferManagerWindow();
+    void createTransferJob(const QString &jid, const QString &fileName);
 
 protected:
     void changeEvent(QEvent *e);
@@ -22,6 +23,7 @@ protected:
 private:
     Ui::TransferManagerWindow *ui;
     QXmppTransferManager *m_transferManager;
+    TransferManagerModel *m_transferManagerModel;
 };
 
 #endif // TRANSFERMANAGERWINDOW_H

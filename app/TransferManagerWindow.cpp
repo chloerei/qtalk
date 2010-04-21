@@ -8,12 +8,19 @@ TransferManagerWindow::TransferManagerWindow(QXmppTransferManager *transferManag
     m_transferManager(transferManager)
 {
     ui->setupUi(this);
-    ui->tableView->setModel(new TransferManagerModel(m_transferManager, this));
+    m_transferManagerModel = new TransferManagerModel(m_transferManager, this);
+    ui->tableView->setModel(m_transferManagerModel);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
 }
 
 TransferManagerWindow::~TransferManagerWindow()
 {
     delete ui;
+}
+
+void TransferManagerWindow::createTransferJob(const QString &jid, const QString &fileName)
+{
+    m_transferManagerModel->addJobToList(m_transferManager->sendFile(jid, fileName));
 }
 
 void TransferManagerWindow::changeEvent(QEvent *e)

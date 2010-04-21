@@ -29,16 +29,6 @@
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_X_MPP">
-    <property name="title">
-     <string>&amp;Action</string>
-    </property>
-    <addaction name="separator"/>
-    <addaction name="actionFindContact"/>
-    <addaction name="separator"/>
-    <addaction name="actionLogout"/>
-    <addaction name="actionQuit"/>
-   </widget>
    <widget class="QMenu" name="menu_Settings">
     <property name="title">
      <string>&amp;Settings</string>
@@ -52,6 +42,17 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionQt"/>
+   </widget>
+   <widget class="QMenu" name="menu_X_MPP">
+    <property name="title">
+     <string>&amp;Action</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionFindContact"/>
+    <addaction name="actionTransferManager"/>
+    <addaction name="separator"/>
+    <addaction name="actionLogout"/>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menu_X_MPP"/>
    <addaction name="menu_Settings"/>
@@ -105,6 +106,11 @@
   <action name="actionLogout">
    <property name="text">
     <string>&amp;Logout</string>
+   </property>
+  </action>
+  <action name="actionTransferManager">
+   <property name="text">
+    <string>TransferManager</string>
    </property>
   </action>
  </widget>

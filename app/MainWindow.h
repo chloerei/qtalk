@@ -23,6 +23,7 @@ class LoginWidget;
 class QTreeView;
 class PreferencesDialog;
 class CloseNoticeDialog;
+class TransferManagerWindow;
 
 class MainWindow : public QMainWindow
 {
@@ -61,6 +62,8 @@ private slots:
     void rosterViewHiddenUpdate();
     void vCardReveived(const QXmppVCard &vCard);
     void quit();
+    void openTransferWindow();
+    void createTransferJob(const QString &jid, const QString &fileName);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -80,6 +83,7 @@ private:
     LoginWidget *m_loginWidget;
     PreferencesDialog *m_preferencesDialog;
     CloseNoticeDialog *m_closeToTrayDialog;
+    TransferManagerWindow *m_transferManagerWindow;
     
     void setupTrayIcon();
 };

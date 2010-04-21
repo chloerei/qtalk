@@ -13,7 +13,36 @@ int TransferManagerModel::rowCount(const QModelIndex &/* parent */) const
 
 int TransferManagerModel::columnCount(const QModelIndex &/* parent */) const
 {
-    return 4;
+    return 7;
+}
+
+QVariant TransferManagerModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole) {
+        if (orientation == Qt::Horizontal) {
+            switch (section) {
+            case 0:
+                return QString(tr("Direction"));
+            case 1:
+                return QString(tr("Jabber ID"));
+            case 2:
+                return QString(tr("File Name"));
+            case 3:
+                return QString(tr("State"));
+            case 4:
+                return QString(tr("Method"));
+            case 5:
+                return QString(tr("File Size"));
+            case 6:
+                return QString(tr("Process"));
+            default:
+                break;
+            }
+        } else {
+            return  section;
+        }
+    }
+    return QVariant();
 }
 
 QVariant TransferManagerModel::data(const QModelIndex &index, int role) const
@@ -29,25 +58,18 @@ QVariant TransferManagerModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case 0:
             return job->direction();
-            break;
         case 1:
             return job->jid();
-            break;
         case 2:
             return job->fileName();
-            break;
         case 3:
             return job->state();
-            break;
         case 4:
             return job->method();
-            break;
         case 5:
             return job->fileSize();
-            break;
         case 6:
             return "precess";
-            break;
         default:
             break;
         }
@@ -58,10 +80,15 @@ QVariant TransferManagerModel::data(const QModelIndex &index, int role) const
 
 void TransferManagerModel::addJobToList(QXmppTransferJob *job)
 {
+    beginInsertRows(QModelIndex(), m_jobList.count(), m_jobList.count());
     m_jobList << job;
+    endInsertRows();
 }
 
 void TransferManagerModel::removeJobFromList(QXmppTransferJob *job)
 {
+    int row = m_jobList.indexOf(job);
+    beginRemoveRows(QModelIndex(), row, row);
     m_jobList.removeOne(job);
+    endRemoveColumns();
 }
