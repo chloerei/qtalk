@@ -32,7 +32,7 @@ QVariant TransferManagerModel::headerData(int section, Qt::Orientation orientati
                 return QString(tr("Method"));
             case FileSize:
                 return QString(tr("File Size"));
-            case Process:
+            case Progress:
                 return QString(tr("Process"));
             default:
                 break;
@@ -56,19 +56,42 @@ QVariant TransferManagerModel::data(const QModelIndex &index, int role) const
         QXmppTransferJob *job = m_jobList[index.row()];
         switch (index.column()) {
         case Direction:
-            return job->direction();
+            switch (job->direction()) {
+            case QXmppTransferJob::IncomingDirection:
+                return QString(tr("Incoming"));
+            case QXmppTransferJob::OutgoingDirection:
+                return QString(tr("Outgoing"));
+            }
         case Jid:
             return job->jid();
         case FileName:
             return job->fileName();
         case State:
-            return job->state();
+            switch (job->state()) {
+            case QXmppTransferJob::OfferState:
+                return QString(tr("Offer"));
+            case QXmppTransferJob::StartState:
+                return QString(tr("Start"));
+            case QXmppTransferJob::TransferState:
+                return QString(tr("Transfer"));
+            case QXmppTransferJob::FinishedState:
+                return QString(tr("Finished"));
+            }
         case Method:
-            return job->method();
+            switch (job->method()) {
+            case QXmppTransferJob::NoMethod:
+                return QString(tr("No Method"));
+            case QXmppTransferJob::InBandMethod:
+                return QString(tr("Ibb"));
+            case QXmppTransferJob::SocksMethod:
+                return QString(tr("Socks"));
+            case QXmppTransferJob::AnyMethod:
+                return QString(tr("Any"));
+            }
         case FileSize:
             return job->fileSize();
-        case Process:
-            return "precess";
+        case Progress:
+            return QString(" %1 / %2 ").arg(m_doneSize[index.row()]).arg(job->fileSize());
         default:
             break;
         }
@@ -81,6 +104,13 @@ void TransferManagerModel::addJobToList(QXmppTransferJob *job)
 {
     beginInsertRows(QModelIndex(), m_jobList.count(), m_jobList.count());
     m_jobList << job;
+    m_doneSize << 0;
+    connect(job, SIGNAL(finished()),
+            this, SLOT(jobFinished()) );
+    connect(job, SIGNAL(progress(qint64,qint64)),
+            this, SLOT(jobProgress(qint64,qint64)) );
+    connect(job, SIGNAL(stateChanged(QXmppTransferJob::State)),
+            this, SLOT(jobStateChanged(QXmppTransferJob::State)) );
     endInsertRows();
 }
 
@@ -88,6 +118,27 @@ void TransferManagerModel::removeJobFromList(QXmppTransferJob *job)
 {
     int row = m_jobList.indexOf(job);
     beginRemoveRows(QModelIndex(), row, row);
-    m_jobList.removeOne(job);
+    m_jobList.removeAt(row);
+    m_doneSize.removeAt(row);
     endRemoveColumns();
+}
+
+void TransferManagerModel::jobFinished()
+{
+    int row = m_jobList.indexOf(qobject_cast<QXmppTransferJob *>(sender()));
+    dataChanged(index(row, 0), index(row, 6));
+}
+
+void TransferManagerModel::jobProgress(qint64 done, qint64 /* total */)
+{
+    qDebug() << "progress" << done;
+    int row = m_jobList.indexOf(qobject_cast<QXmppTransferJob *>(sender()));
+    m_doneSize[row] = done;
+    dataChanged(index(row,Progress), index(row, Progress));
+}
+
+void TransferManagerModel::jobStateChanged(QXmppTransferJob::State /* state */)
+{
+    int row = m_jobList.indexOf(qobject_cast<QXmppTransferJob *>(sender()));
+    dataChanged(index(row, State), index(row, State));
 }

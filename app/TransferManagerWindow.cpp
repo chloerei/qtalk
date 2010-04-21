@@ -11,6 +11,7 @@ TransferManagerWindow::TransferManagerWindow(QXmppTransferManager *transferManag
     m_transferManagerModel = new TransferManagerModel(this);
     ui->tableView->setModel(m_transferManagerModel);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    setWindowTitle(QString(tr("Transfer Manager")));
 }
 
 TransferManagerWindow::~TransferManagerWindow()

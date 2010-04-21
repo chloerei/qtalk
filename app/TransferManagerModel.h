@@ -12,7 +12,7 @@ public:
     {
         Jid       = 0,
         FileName  = 1,
-        Process   = 2,
+        Progress   = 2,
         FileSize  = 3,
         State     = 4,
         Method    = 5,
@@ -30,9 +30,15 @@ public slots:
     void addJobToList(QXmppTransferJob *job);
     void removeJobFromList(QXmppTransferJob *job);
 
+private slots:
+    void jobFinished();
+    void jobProgress(qint64 done, qint64 total);
+    void jobStateChanged(QXmppTransferJob::State state);
+
 private:
     //QXmppTransferManager *m_transferManager;
     QList<QXmppTransferJob *> m_jobList;
+    QList<qint64> m_doneSize;
 };
 
 #endif // TRANSFERMANAGERMODEL_H
