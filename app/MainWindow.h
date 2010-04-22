@@ -45,6 +45,8 @@ private slots:
     void rosterItemClicked(const QModelIndex &index);
     void getUnreadListClicked(const QModelIndex &index);
     void openChatWindow(const QString &jid);
+    void actionStartChat();
+    void actionContactInfo();
     void messageReceived(const QXmppMessage&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void changeTrayIcon(TrayIconType type);
@@ -64,6 +66,7 @@ private slots:
     void quit();
     void openTransferWindow();
     void createTransferJob(const QString &jid, const QString &fileName);
+    void rosterContextMenu(const QPoint &position);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -74,6 +77,8 @@ private:
     XmppClient *m_client;
     RosterModel *m_rosterModel;
     QTreeView *m_rosterTreeView;
+    QAction *m_actionStartChat;
+    QAction *m_actionContactInfo;
     QMap<QString, QPointer<ChatWindow> > m_chatWindows;
     QSystemTrayIcon *m_trayIcon;
     QMenu *m_trayIconMenu;
