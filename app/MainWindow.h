@@ -42,7 +42,7 @@ private slots:
     void writePreferences();
     void login();
     void clientConnected();
-    void rosterDoubleClicked(const QModelIndex &index);
+    void rosterItemClicked(const QModelIndex &index);
     void getUnreadListClicked(const QModelIndex &index);
     void openChatWindow(const QString &jid);
     void messageReceived(const QXmppMessage&);
