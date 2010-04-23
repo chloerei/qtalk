@@ -36,6 +36,12 @@ void Preferences::load()
     settings.beginGroup("chatwindow");
     enterToSendMessage = settings.value("enterToSendMessage", false).toBool();
     settings.endGroup();
+
+    // mainWindow
+    settings.beginGroup("mainWindow");
+    mainWindowGeometry = settings.value("geometry").toByteArray();
+    mainWindowState = settings.value("state").toByteArray();
+    settings.endGroup();
 }
 
 void Preferences::save()
@@ -68,5 +74,11 @@ void Preferences::save()
     // ChatWindow
     settings.beginGroup("chatwindow");
     settings.setValue("enterToSendMessage", enterToSendMessage);
+    settings.endGroup();
+
+    // mainWindow
+    settings.beginGroup("mainWindow");
+    settings.setValue("geometry", mainWindowGeometry);
+    settings.setValue("state", mainWindowState);
     settings.endGroup();
 }

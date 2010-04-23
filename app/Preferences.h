@@ -28,6 +28,10 @@ public:
 
     // ChatWindow
     bool enterToSendMessage;
+
+    // Mainwindow
+    QByteArray mainWindowGeometry;
+    QByteArray mainWindowState;
 };
 
 #endif // PREFERENCES_H
