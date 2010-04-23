@@ -91,6 +91,7 @@ private:
     TransferManagerWindow *m_transferManagerWindow;
     
     void setupTrayIcon();
+    void createUnreadMessageWindow();
 };
 
 #endif
