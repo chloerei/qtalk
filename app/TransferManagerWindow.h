@@ -17,6 +17,9 @@ public:
     ~TransferManagerWindow();
     void createTransferJob(const QString &jid, const QString &fileName);
 
+private slots:
+    void stopTransferJob();
+
 protected:
     void changeEvent(QEvent *e);
 

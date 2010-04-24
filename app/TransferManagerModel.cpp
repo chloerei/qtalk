@@ -38,7 +38,7 @@ QVariant TransferManagerModel::headerData(int section, Qt::Orientation orientati
                 break;
             }
         } else {
-            return  section;
+            return  QVariant();
         }
     }
     return QVariant();
@@ -121,6 +121,31 @@ void TransferManagerModel::removeJobFromList(QXmppTransferJob *job)
     m_jobList.removeAt(row);
     m_doneSize.removeAt(row);
     endRemoveColumns();
+}
+
+void TransferManagerModel::stopJobAtRow(int row)
+{
+    m_jobList[row]->abort();
+}
+
+void TransferManagerModel::clearJob()
+{
+    QList<QXmppTransferJob *> unfinished;
+    foreach (QXmppTransferJob *job, m_jobList) {
+        if (job->state() != QXmppTransferJob::FinishedState)
+            unfinished << job;
+    }
+    m_jobList = unfinished;
+    reset();
+}
+
+void TransferManagerModel::removeRow(int row, const QModelIndex &parent)
+{
+    if (parent != QModelIndex())
+        return;
+    beginRemoveRows(QModelIndex(), row, row);
+    m_jobList.removeAt(row);
+    endRemoveRows();
 }
 
 void TransferManagerModel::jobFinished()

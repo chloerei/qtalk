@@ -63,15 +63,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionNewTransfer"/>
    <addaction name="actionStopTransfer"/>
    <addaction name="actionCleanList"/>
   </widget>
-  <action name="actionNewTransfer">
-   <property name="text">
-    <string>New Transfer</string>
-   </property>
-  </action>
   <action name="actionStopTransfer">
    <property name="text">
     <string>Stop Transfer</string>

@@ -10,13 +10,13 @@ Q_OBJECT
 public:
     enum ColumnName
     {
-        Jid       = 0,
-        FileName  = 1,
-        Progress   = 2,
-        FileSize  = 3,
-        State     = 4,
-        Method    = 5,
-        Direction = 6
+        Direction = 0,
+        Jid       = 1,
+        FileName  = 2,
+        Progress  = 3,
+        FileSize  = 4,
+        State     = 5,
+        Method    = 6
     };
     explicit TransferManagerModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -29,6 +29,9 @@ signals:
 public slots:
     void addJobToList(QXmppTransferJob *job);
     void removeJobFromList(QXmppTransferJob *job);
+    void stopJobAtRow(int row);
+    void clearJob();
+    void removeRow(int row, const QModelIndex &parent = QModelIndex());
 
 private slots:
     void jobFinished();
