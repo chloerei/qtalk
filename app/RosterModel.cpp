@@ -4,6 +4,7 @@
 #include "QXmppVCardManager.h"
 #include "QXmppVCard.h"
 #include <QIcon>
+#include <QXmppRosterIq.h>
 
 class TreeItem
 {

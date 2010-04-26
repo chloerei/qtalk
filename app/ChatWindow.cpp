@@ -14,6 +14,7 @@
 #include "ContactInfoDialog.h"
 #include <QFileDialog>
 #include <QDesktopServices>
+#include <QXmppRpcIq.h>
 
 ChatWindow::ChatWindow(QWidget *parent) :
     QMainWindow(parent),
