@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QFile>
+#include <QMenu>
 
 TransferManagerWindow::TransferManagerWindow(QXmppTransferManager *transferManager, QWidget *parent) :
     QMainWindow(parent),
@@ -21,6 +22,10 @@ TransferManagerWindow::TransferManagerWindow(QXmppTransferManager *transferManag
             this, SLOT(stopTransferJob()) );
     connect(ui->actionCleanList, SIGNAL(triggered()),
             m_transferManagerModel, SLOT(clearJob()) );
+
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tableView, SIGNAL(customContextMenuRequested(const QPoint &)),
+            this, SLOT(showCustomContextMenu(const QPoint &)) );
     setAttribute(Qt::WA_QuitOnClose, false);
 }
 
@@ -78,6 +83,18 @@ void TransferManagerWindow::stopTransferJob()
     foreach(QModelIndex index, ui->tableView->selectionModel()->selectedRows()) {
         m_transferManagerModel->stopJobAtRow(index.row());
     }
+}
+
+void TransferManagerWindow::showCustomContextMenu(const QPoint &position)
+{
+    QList<QAction *> actions;
+    QModelIndex index = ui->tableView->indexAt(position);
+    if (index.isValid()) {
+        actions << ui->actionStopTransfer;
+        actions << ui->actionCleanList;
+    }
+    if (!actions.isEmpty())
+        QMenu::exec(actions, ui->tableView->mapToGlobal(position));
 }
 
 void TransferManagerWindow::changeEvent(QEvent *e)

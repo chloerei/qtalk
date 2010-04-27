@@ -24,6 +24,7 @@ public slots:
 
 private slots:
     void stopTransferJob();
+    void showCustomContextMenu(const QPoint &position);
 
 protected:
     void changeEvent(QEvent *e);
