@@ -17,11 +17,11 @@ TransferManagerWindow::TransferManagerWindow(QXmppTransferManager *transferManag
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setAlternatingRowColors(true);
-    setWindowTitle(QString(tr("Transfer Manager")));
     connect(ui->actionStopTransfer, SIGNAL(triggered()),
             this, SLOT(stopTransferJob()) );
     connect(ui->actionCleanList, SIGNAL(triggered()),
             m_transferManagerModel, SLOT(clearJob()) );
+    setAttribute(Qt::WA_QuitOnClose, false);
 }
 
 TransferManagerWindow::~TransferManagerWindow()
@@ -38,7 +38,8 @@ void TransferManagerWindow::receivedTransferJob(QXmppTransferJob *job)
 {
     if (QMessageBox::information(this,
                                  tr("File recevied"),
-                                 tr("file name:"),
+                                 QString(tr("Transfer offer from: %1\nFilename: %2 \nDo your want to recevie?"))
+                                 .arg(job->jid()).arg(job->fileName()),
                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
         m_transferManagerModel->addJobToList(job);
         QString saveFileName =
@@ -54,8 +55,8 @@ void TransferManagerWindow::receivedTransferJob(QXmppTransferJob *job)
             activateWindow();
         } else {
             QMessageBox::warning(this,
-                                 tr("writing error"),
-                                 tr("Can no writing file"));
+                                 tr("Writing Error"),
+                                 tr("Can no writing file. Transfer abort"));
             job->abort();
         }
     } else {
