@@ -19,6 +19,9 @@ public:
     void createTransferJob(const QString &jid, const QString &fileName);
     void receivedTransferJob(QXmppTransferJob *job);
 
+public slots:
+    void deleteFileHandel(QXmppTransferJob *job);
+
 private slots:
     void stopTransferJob();
 
@@ -29,7 +32,7 @@ private:
     Ui::TransferManagerWindow *ui;
     QXmppTransferManager *m_transferManager;
     TransferManagerModel *m_transferManagerModel;
-    QList<QFile *> m_fileList;
+    QMap<QString, QFile *> m_files;
 };
 
 #endif // TRANSFERMANAGERWINDOW_H

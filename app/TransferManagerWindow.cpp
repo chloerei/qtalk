@@ -34,22 +34,22 @@ void TransferManagerWindow::createTransferJob(const QString &jid, const QString 
     m_transferManagerModel->addJobToList(m_transferManager->sendFile(jid, fileName));
 }
 
-void TransferManagerWindow::receivedTransferJob(QXmppTransferJob *job)
+void TransferManagerWindow::receivedTransferJob(QXmppTransferJob *offer)
 {
     if (QMessageBox::information(this,
                                  tr("File recevied"),
                                  QString(tr("Transfer offer from: %1\nFilename: %2 \nDo your want to recevie?"))
-                                 .arg(job->jid()).arg(job->fileName()),
+                                 .arg(offer->jid()).arg(offer->fileName()),
                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-        m_transferManagerModel->addJobToList(job);
+        m_transferManagerModel->addJobToList(offer);
         QString saveFileName =
                 QFileDialog::getSaveFileName(this,
                                              tr("Save File"),
-                                             QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + job->fileName());
+                                             QDesktopServices::storageLocation(QDesktopServices::DesktopLocation) + offer->fileName());
         QFile *file = new QFile(saveFileName);
         if (file->open(QIODevice::WriteOnly)) {
-            job->accept(file);
-            m_fileList << file;
+            offer->accept(file);
+            m_files[offer->sid()] = file;
             show();
             raise();
             activateWindow();
@@ -57,10 +57,19 @@ void TransferManagerWindow::receivedTransferJob(QXmppTransferJob *job)
             QMessageBox::warning(this,
                                  tr("Writing Error"),
                                  tr("Can no writing file. Transfer abort"));
-            job->abort();
+            offer->abort();
+            delete file;
         }
     } else {
-        job->abort();
+        offer->abort();
+    }
+}
+
+void TransferManagerWindow::deleteFileHandel(QXmppTransferJob *job)
+{
+    if (m_files.contains(job->sid())) {
+        qDebug("delete file handel");
+        delete m_files.take(job->sid());
     }
 }
 
