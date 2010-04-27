@@ -24,6 +24,7 @@ class QTreeView;
 class PreferencesDialog;
 class CloseNoticeDialog;
 class TransferManagerWindow;
+class QXmppTransferJob;
 
 class MainWindow : public QMainWindow
 {
@@ -66,7 +67,9 @@ private slots:
     void quit();
     void openTransferWindow();
     void createTransferJob(const QString &jid, const QString &fileName);
+    void receivedTransferJob(QXmppTransferJob *offer);
     void rosterContextMenu(const QPoint &position);
+    void initTransferWindow();
 
 protected:
     void closeEvent(QCloseEvent *event);

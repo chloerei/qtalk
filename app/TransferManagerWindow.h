@@ -5,6 +5,7 @@
 #include <QXmppTransferManager.h>
 
 class TransferManagerModel;
+class QFile;
 
 namespace Ui {
     class TransferManagerWindow;
@@ -16,6 +17,7 @@ public:
     explicit TransferManagerWindow(QXmppTransferManager *transferManager, QWidget *parent = 0);
     ~TransferManagerWindow();
     void createTransferJob(const QString &jid, const QString &fileName);
+    void receivedTransferJob(QXmppTransferJob *job);
 
 private slots:
     void stopTransferJob();
@@ -27,6 +29,7 @@ private:
     Ui::TransferManagerWindow *ui;
     QXmppTransferManager *m_transferManager;
     TransferManagerModel *m_transferManagerModel;
+    QList<QFile *> m_fileList;
 };
 
 #endif // TRANSFERMANAGERWINDOW_H
