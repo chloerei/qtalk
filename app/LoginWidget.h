@@ -13,19 +13,6 @@ class LoginWidget : public QWidget {
 public:
     explicit LoginWidget(QWidget *parent = 0);
     ~LoginWidget();
-    QString jid() const;
-    QString password() const;
-    QString host() const;
-    int port() const;
-    bool isStorePassword() const;
-    bool isAutoLogin() const;
-
-    void setJid(QString);
-    void setPassword(QString);
-    void setHost(QString);
-    void setPort(int);
-    void setStorePassword(bool);
-    void setAutoLogin(bool);
 
 public slots:
     void lock();

@@ -57,66 +57,6 @@ void LoginWidget::changeEvent(QEvent *e)
     }
 }
 
-QString LoginWidget::jid() const
-{
-    return ui->jidLineEdit->text();
-}
-
-QString LoginWidget::password() const
-{
-    return ui->passwordLineEdit->text();
-}
-
-QString LoginWidget::host() const
-{
-    return ui->hostLineEdit->text();
-}
-
-int LoginWidget::port() const
-{
-    return ui->portSpinBox->value();
-}
-
-bool LoginWidget::isStorePassword() const
-{
-    return ui->storePasswordCheckBox->isChecked();
-}
-
-bool LoginWidget::isAutoLogin() const
-{
-    return ui->autoLoginCheckBox->isChecked();
-}
-
-void LoginWidget::setJid(QString jid)
-{
-    ui->jidLineEdit->setText(jid);
-}
-
-void LoginWidget::setPassword(QString password)
-{
-    ui->passwordLineEdit->setText(password);
-}
-
-void LoginWidget::setHost(QString host)
-{
-    ui->hostLineEdit->setText(host);
-}
-
-void LoginWidget::setPort(int port)
-{
-    ui->portSpinBox->setValue(port);
-}
-
-void LoginWidget::setStorePassword(bool b)
-{
-    ui->storePasswordCheckBox->setChecked(b);
-}
-
-void LoginWidget::setAutoLogin(bool b)
-{
-    ui->autoLoginCheckBox->setChecked(b);
-}
-
 void LoginWidget::lock()
 {
     ui->tabWidget->setEnabled(false);
@@ -146,10 +86,11 @@ void LoginWidget::clickedLogin()
 void LoginWidget::getHost()
 {
     if (!ui->advanceCheckBox->isChecked()) {
-        const int pos = jid().indexOf(QChar('@'));
+        QString jid = ui->jidLineEdit->text();
+        const int pos = jid.indexOf(QChar('@'));
         if (pos < 0)
             return;
-        QString host = jid().mid(pos+1);
+        QString host = jid.mid(pos+1);
         if (host == "gmail.com")
             host = "talk.google.com";
         ui->hostLineEdit->setText(host);
