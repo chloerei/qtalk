@@ -21,9 +21,7 @@ class ChatWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    ChatWindow(QWidget *parent = 0);
-    void setClient(QXmppClient *client);
-    void setJid(QString);
+    ChatWindow(QString jid, QXmppClient *client, QWidget *parent = 0);
     void appendMessage(const QXmppMessage &);
     void readPref(Preferences *pref);
     void setVCard(QXmppVCard vCard);

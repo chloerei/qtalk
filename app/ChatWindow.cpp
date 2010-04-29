@@ -16,8 +16,10 @@
 #include <QDesktopServices>
 #include <QXmppRpcIq.h>
 
-ChatWindow::ChatWindow(QWidget *parent) :
+ChatWindow::ChatWindow(QString jid, QXmppClient *client, QWidget *parent) :
     QMainWindow(parent),
+    m_jid(jid),
+    m_client(client),
     m_selfState(QXmppMessage::Active),
     m_pausedTimer(new QTimer),
     m_inactiveTimer(new QTimer),
@@ -42,6 +44,15 @@ ChatWindow::ChatWindow(QWidget *parent) :
     m_statusBar->setSizeGripEnabled(false);
     setStatusBar(m_statusBar);
 
+    // init ui
+    QXmppRoster::QXmppRosterEntry entry = m_client->getRoster().getRosterEntry(jidToBareJid(m_jid));
+    ui.name->setText(entry.name());
+    ui.jid->setText(m_jid);
+    if (m_client->getRoster().getResources(jidToBareJid(m_jid)).isEmpty())
+        ui.photo->setPixmap(QPixmap(":/images/user-identity-grey-100.png"));
+    else
+        ui.photo->setPixmap(QPixmap(":/images/user-identity-100.png"));
+
     connect(m_sendButton, SIGNAL(clicked()),
             this, SLOT(sendMessage()));
     connect(m_editor, SIGNAL(textChanged()),
@@ -61,23 +72,6 @@ ChatWindow::ChatWindow(QWidget *parent) :
 
     setAttribute(Qt::WA_QuitOnClose, false);
     setAttribute(Qt::WA_DeleteOnClose, true);
-}
-
-void ChatWindow::setClient(QXmppClient *client)
-{
-    m_client = client;
-}
-
-void ChatWindow::setJid(QString jid)
-{
-    m_jid = jid;
-    QXmppRoster::QXmppRosterEntry entry = m_client->getRoster().getRosterEntry(jidToBareJid(jid));
-    ui.name->setText(entry.name());
-    ui.jid->setText(jid);
-    if (m_client->getRoster().getResources(jidToBareJid(jid)).isEmpty())
-        ui.photo->setPixmap(QPixmap(":/images/user-identity-grey-100.png"));
-    else
-        ui.photo->setPixmap(QPixmap(":/images/user-identity-100.png"));
 }
 
 void ChatWindow::appendMessage(const QXmppMessage &o_message)
