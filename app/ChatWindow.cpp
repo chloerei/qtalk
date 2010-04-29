@@ -211,17 +211,7 @@ void ChatWindow::goneTimeout()
 
 void ChatWindow::openContactInfoDialog()
 {
-    if (m_contactInfoDialog == NULL) {
-        m_contactInfoDialog = new ContactInfoDialog(this);
-        m_contactInfoDialog->setData(
-                m_client->getRoster().getRosterEntry(jidToBareJid(m_jid)).name(),
-                m_jid,
-                m_vCard
-                );
-    }
-    m_contactInfoDialog->show();
-    m_contactInfoDialog->raise();
-    m_contactInfoDialog->activateWindow();
+    emit viewContactInfo(m_jid);
 }
 
 void ChatWindow::sendFileSlot()

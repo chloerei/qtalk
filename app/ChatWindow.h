@@ -28,6 +28,7 @@ public:
 
 signals:
     void sendFile(QString jid, QString fileName);
+    void viewContactInfo(const QString &jid);
 
 private slots:
     void sendMessage();

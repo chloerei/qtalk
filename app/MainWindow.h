@@ -10,21 +10,22 @@
 #include <Preferences.h>
 #include <QXmppVCard.h>
 
-class XmppClient;
+class ChatWindow;
+class CloseNoticeDialog;
+class ContactInfoDialog;
+class LoginWidget;
+class PreferencesDialog;
+class QListView;
+class QModelIndex;
+class QTreeView;
+class QXmppMessage;
+class QXmppTransferJob;
 class RosterModel;
 class RosterTreeView;
-class QModelIndex;
-class ChatWindow;
-class QXmppMessage;
-class QListView;
-class UnreadMessageWindow;
-class UnreadMessageModel;
-class LoginWidget;
-class QTreeView;
-class PreferencesDialog;
-class CloseNoticeDialog;
 class TransferManagerWindow;
-class QXmppTransferJob;
+class UnreadMessageModel;
+class UnreadMessageWindow;
+class XmppClient;
 
 class MainWindow : public QMainWindow
 {
@@ -48,6 +49,7 @@ private slots:
     void openChatWindow(const QString &jid);
     void actionStartChat();
     void actionContactInfo();
+    void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void changeTrayIcon(TrayIconType type);
@@ -83,6 +85,7 @@ private:
     QAction *m_actionStartChat;
     QAction *m_actionContactInfo;
     QMap<QString, QPointer<ChatWindow> > m_chatWindows;
+    QMap<QString, QPointer<ContactInfoDialog> > m_contactInfoDialogs;
     QSystemTrayIcon *m_trayIcon;
     QMenu *m_trayIconMenu;
     QAction *m_quitAction;
