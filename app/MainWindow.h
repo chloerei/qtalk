@@ -66,6 +66,7 @@ private slots:
     void rosterIconResize();
     void rosterViewHiddenUpdate();
     void vCardReveived(const QXmppVCard &vCard);
+    void logout();
     void quit();
     void openTransferWindow();
     void createTransferJob(const QString &jid, const QString &fileName);

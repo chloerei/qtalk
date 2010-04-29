@@ -25,6 +25,7 @@ public:
     bool isUnread() const;
     bool hasChlidContain(const QString &data) const;
     int childIndexOfData(const QString &data) const;
+    void clear();
 
 private:
     RosterModel::ItemType m_type;
@@ -162,6 +163,12 @@ int TreeItem::childIndexOfData(const QString &data) const
         }
     }
     return -1;
+}
+
+void TreeItem::clear()
+{
+    qDeleteAll(m_childItems);
+    m_childItems.clear();
 }
 
 RosterModel::RosterModel(QObject *parent) :
@@ -573,6 +580,13 @@ QXmppVCard RosterModel::getVCard(const QString &bareJid)
         return m_vCards[bareJid];
     else
         return QXmppVCard();
+}
+
+void RosterModel::clear()
+{
+    m_vCards.clear();
+    m_rootItem->clear();
+    reset();
 }
 
 QList<QModelIndex> RosterModel::findContactIndexListForBareJid(const QString &bareJid) 
