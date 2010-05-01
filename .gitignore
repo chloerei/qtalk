@@ -7,3 +7,4 @@ app/release/*
 app/debug/*
 *Makefile*
 project.pro.user*
+.directory

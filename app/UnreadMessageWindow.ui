@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Unread Messages</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="application.qrc">
+    <normaloff>:/images/mail-unread-new.png</normaloff>:/images/mail-unread-new.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -46,7 +50,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../application.qrc"/>
+  <include location="application.qrc"/>
  </resources>
  <connections/>
 </ui>
