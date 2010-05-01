@@ -14,6 +14,7 @@ class PrefGeneral : public PrefWidget
 public:
     explicit PrefGeneral(QWidget *parent = 0);
     ~PrefGeneral();
+    QIcon sectionIcon() const;
     QString sectionName() const;
     void readData(Preferences *pref);
     void writeData(Preferences *pref);

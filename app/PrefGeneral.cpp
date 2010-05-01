@@ -17,6 +17,11 @@ PrefGeneral::~PrefGeneral()
     delete ui;
 }
 
+QIcon PrefGeneral::sectionIcon() const
+{
+    return QIcon(":/images/preferences-other.png");
+}
+
 void PrefGeneral::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);

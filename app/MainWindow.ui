@@ -29,13 +29,6 @@
      <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_Settings">
-    <property name="title">
-     <string>&amp;Settings</string>
-    </property>
-    <addaction name="actionHideOffline"/>
-    <addaction name="actionPreferences"/>
-   </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
@@ -48,11 +41,18 @@
      <string>&amp;Action</string>
     </property>
     <addaction name="separator"/>
-    <addaction name="actionFindContact"/>
+    <addaction name="actionAddContact"/>
     <addaction name="actionTransferManager"/>
     <addaction name="separator"/>
     <addaction name="actionLogout"/>
     <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Settings">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actionHideOffline"/>
+    <addaction name="actionPreferences"/>
    </widget>
    <addaction name="menu_X_MPP"/>
    <addaction name="menu_Settings"/>
@@ -71,6 +71,10 @@
    </attribute>
   </widget>
   <action name="actionPreferences">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/preferences-system.png</normaloff>:/images/preferences-system.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Preferences</string>
    </property>
@@ -85,12 +89,23 @@
     <string>&amp;Qt</string>
    </property>
   </action>
-  <action name="actionFindContact">
+  <action name="actionAddContact">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/contact-new.png</normaloff>:/images/contact-new.png</iconset>
+   </property>
    <property name="text">
-    <string>&amp;Search Contact</string>
+    <string>&amp;Add Contact</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Contact</string>
    </property>
   </action>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/system-shutdown.png</normaloff>:/images/system-shutdown.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
    </property>
@@ -104,16 +119,26 @@
    </property>
   </action>
   <action name="actionLogout">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/system-log-out.png</normaloff>:/images/system-log-out.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Logout</string>
    </property>
   </action>
   <action name="actionTransferManager">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/network-server-database.png</normaloff>:/images/network-server-database.png</iconset>
+   </property>
    <property name="text">
     <string>TransferManager</string>
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="application.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -80,7 +80,7 @@ void PreferencesDialog::changeEvent(QEvent *e)
 
 void PreferencesDialog::addSection(PrefWidget *widget)
 {
-    ui->sections->addItem(new QListWidgetItem(widget->sectionName()));
+    ui->sections->addItem(new QListWidgetItem(widget->sectionIcon(), widget->sectionName()));
     ui->pages->addWidget(widget);
     m_sections << widget;
 }

@@ -14,6 +14,7 @@ class PrefChatWindow : public PrefWidget
 public:
     explicit PrefChatWindow(QWidget *parent = 0);
     ~PrefChatWindow();
+    QIcon sectionIcon() const;
     QString sectionName() const;
     void readData(Preferences *pref);
     void writeData(Preferences *pref);

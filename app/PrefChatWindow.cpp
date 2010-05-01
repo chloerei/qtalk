@@ -25,6 +25,11 @@ void PrefChatWindow::changeEvent(QEvent *e)
     }
 }
 
+QIcon PrefChatWindow::sectionIcon() const
+{
+    return QIcon(":/images/preferences-system-windows.png");
+}
+
 QString PrefChatWindow::sectionName() const
 {
     return "ChatWindow";

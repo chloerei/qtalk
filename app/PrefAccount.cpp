@@ -14,6 +14,11 @@ PrefAccount::~PrefAccount()
     delete ui;
 }
 
+QIcon PrefAccount::sectionIcon() const
+{
+    return QIcon(":/images/preferences-desktop-user-password.png");
+}
+
 QString PrefAccount::sectionName() const
 {
     return "Account";
