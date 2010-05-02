@@ -275,6 +275,11 @@ QVariant RosterModel::data(const QModelIndex &index, int role) const
         return displayData(index);
     }
 
+    if (role == Qt::ToolTipRole) {
+        return toolTipData(index);
+
+    }
+
     if (role == Qt::DecorationRole) {
         if (type == group) {
             QImage image(":/images/folder.png");
@@ -448,6 +453,72 @@ QString RosterModel::displayData(const QModelIndex &index) const
     } else {
         return QString();
     }
+}
+
+QString RosterModel::toolTipData(const QModelIndex &index) const
+{
+    TreeItem *item = getItem(index);
+    ItemType type = item->type();
+
+    if (type == group)
+        return QString();
+
+    QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(jidToBareJid(jidAt(index)));
+    QString subscriptionStr = "";
+    switch (entry.subscriptionType()) {
+    case QXmppRoster::QXmppRosterEntry::NotSet:
+        subscriptionStr = QString(tr("NotSet"));
+        break;
+    case QXmppRoster::QXmppRosterEntry::None:
+        subscriptionStr = QString(tr("None"));
+        break;
+    case QXmppRoster::QXmppRosterEntry::Both:
+        subscriptionStr = QString(tr("Both"));
+        break;
+    case QXmppRoster::QXmppRosterEntry::From:
+        subscriptionStr = QString(tr("From"));
+        break;
+    case QXmppRoster::QXmppRosterEntry::To:
+        subscriptionStr = QString(tr("To"));
+        break;
+    case QXmppRoster::QXmppRosterEntry::Remove:
+        subscriptionStr = QString(tr("Remove"));
+        break;
+    }
+
+    if (type == contact) {
+        QString resource;
+        QString status;
+        if (item->childCount() == 0) {
+            resource = QString(tr("No Resource"));
+            status = QString(tr("Offline"));
+        } else if (item->childCount() == 1) {
+            resource = item->child(0)->data();
+            QXmppPresence presence = m_roster->getPresence(item->data(), item->child(0)->data());
+            status = QString("%1 (%2)").arg(presence.getStatus().getTypeStr()).arg(presence.getStatus().getStatusText());
+        } else {
+            resource = QString(tr("Multi Resources"));
+            status = QString(tr("Multi Status"));
+        }
+        return QString(tr("Name: ")) + entry.name() + "\n"
+                + QString(tr("Jabber ID: ")) + entry.bareJid() + "\n"
+                + QString(tr("Status: ")) + status + "\n"
+                + QString(tr("Resource: ")) + resource + "\n"
+                + QString(tr("Subscription Type: ")) + subscriptionStr;
+    }
+
+    if (type == resource) {
+        QXmppPresence presence = m_roster->getPresence(jidToBareJid(jidAt(index)),
+                                                       jidToResource(jidAt(index)));
+        QString status = QString("%1 (%2)").arg(presence.getStatus().getTypeStr()).arg(presence.getStatus().getStatusText());
+        return QString(tr("Name: ")) + entry.name() + "\n"
+                + QString(tr("Jabber ID: ")) + entry.bareJid() + "\n"
+                + QString(tr("Status: ")) + status + "\n"
+                + QString(tr("Resource: ")) + item->data() + "\n"
+                + QString(tr("Subscription Type: ")) + subscriptionStr;
+    }
+
+    return QString();
 }
 
 void RosterModel::sortContact(const QModelIndex &groupIndex)
