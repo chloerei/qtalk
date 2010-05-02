@@ -43,8 +43,8 @@ public:
     void readPref(Preferences *pref);
     QList<QModelIndex> allIndex(const QModelIndex &index = QModelIndex()) const;
     bool isIndexHidden(const QModelIndex &index);
-    bool hasVCard(const QString &bareJid);
-    QXmppVCard getVCard(const QString &bareJid); // if no exist, return empty vcard
+    bool hasVCard(const QString &bareJid) const;
+    QXmppVCard getVCard(const QString &bareJid) const; // if no exist, return empty vcard
     void clear();
 
 signals:

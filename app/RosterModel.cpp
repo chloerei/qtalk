@@ -370,7 +370,7 @@ void RosterModel::parsePresence(const QModelIndex &contactIndex, const QString &
                 beginRemoveRows(contactIndex, resourceItem->childNumber(), resourceItem->childNumber());
                 contactItem->removeOne(resourceItem);
                 endRemoveRows();
-                emit dataChanged(contactIndex, contactIndex);
+                //emit dataChanged(contactIndex, contactIndex);
                 sortContact(groupIndex);
             }
         }
@@ -391,6 +391,7 @@ void RosterModel::parsePresence(const QModelIndex &contactIndex, const QString &
             emit hiddenUpdate();
         }
     }
+    emit dataChanged(contactIndex, contactIndex);
 }
 
 RosterModel::ItemType RosterModel::itemTypeAt(const QModelIndex &index) const
@@ -425,16 +426,34 @@ QString RosterModel::displayData(const QModelIndex &index) const
     if (item->type() == RosterModel::group) {
         return QString("%1 [ %2 / %3 ]").arg(item->data()).arg(item->childCount(true)).arg(item->childCount());
     } else if (item->type() == RosterModel::contact) {
-        QString name = m_roster->getRosterEntry(item->data()).name();
-        if (name.isEmpty())
+        QXmppVCard vcard = getVCard(item->data());
+        QString name;
+        QString rosterName = m_roster->getRosterEntry(item->data()).name();
+        QString nickName = vcard.nickName();
+        QString fullName = vcard.fullName();
+        if (!rosterName.isEmpty())
+            name = rosterName;
+        else if (!nickName.isEmpty())
+            name = nickName;
+        else if (!fullName.isEmpty())
+            name = fullName;
+        else
             name = item->data();
 
-        return QString("%1 \n%2").arg(name).arg(statusTextAt(index));
+        QString statusText = statusTextAt(index);
+        if (statusText.isEmpty())
+            return name;
+        else
+            return QString("%1 \n%2").arg(name).arg(statusTextAt(index));
     } else if (item->type() == RosterModel::resource) {
-        QString str = item->data() + "\n" + statusTextAt(index);
+        QString str = item->data();
         if (item->isUnread())
             str = "[*]" + str;
-        return str;
+        QString statusText = statusTextAt(index);
+        if (statusText.isEmpty())
+            return str;
+        else
+            return QString("%1 \n%2").arg(str).arg(statusText);
     } else {
         return QString();
     }
@@ -507,7 +526,10 @@ QString RosterModel::statusTextAt(const QModelIndex &index) const
     if (item->type() == resource) {
         QXmppPresence presence = m_roster->getPresence(jidToBareJid(jidAt(index)),
                                                        jidToResource(jidAt(index)));
-        return QString("%1 (%2)").arg(presence.getStatus().getTypeStr()).arg(presence.getStatus().getStatusText());
+        if (presence.getStatus().getTypeStr().isEmpty())
+            return QString();
+        else
+            return QString("%1 %2").arg(presence.getStatus().getTypeStr()).arg(presence.getStatus().getStatusText());
     } else {
         if (item->childCount() == 0) {
             return QString(tr("Offline"));
@@ -642,12 +664,12 @@ bool RosterModel::isIndexHidden(const QModelIndex &index)
     return false;
 }
 
-bool RosterModel::hasVCard(const QString &bareJid)
+bool RosterModel::hasVCard(const QString &bareJid) const
 {
     return m_vCards.contains(bareJid);
 }
 
-QXmppVCard RosterModel::getVCard(const QString &bareJid)
+QXmppVCard RosterModel::getVCard(const QString &bareJid) const
 {
     if (hasVCard(bareJid))
         return m_vCards[bareJid];
