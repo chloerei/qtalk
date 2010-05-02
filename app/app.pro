@@ -48,7 +48,8 @@ SOURCES += main.cpp \
     MessageEdit.cpp \
     ContactInfoDialog.cpp \
     TransferManagerWindow.cpp \
-    TransferManagerModel.cpp
+    TransferManagerModel.cpp \
+    AddContactDialog.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
            XmppClient.h \
@@ -67,7 +68,8 @@ HEADERS += MainWindow.h \
     MessageEdit.h \
     ContactInfoDialog.h \
     TransferManagerWindow.h \
-    TransferManagerModel.h
+    TransferManagerModel.h \
+    AddContactDialog.h
 FORMS   += MainWindow.ui \
            UnreadMessageWindow.ui \
            LoginWidget.ui \
@@ -78,4 +80,5 @@ FORMS   += MainWindow.ui \
            CloseNoticeDialog.ui \
            PrefChatWindow.ui \
     ContactInfoDialog.ui \
-    TransferManagerWindow.ui
+    TransferManagerWindow.ui \
+    AddContactDialog.ui

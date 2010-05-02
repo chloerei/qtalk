@@ -10,6 +10,7 @@
 #include <Preferences.h>
 #include <QXmppVCard.h>
 
+class AddContactDialog;
 class ChatWindow;
 class CloseNoticeDialog;
 class ContactInfoDialog;
@@ -49,6 +50,7 @@ private slots:
     void openChatWindow(const QString &jid);
     void actionStartChat();
     void actionContactInfo();
+    void actionAddContact();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -96,6 +98,8 @@ private:
     PreferencesDialog *m_preferencesDialog;
     CloseNoticeDialog *m_closeToTrayDialog;
     TransferManagerWindow *m_transferManagerWindow;
+    AddContactDialog *m_addContactDialog;
+
     
     void setupTrayIcon();
     void createUnreadMessageWindow();
