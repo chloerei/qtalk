@@ -73,6 +73,7 @@ private:
     TreeItem* getItem(const QModelIndex &index) const;
     QString displayData(const QModelIndex &index) const;
     QString toolTipData(const QModelIndex &index) const;
+    QString statusTextAt(const QModelIndex &index) const;
     void sortContact(const QModelIndex &groupIndex);
     QList<QModelIndex> findContactIndexListForBareJid(const QString &bareJid); // include all resource
     QMap<QString, QXmppVCard> m_vCards; // <bareJid, vcard>
