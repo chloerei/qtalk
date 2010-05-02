@@ -25,6 +25,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(ui->buttonBox, SIGNAL(rejected()),
             this, SLOT(prefRejected()) );
 
+    setAttribute(Qt::WA_QuitOnClose, false);
     addSection(m_prefAccount);
     addSection(m_prefGeneral);
     addSection(m_prefChatWindow);
