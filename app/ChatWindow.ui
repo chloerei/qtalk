@@ -117,7 +117,11 @@
      <item>
       <widget class="QPushButton" name="detailButton">
        <property name="text">
-        <string>Detail</string>
+        <string>Info</string>
+       </property>
+       <property name="icon">
+        <iconset resource="application.qrc">
+         <normaloff>:/images/preferences-desktop-user.png</normaloff>:/images/preferences-desktop-user.png</iconset>
        </property>
       </widget>
      </item>
@@ -155,6 +159,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="application.qrc"/>
+ </resources>
  <connections/>
 </ui>

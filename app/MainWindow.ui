@@ -153,6 +153,24 @@
     <string>Remove Contact</string>
    </property>
   </action>
+  <action name="actionStartChat">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/mail-message-new.png</normaloff>:/images/mail-message-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start Chat</string>
+   </property>
+  </action>
+  <action name="actionContactInfo">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/preferences-desktop-user.png</normaloff>:/images/preferences-desktop-user.png</iconset>
+   </property>
+   <property name="text">
+    <string>Contact Info</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="application.qrc"/>

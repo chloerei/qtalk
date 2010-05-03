@@ -16,11 +16,15 @@
   <property name="windowTitle">
    <string>Contact Info</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="application.qrc">
+    <normaloff>:/images/preferences-desktop-user.png</normaloff>:/images/preferences-desktop-user.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="1">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Base</string>
+      <string>Roster</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -268,7 +272,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="application.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

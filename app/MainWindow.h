@@ -86,8 +86,6 @@ private:
     XmppClient *m_client;
     RosterModel *m_rosterModel;
     QTreeView *m_rosterTreeView;
-    QAction *m_actionStartChat;
-    QAction *m_actionContactInfo;
     QMap<QString, QPointer<ChatWindow> > m_chatWindows;
     QMap<QString, QPointer<ContactInfoDialog> > m_contactInfoDialogs;
     QSystemTrayIcon *m_trayIcon;
