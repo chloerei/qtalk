@@ -350,6 +350,7 @@ void RosterModel::presenceChangedSlot(const QString &bareJid, const QString &res
 
 void RosterModel::rosterChangedSlot(const QString &bareJid)
 {
+    // bug : group changed, model no update
     QList<QModelIndex> indexs = indexsForBareJid(bareJid);
     if (indexs.isEmpty()) {
         addRoster(bareJid);
