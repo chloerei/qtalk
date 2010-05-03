@@ -204,6 +204,11 @@
     <string>Subscribe</string>
    </property>
   </action>
+  <action name="actionAllowSubcribe">
+   <property name="text">
+    <string>Allow Subcribe</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="application.qrc"/>

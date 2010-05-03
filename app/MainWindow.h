@@ -55,6 +55,7 @@ private slots:
     void actionSubscribe();
     void actionUnsubsribe();
     void actionDropSubsribe();
+    void actionAllowSubsribe();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
