@@ -51,6 +51,7 @@ private slots:
     void actionStartChat();
     void actionContactInfo();
     void actionAddContact();
+    void actionRemoveContact();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);

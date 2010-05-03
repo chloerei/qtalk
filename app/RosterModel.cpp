@@ -194,6 +194,8 @@ void RosterModel::setClient(QXmppClient *client)
             this, SLOT(presenceChangedSlot(const QString, const QString)));
     connect(m_roster, SIGNAL(rosterReceived()),
             this, SLOT(parseRoster()) );
+    connect(m_roster, SIGNAL(rosterChanged(QString)),
+             this, SLOT(rosterChangedSlot(QString)) );
     connect(m_vCardManager, SIGNAL(vCardReceived(const QXmppVCard&)),
             this, SLOT(vCardRecived(const QXmppVCard&)) );
 }
@@ -353,8 +355,19 @@ void RosterModel::rosterChangedSlot(const QString &bareJid)
         addRoster(bareJid);
         reset();
     } else {
-        foreach (QModelIndex index, indexs) {
-            dataChanged(index, index);
+        QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
+        if (entry.subscriptionType() == QXmppRoster::QXmppRosterEntry::Remove) {
+            foreach (QModelIndex index, indexs) {
+                beginRemoveRows(parent(index), index.row(), index.row());
+                TreeItem *item = getItem(index);
+                item->parent()->removeOne(item);
+                endRemoveRows();
+            }
+        } else {
+            foreach (QModelIndex index, indexs) {
+                dataChanged(index, index);
+                dataChanged(parent(index), parent(index));
+            }
         }
     }
 }

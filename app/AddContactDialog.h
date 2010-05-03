@@ -14,7 +14,6 @@ public:
     explicit AddContactDialog(QWidget *parent = 0);
     ~AddContactDialog();
     QString jid() const;
-    QXmppRosterIq::Item::SubscriptionType subscriptionType() const;
 
 private slots:
     void enableOkButton(const QString &str);
