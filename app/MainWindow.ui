@@ -147,7 +147,7 @@
   <action name="actionRemoveContact">
    <property name="icon">
     <iconset resource="application.qrc">
-     <normaloff>:/images/im-ban-kick-user.png</normaloff>:/images/im-ban-kick-user.png</iconset>
+     <normaloff>:/images/list-remove.png</normaloff>:/images/list-remove.png</iconset>
    </property>
    <property name="text">
     <string>Remove Contact</string>
@@ -169,6 +169,39 @@
    </property>
    <property name="text">
     <string>Contact Info</string>
+   </property>
+  </action>
+  <action name="actionUnsubscribe">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/im-ban-user.png</normaloff>:/images/im-ban-user.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsubscribe</string>
+   </property>
+   <property name="toolTip">
+    <string>Unsubscribe roster's status</string>
+   </property>
+  </action>
+  <action name="actionDropSubscribe">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/im-kick-user.png</normaloff>:/images/im-kick-user.png</iconset>
+   </property>
+   <property name="text">
+    <string>Drop Subscribe</string>
+   </property>
+   <property name="toolTip">
+    <string>Don't send self status to roster</string>
+   </property>
+  </action>
+  <action name="actionSubscribe">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/email.png</normaloff>:/images/email.png</iconset>
+   </property>
+   <property name="text">
+    <string>Subscribe</string>
    </property>
   </action>
  </widget>

@@ -27,5 +27,7 @@
         <file>images/list-add-user.png</file>
         <file>images/network-server-database.png</file>
         <file>images/mail-message-new.png</file>
+        <file>images/email.png</file>
+        <file>images/list-remove.png</file>
     </qresource>
 </RCC>
