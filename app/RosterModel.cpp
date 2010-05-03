@@ -190,7 +190,7 @@ void RosterModel::setClient(QXmppClient *client)
     m_roster = &client->getRoster();
     m_vCardManager = &client->getVCardManager();
     connect(m_roster, SIGNAL(presenceChanged(const QString, const QString)),
-            this, SLOT(presenceChanged(const QString, const QString)));
+            this, SLOT(presenceChangedSlot(const QString, const QString)));
     connect(m_roster, SIGNAL(rosterReceived()),
             this, SLOT(parseRoster()) );
     connect(m_vCardManager, SIGNAL(vCardReceived(const QXmppVCard&)),
@@ -200,20 +200,7 @@ void RosterModel::setClient(QXmppClient *client)
 void RosterModel::parseRoster()
 {
     foreach (QString bareJid, m_roster->getRosterBareJids()) {
-        QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
-        if (entry.groups().isEmpty()) {
-            TreeItem *groupItem = findOrCreateGroup("nogroup");
-            TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
-            groupItem->appendChild(item);
-        } else {
-            foreach (QString group, entry.groups()) {
-                if (group.isEmpty())
-                    group = "nogroup";
-                TreeItem *groupItem = findOrCreateGroup(group);
-                TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
-                groupItem->appendChild(item);
-            }
-        }
+        addRoster(bareJid);
     }
     reset();
     emit parseDone();
@@ -222,7 +209,7 @@ void RosterModel::parseRoster()
 void RosterModel::vCardRecived(const QXmppVCard &vCard)
 {
     m_vCards[vCard.from()] = vCard;
-    foreach (QModelIndex index, findContactIndexListForBareJid(vCard.from())) {
+    foreach (QModelIndex index, indexsForBareJid(vCard.from())) {
         dataChanged(index, index);
     }
 }
@@ -342,12 +329,12 @@ int RosterModel::columnCount(const QModelIndex & /* parent */) const
     return 1;
 }
 
-void RosterModel::presenceChanged(const QString &bareJid, const QString &resource)
+void RosterModel::presenceChangedSlot(const QString &bareJid, const QString &resource)
 {
     QXmppPresence presence = m_roster->getPresence(bareJid, resource);
     //QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
 
-    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    QList<QModelIndex> contactIndexList = indexsForBareJid(bareJid);
     foreach (QModelIndex index, contactIndexList) {
         parsePresence(index, resource, presence);
     }
@@ -356,6 +343,38 @@ void RosterModel::presenceChanged(const QString &bareJid, const QString &resourc
     if (!m_vCards.contains(bareJid)) {
         m_vCardManager->requestVCard(bareJid);
     }
+}
+
+void RosterModel::rosterChangedSlot(const QString &bareJid)
+{
+    QList<QModelIndex> indexs = indexsForBareJid(bareJid);
+    if (indexs.isEmpty()) {
+        addRoster(bareJid);
+        reset();
+    } else {
+        foreach (QModelIndex index, indexs) {
+            dataChanged(index, index);
+        }
+    }
+}
+
+void RosterModel::addRoster(const QString &bareJid)
+{
+    QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
+    if (entry.groups().isEmpty()) {
+        TreeItem *groupItem = findOrCreateGroup("nogroup");
+        TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
+        groupItem->appendChild(item);
+    } else {
+        foreach (QString group, entry.groups()) {
+            if (group.isEmpty())
+                group = "nogroup";
+            TreeItem *groupItem = findOrCreateGroup(group);
+            TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
+            groupItem->appendChild(item);
+        }
+    }
+
 }
 
 void RosterModel::parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence)
@@ -559,7 +578,7 @@ void RosterModel::sortContact(const QModelIndex &groupIndex)
 // a message recevie, mark the reaource unread. if resource is unknow, let the contact mark unread
 void RosterModel::messageUnread(const QString &bareJid, const QString &resource)
 {
-    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    QList<QModelIndex> contactIndexList = indexsForBareJid(bareJid);
     foreach (QModelIndex contactIndex, contactIndexList) {
         if (getItem(contactIndex)->hasChlidContain(resource)){
             QModelIndex resourceIndex = index(getItem(contactIndex)->childIndexOfData(resource), 0, contactIndex);
@@ -576,7 +595,7 @@ void RosterModel::messageUnread(const QString &bareJid, const QString &resource)
 // when open the jid chatWindow, clean the resource unread state
 void RosterModel::messageReaded(const QString &bareJid, const QString &resource)
 {
-    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    QList<QModelIndex> contactIndexList = indexsForBareJid(bareJid);
     foreach (QModelIndex contactIndex, contactIndexList) {
         if (getItem(contactIndex)->hasChlidContain(resource)){
             QModelIndex resourceIndex = index(getItem(contactIndex)->childIndexOfData(resource), 0, contactIndex);
@@ -591,7 +610,7 @@ void RosterModel::messageReaded(const QString &bareJid, const QString &resource)
 // when open the bareJid chatWindow, clean all unread state
 void RosterModel::messageReadedAll(const QString &bareJid)
 {
-    QList<QModelIndex> contactIndexList = findContactIndexListForBareJid(bareJid);
+    QList<QModelIndex> contactIndexList = indexsForBareJid(bareJid);
     foreach (QModelIndex contactIndex, contactIndexList) {
         getItem(contactIndex)->setUnread(false);
         foreach(TreeItem *resourceItem, getItem(contactIndex)->childItems()) {
@@ -684,7 +703,7 @@ void RosterModel::clear()
     reset();
 }
 
-QList<QModelIndex> RosterModel::findContactIndexListForBareJid(const QString &bareJid) 
+QList<QModelIndex> RosterModel::indexsForBareJid(const QString &bareJid)
 {
     QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
     QList<QModelIndex> results;

@@ -56,7 +56,8 @@ public slots:
     void parseRoster();
 
 private slots:
-    void presenceChanged(const QString &bareJid, const QString &resource);
+    void presenceChangedSlot(const QString &bareJid, const QString &resource);
+    void rosterChangedSlot(const QString &bareJid);
     void vCardRecived(const QXmppVCard&);
 
 private:
@@ -69,13 +70,14 @@ private:
     bool m_showResources;
     bool m_showSingleResource;
 
+    void addRoster(const QString &bareJid);
     void parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;
     QString displayData(const QModelIndex &index) const;
     QString toolTipData(const QModelIndex &index) const;
     QString statusTextAt(const QModelIndex &index) const;
     void sortContact(const QModelIndex &groupIndex);
-    QList<QModelIndex> findContactIndexListForBareJid(const QString &bareJid); // include all resource
+    QList<QModelIndex> indexsForBareJid(const QString &bareJid); // include all resource
     QMap<QString, QXmppVCard> m_vCards; // <bareJid, vcard>
 };
 
