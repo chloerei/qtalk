@@ -24,10 +24,9 @@ public:
         resource // data => resource
     };
 
-    RosterModel(QObject *parent = 0);
+    RosterModel(QXmppClient *client, QObject *parent = 0);
     ~RosterModel();
 
-    void setClient(QXmppClient *client);
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant data(const QModelIndex &index, int role) const;
@@ -70,6 +69,7 @@ private:
     bool m_showResources;
     bool m_showSingleResource;
 
+    void setClient(QXmppClient *client);
     void addRoster(const QString &bareJid);
     void parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;

@@ -171,11 +171,12 @@ void TreeItem::clear()
     m_childItems.clear();
 }
 
-RosterModel::RosterModel(QObject *parent) :
+RosterModel::RosterModel(QXmppClient *client, QObject *parent) :
     QAbstractItemModel(parent),
     m_hideOffline(false),
     m_showResources(false)
 {
+    setClient(client);
     m_rootItem = new TreeItem(root, "root");
 }
 

@@ -144,6 +144,15 @@
     <string>TransferManager</string>
    </property>
   </action>
+  <action name="actionRemoveContact">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/im-ban-kick-user.png</normaloff>:/images/im-ban-kick-user.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove Contact</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="application.qrc"/>
