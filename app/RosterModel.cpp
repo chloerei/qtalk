@@ -718,6 +718,16 @@ void RosterModel::clear()
     reset();
 }
 
+QSet<QString> RosterModel::getGroups() const
+{
+    QSet<QString> sets;
+    foreach (TreeItem *item, m_rootItem->childItems()) {
+        if (item->type() == group && item->data() != "nogroup")
+            sets << item->data();
+    }
+    return sets;
+}
+
 QList<QModelIndex> RosterModel::indexsForBareJid(const QString &bareJid)
 {
     QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);

@@ -8,8 +8,10 @@ AddContactDialog::AddContactDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-    connect(ui->lineEdit, SIGNAL(textChanged(QString)),
+    connect(ui->jid, SIGNAL(textChanged(QString)),
             this, SLOT(enableOkButton(QString)) );
+    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(enableGroupLineEdit(int)) );
 }
 
 AddContactDialog::~AddContactDialog()
@@ -17,9 +19,37 @@ AddContactDialog::~AddContactDialog()
     delete ui;
 }
 
+void AddContactDialog::setGroups(QSet<QString> groups)
+{
+    ui->comboBox->clear();
+    ui->comboBox->addItem(tr("None"));
+    ui->comboBox->addItem(tr("New Group"));
+    foreach (QString group, groups) {
+        ui->comboBox->addItem(group);
+    }
+}
+
 QString AddContactDialog::jid() const
 {
-    return ui->lineEdit->text();
+    return ui->jid->text();
+}
+
+QString AddContactDialog::name() const
+{
+    return ui->name->text();
+}
+
+QString AddContactDialog::group() const
+{
+    if (ui->comboBox->currentIndex() == 1) {
+        // custom
+        return ui->group->text();
+    } else if (ui->comboBox->currentIndex() == 0) {
+        // none
+        return QString();
+    } else {
+        return ui->comboBox->currentText();
+    }
 }
 
 void AddContactDialog::enableOkButton(const QString &str)
@@ -28,6 +58,17 @@ void AddContactDialog::enableOkButton(const QString &str)
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     else
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+}
+
+void AddContactDialog::enableGroupLineEdit(int index)
+{
+    // custom
+    if (index == 1) {
+        ui->group->setEnabled(true);
+    } else {
+        ui->group->clear();
+        ui->group->setEnabled(false);
+    }
 }
 
 void AddContactDialog::changeEvent(QEvent *e)

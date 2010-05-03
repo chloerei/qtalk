@@ -45,6 +45,7 @@ public:
     bool hasVCard(const QString &bareJid) const;
     QXmppVCard getVCard(const QString &bareJid) const; // if no exist, return empty vcard
     void clear();
+    QSet<QString> getGroups() const;
 
 signals:
     void lastOneResource(const QModelIndex &contactIndex);
