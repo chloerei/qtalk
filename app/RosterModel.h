@@ -70,24 +70,27 @@ private:
     bool m_showResources;
     bool m_showSingleResource;
 
+    void removeRow(int row, const QModelIndex &parent = QModelIndex());
     void initNoGroup();
-    TreeItem* findOrCreateGroup(QString group);
+    void setClient(QXmppClient *client);
+    QModelIndex findOrCreateGroup(QString group);
+    QModelIndex groupIndexFor(const QString &groupName) const;
+    QModelIndex nogroupIndex() const;
     void insertRosterToGroup(QString bareJid, QString group);
     void removeRosterFromGroup(QString bareJid, QString group);
-    QModelIndex nogroupIndex() const;
     bool hasGroup(const QString &groupName) const;
-    QModelIndex groupIndex(const QString &groupName) const;
-    void setClient(QXmppClient *client);
-    void newRoster(const QString &bareJid);
+    void newContact(const QString &bareJid);
     void checkRosources(const QModelIndex &index);
     void parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;
-    QString displayData(const QModelIndex &index) const;
-    QString toolTipData(const QModelIndex &index) const;
-    QString statusTextAt(const QModelIndex &index) const;
     void sortContact(const QModelIndex &groupIndex);
     QList<QModelIndex> indexsForBareJid(const QString &bareJid); // include all resource
     QMap<QString, QXmppVCard> m_vCards; // <bareJid, vcard>
+
+    // use for data display
+    QString displayData(const QModelIndex &index) const;
+    QString toolTipData(const QModelIndex &index) const;
+    QString statusTextAt(const QModelIndex &index) const;
 };
 
 #endif
