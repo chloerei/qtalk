@@ -65,13 +65,21 @@ private:
     QXmppRoster *m_roster;
     QXmppVCardManager *m_vCardManager;
     TreeItem* m_rootItem;
-    TreeItem* findOrCreateGroup(QString group);
+    TreeItem* m_noGroupItem;
     bool m_hideOffline;
     bool m_showResources;
     bool m_showSingleResource;
 
+    void initNoGroup();
+    TreeItem* findOrCreateGroup(QString group);
+    void insertRosterToGroup(QString bareJid, QString group);
+    void removeRosterFromGroup(QString bareJid, QString group);
+    QModelIndex nogroupIndex() const;
+    bool hasGroup(const QString &groupName) const;
+    QModelIndex groupIndex(const QString &groupName) const;
     void setClient(QXmppClient *client);
-    void addRoster(const QString &bareJid);
+    void newRoster(const QString &bareJid);
+    void checkRosources(const QModelIndex &index);
     void parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence);
     TreeItem* getItem(const QModelIndex &index) const;
     QString displayData(const QModelIndex &index) const;

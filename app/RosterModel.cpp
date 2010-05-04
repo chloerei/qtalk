@@ -178,11 +178,85 @@ RosterModel::RosterModel(QXmppClient *client, QObject *parent) :
 {
     setClient(client);
     m_rootItem = new TreeItem(root, "root");
+
+    initNoGroup();
 }
 
 RosterModel::~RosterModel()
 {
     delete m_rootItem;
+}
+
+void RosterModel::initNoGroup()
+{
+    m_noGroupItem = new TreeItem(group, QString(tr("No Group")), m_rootItem);
+    m_rootItem->appendChild(m_noGroupItem);
+}
+
+TreeItem* RosterModel::findOrCreateGroup(QString groupName)
+{
+    if (m_rootItem->hasChlidContain(groupName)) {
+        return m_rootItem->child(m_rootItem->childIndexOfData(groupName));
+    } else {
+        int row = rowCount(QModelIndex());
+        beginInsertRows(QModelIndex(), row, row);
+        TreeItem *groupItem = new TreeItem(group, groupName, m_rootItem);
+        m_rootItem->appendChild(groupItem);
+        endInsertRows();
+        return groupItem;
+    }
+
+}
+
+void RosterModel::insertRosterToGroup(QString bareJid, QString group)
+{
+    TreeItem *groupItem = findOrCreateGroup(group);
+    if (groupItem->hasChlidContain(bareJid)) {
+        qDebug() << QString("Exist %1 in group %2").arg(bareJid).arg(group);
+    } else {
+        qDebug() << QString("Insert %1 to group %2").arg(bareJid).arg(group);
+        int row = rowCount(groupIndex(group));
+        beginInsertRows(groupIndex(group), row, row);
+        TreeItem *contactItem = new TreeItem(contact, bareJid, groupItem);
+        groupItem->appendChild(contactItem);
+        endInsertRows();
+        dataChanged(groupIndex(group), groupIndex(group));
+        checkRosources(createIndex(contactItem->childNumber(), 0, contactItem));
+    }
+}
+
+void RosterModel::removeRosterFromGroup(QString bareJid, QString group)
+{
+    qDebug() << QString("Remove %1 from %2").arg(bareJid).arg(group);
+    if (m_rootItem->hasChlidContain(group)) {
+        TreeItem *groupItem = findOrCreateGroup(group);
+        if (groupItem->hasChlidContain(bareJid)) {
+            TreeItem *contactItem = groupItem->child(groupItem->childIndexOfData(bareJid));
+            beginRemoveRows(groupIndex(group), contactItem->childNumber(), contactItem->childNumber());
+            groupItem->removeOne(contactItem);
+            endRemoveRows();
+        }
+    }
+}
+
+QModelIndex RosterModel::nogroupIndex() const
+{
+    return createIndex(m_noGroupItem->childNumber(), 0, m_noGroupItem);
+}
+
+bool RosterModel::hasGroup(const QString &groupName) const
+{
+    return m_rootItem->hasChlidContain(groupName);
+}
+
+QModelIndex RosterModel::groupIndex(const QString &groupName) const
+{
+    if (hasGroup(groupName)) {
+        int row = m_rootItem->childIndexOfData(groupName);
+        return createIndex(row, 0, m_rootItem->child(row));
+    } else {
+        return QModelIndex();
+    }
 }
 
 void RosterModel::setClient(QXmppClient *client)
@@ -202,8 +276,25 @@ void RosterModel::setClient(QXmppClient *client)
 
 void RosterModel::parseRoster()
 {
+
     foreach (QString bareJid, m_roster->getRosterBareJids()) {
-        addRoster(bareJid);
+        QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
+        if (entry.groups().isEmpty()) {
+            TreeItem *item = new TreeItem(contact, bareJid, m_noGroupItem);
+            m_noGroupItem->appendChild(item);
+        } else {
+            foreach (QString groupName, entry.groups()) {
+                TreeItem *groupItem;
+                if (m_rootItem->hasChlidContain(groupName)) {
+                    groupItem = m_rootItem->child(m_rootItem->childIndexOfData(groupName));
+                } else {
+                    groupItem = new TreeItem(group, groupName, m_rootItem);
+                    m_rootItem->appendChild(groupItem);
+                }
+                TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
+                groupItem->appendChild(item);
+            }
+        }
     }
     reset();
     emit parseDone();
@@ -215,20 +306,6 @@ void RosterModel::vCardRecived(const QXmppVCard &vCard)
     foreach (QModelIndex index, indexsForBareJid(vCard.from())) {
         dataChanged(index, index);
     }
-}
-
-TreeItem* RosterModel::findOrCreateGroup(QString group)
-{
-    foreach (TreeItem *item, m_rootItem->childItems()) {
-        if (item->type() == RosterModel::group && item->data() == group) {
-            return item;
-        }
-    }
-
-    // create
-    TreeItem *newItem = new TreeItem(RosterModel::group, group, m_rootItem);
-    m_rootItem->appendChild(newItem);
-    return newItem;
 }
 
 QModelIndex RosterModel::index(int row, int column, const QModelIndex &parent) const
@@ -354,26 +431,14 @@ void RosterModel::rosterChangedSlot(const QString &bareJid)
     QList<QModelIndex> indexs = indexsForBareJid(bareJid);
     if (indexs.isEmpty()) {
         qDebug() << QString("Add New roster: ") << bareJid;
-        addRoster(bareJid);
-        reset();
+        newRoster(bareJid);
+        //reset();
     } else {
         QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
 
-        // clear
-        foreach (QModelIndex index, indexs) {
-            beginRemoveRows(parent(index), index.row(), index.row());
-            TreeItem *item = getItem(index);
-            qDebug() << QString("Remove roster ") << bareJid << " from " << item->parent()->data();
-            item->parent()->removeOne(item);
-            endRemoveRows();
-        }
-
-        // re add
-        qDebug() << QString("Add roster: ") << bareJid;
-        addRoster(bareJid);
-        reset();
-        /*
         if (entry.subscriptionType() == QXmppRoster::QXmppRosterEntry::Remove) {
+            // clear
+            qDebug() << QString("Clear %1").arg(bareJid);
             foreach (QModelIndex index, indexs) {
                 beginRemoveRows(parent(index), index.row(), index.row());
                 TreeItem *item = getItem(index);
@@ -381,32 +446,81 @@ void RosterModel::rosterChangedSlot(const QString &bareJid)
                 endRemoveRows();
             }
         } else {
-            foreach (QModelIndex index, indexs) {
-                dataChanged(index, index);
-                dataChanged(parent(index), parent(index));
+            // add/remove group, update
+
+            // need to parse groups
+            QSet<QString> groups = entry.groups();
+
+            if (groups.isEmpty()) {
+                groups << m_noGroupItem->data();
+            }
+
+            foreach (QModelIndex index, indexsForBareJid(bareJid)) {
+                QModelIndex groupIndex = parent(index);
+                QString group = getItem(groupIndex)->data();
+
+                if (groups.contains(group)) {
+                    // update a contact in group
+                    qDebug() << QString("Update %1 in %2").arg(bareJid).arg(group);
+                    dataChanged(index, index);
+
+                    // had parse
+                    groups.remove(group);
+                } else {
+                    // remove from a group
+                    removeRosterFromGroup(bareJid, group);
+                }
+                dataChanged(groupIndex, groupIndex);
+            }
+
+            // add to new groups
+            foreach (QString group, groups) {
+                insertRosterToGroup(bareJid, group);
             }
         }
-        */
     }
+    emit hiddenUpdate();
 }
 
-void RosterModel::addRoster(const QString &bareJid)
+void RosterModel::newRoster(const QString &bareJid)
 {
     QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
     if (entry.groups().isEmpty()) {
-        TreeItem *groupItem = findOrCreateGroup("nogroup");
-        TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
-        groupItem->appendChild(item);
+        int row = rowCount(nogroupIndex());
+        beginInsertRows(nogroupIndex(), row, row);
+        TreeItem *item = new TreeItem(contact, bareJid, m_noGroupItem);
+        m_noGroupItem->appendChild(item);
+        endInsertRows();
+        checkRosources(createIndex(row, 0, item));
     } else {
-        foreach (QString group, entry.groups()) {
-            if (group.isEmpty())
-                group = "nogroup";
-            TreeItem *groupItem = findOrCreateGroup(group);
+        foreach (QString groupName, entry.groups()) {
+            TreeItem *groupItem = findOrCreateGroup(groupName);
+            int row = rowCount(groupIndex(groupName));
+            beginInsertRows(groupIndex(groupName), row, row);
             TreeItem *item = new TreeItem(contact, entry.bareJid(), groupItem);
             groupItem->appendChild(item);
+            endInsertRows();
+            checkRosources(createIndex(row, 0, item));
         }
     }
+}
 
+void RosterModel::checkRosources(const QModelIndex &index)
+{
+    // only use for contact index
+    if (itemTypeAt(index) == contact) {
+        TreeItem *contactItem = getItem(index);
+        QString bareJid = contactItem->data();
+        QStringList resources = m_roster->getResources(bareJid);
+        if (!resources.isEmpty()) {
+            beginInsertRows(index, 0, resources.count() -1 );
+            foreach (QString resourceName, resources) {
+                TreeItem *resourceItem = new TreeItem(resource, resourceName, contactItem);
+                contactItem->appendChild(resourceItem);
+            }
+            endInsertRows();
+        }
+    }
 }
 
 void RosterModel::parsePresence(const QModelIndex &contactIndex, const QString &resource, const QXmppPresence &presence)
@@ -732,6 +846,8 @@ void RosterModel::clear()
 {
     m_vCards.clear();
     m_rootItem->clear();
+    // re-init no group for next login
+    initNoGroup();
     reset();
 }
 
