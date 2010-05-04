@@ -353,10 +353,26 @@ void RosterModel::rosterChangedSlot(const QString &bareJid)
     // bug : group changed, model no update
     QList<QModelIndex> indexs = indexsForBareJid(bareJid);
     if (indexs.isEmpty()) {
+        qDebug() << QString("Add New roster: ") << bareJid;
         addRoster(bareJid);
         reset();
     } else {
         QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
+
+        // clear
+        foreach (QModelIndex index, indexs) {
+            beginRemoveRows(parent(index), index.row(), index.row());
+            TreeItem *item = getItem(index);
+            qDebug() << QString("Remove roster ") << bareJid << " from " << item->parent()->data();
+            item->parent()->removeOne(item);
+            endRemoveRows();
+        }
+
+        // re add
+        qDebug() << QString("Add roster: ") << bareJid;
+        addRoster(bareJid);
+        reset();
+        /*
         if (entry.subscriptionType() == QXmppRoster::QXmppRosterEntry::Remove) {
             foreach (QModelIndex index, indexs) {
                 beginRemoveRows(parent(index), index.row(), index.row());
@@ -370,6 +386,7 @@ void RosterModel::rosterChangedSlot(const QString &bareJid)
                 dataChanged(parent(index), parent(index));
             }
         }
+        */
     }
 }
 
@@ -730,8 +747,20 @@ QSet<QString> RosterModel::getGroups() const
 
 QList<QModelIndex> RosterModel::indexsForBareJid(const QString &bareJid)
 {
-    QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
     QList<QModelIndex> results;
+    foreach (TreeItem *item, m_rootItem->childItems()) {
+        if (item->type() == RosterModel::contact && item->data() == bareJid)
+            results << createIndex(item->childNumber(), 0, item);
+
+        if (item->type() == RosterModel::group) {
+            if (item->hasChlidContain(bareJid)) {
+                int row = item->childIndexOfData(bareJid);
+                results << createIndex(row, 0, item->child(row));
+            }
+        }
+    }
+    /*
+    QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
     if (entry.groups().isEmpty()) {
         TreeItem *groupItem = findOrCreateGroup("nogroup");
 
@@ -755,5 +784,6 @@ QList<QModelIndex> RosterModel::indexsForBareJid(const QString &bareJid)
             }
         }
     }
+    */
     return results;
 }
