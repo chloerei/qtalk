@@ -34,5 +34,6 @@
         <file>images/go-previous.png</file>
         <file>images/ktip.png</file>
         <file>images/preferences-system-power-management.png</file>
+        <file>images/dialog-ok-apply.png</file>
     </qresource>
 </RCC>

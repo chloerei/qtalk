@@ -50,7 +50,8 @@ SOURCES += main.cpp \
     TransferManagerWindow.cpp \
     TransferManagerModel.cpp \
     AddContactDialog.cpp \
-    InfoEventStackWidget.cpp
+    InfoEventStackWidget.cpp \
+    InfoEventSubscribeRequest.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
            XmppClient.h \
@@ -71,7 +72,8 @@ HEADERS += MainWindow.h \
     TransferManagerWindow.h \
     TransferManagerModel.h \
     AddContactDialog.h \
-    InfoEventStackWidget.h
+    InfoEventStackWidget.h \
+    InfoEventSubscribeRequest.h
 FORMS   += MainWindow.ui \
            UnreadMessageWindow.ui \
            LoginWidget.ui \
@@ -84,4 +86,5 @@ FORMS   += MainWindow.ui \
     ContactInfoDialog.ui \
     TransferManagerWindow.ui \
     AddContactDialog.ui \
-    InfoEventStackWidget.ui
+    InfoEventStackWidget.ui \
+    InfoEventSubscribeRequest.ui
