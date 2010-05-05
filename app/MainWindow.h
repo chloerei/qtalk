@@ -14,6 +14,7 @@ class AddContactDialog;
 class ChatWindow;
 class CloseNoticeDialog;
 class ContactInfoDialog;
+class InfoEventStackWidget;
 class LoginWidget;
 class PreferencesDialog;
 class QListView;
@@ -56,6 +57,7 @@ private slots:
     void actionUnsubsribe();
     void actionDropSubsribe();
     void actionAllowSubsribe();
+    void showEventStack();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
@@ -88,6 +90,7 @@ private:
     Ui::MainWindow ui;
     Preferences m_preferences;
     XmppClient *m_client;
+    InfoEventStackWidget *m_infoEventStackWidget;
     RosterModel *m_rosterModel;
     QTreeView *m_rosterTreeView;
     QMap<QString, QPointer<ChatWindow> > m_chatWindows;

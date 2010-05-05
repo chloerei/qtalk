@@ -29,5 +29,10 @@
         <file>images/mail-message-new.png</file>
         <file>images/email.png</file>
         <file>images/list-remove.png</file>
+        <file>images/application-exit.png</file>
+        <file>images/go-next.png</file>
+        <file>images/go-previous.png</file>
+        <file>images/ktip.png</file>
+        <file>images/preferences-system-power-management.png</file>
     </qresource>
 </RCC>
