@@ -6,6 +6,8 @@ InfoEventStackWidget::InfoEventStackWidget(QWidget *parent) :
     ui(new Ui::InfoEventStackWidget)
 {
     ui->setupUi(this);
+    connect(ui->closeButton, SIGNAL(clicked()),
+            this, SLOT(closeSlot()) );
 }
 
 InfoEventStackWidget::~InfoEventStackWidget()
@@ -22,5 +24,12 @@ void InfoEventStackWidget::changeEvent(QEvent *e)
         break;
     default:
         break;
+    }
+}
+
+void InfoEventStackWidget::closeSlot()
+{
+    if (ui->stackedWidget->count() == 0) {
+        setVisible(false);
     }
 }
