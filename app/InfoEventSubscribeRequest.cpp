@@ -1,6 +1,7 @@
 #include "InfoEventSubscribeRequest.h"
 #include "ui_InfoEventSubscribeRequest.h"
 #include <QXmppClient.h>
+#include <QXmppPresence.h>
 
 InfoEventSubscribeRequest::InfoEventSubscribeRequest(QString bareJid, QXmppClient *client, QWidget *parent) :
     QWidget(parent),
@@ -22,11 +23,19 @@ InfoEventSubscribeRequest::~InfoEventSubscribeRequest()
 
 void InfoEventSubscribeRequest::acceptSlot()
 {
+    QXmppPresence presence;
+    presence.setTo(ui->bareJid->text());
+    presence.setType(QXmppPresence::Subscribed);
+    m_client->sendPacket(presence);
     emit needDestory();
 }
 
 void InfoEventSubscribeRequest::denySlot()
 {
+    QXmppPresence presence;
+    presence.setTo(ui->bareJid->text());
+    presence.setType(QXmppPresence::Unsubscribed);
+    m_client->sendPacket(presence);
     emit needDestory();
 }
 
