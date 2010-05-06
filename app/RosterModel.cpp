@@ -178,8 +178,6 @@ RosterModel::RosterModel(QXmppClient *client, QObject *parent) :
 {
     setClient(client);
     m_rootItem = new TreeItem(root, "root");
-
-    initNoGroup();
 }
 
 RosterModel::~RosterModel()
@@ -288,6 +286,7 @@ void RosterModel::setClient(QXmppClient *client)
 
 void RosterModel::parseRoster()
 {
+    initNoGroup();
 
     foreach (QString bareJid, m_roster->getRosterBareJids()) {
         QXmppRoster::QXmppRosterEntry entry = m_roster->getRosterEntry(bareJid);
@@ -845,8 +844,6 @@ void RosterModel::clear()
 {
     m_vCards.clear();
     m_rootItem->clear();
-    // re-init no group for next login
-    initNoGroup();
     reset();
 }
 
