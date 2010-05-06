@@ -1,12 +1,18 @@
 #include "InfoEventSubscribeRequest.h"
 #include "ui_InfoEventSubscribeRequest.h"
+#include <QXmppClient.h>
 
-InfoEventSubscribeRequest::InfoEventSubscribeRequest(QString bareJid, QWidget *parent) :
+InfoEventSubscribeRequest::InfoEventSubscribeRequest(QString bareJid, QXmppClient *client, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::InfoEventSubscribeRequest)
+    ui(new Ui::InfoEventSubscribeRequest),
+    m_client(client)
 {
     ui->setupUi(this);
     ui->bareJid->setText(bareJid);
+    connect(ui->denyButton, SIGNAL(clicked()),
+            this, SLOT(denySlot()) );
+    connect(ui->acceptButton, SIGNAL(clicked()),
+            this, SLOT(acceptSlot()) );
 }
 
 InfoEventSubscribeRequest::~InfoEventSubscribeRequest()
@@ -16,12 +22,12 @@ InfoEventSubscribeRequest::~InfoEventSubscribeRequest()
 
 void InfoEventSubscribeRequest::acceptSlot()
 {
-    emit accept(ui->bareJid->text());
+    emit needDestory();
 }
 
 void InfoEventSubscribeRequest::denySlot()
 {
-    emit deny(ui->bareJid->text());
+    emit needDestory();
 }
 
 void InfoEventSubscribeRequest::changeEvent(QEvent *e)

@@ -29,10 +29,12 @@ InfoEventStackWidget::~InfoEventStackWidget()
 
 void InfoEventStackWidget::addSubscribeRequest(const QString &bareJid)
 {
-    InfoEventSubscribeRequest *widget = new InfoEventSubscribeRequest(bareJid);
+    InfoEventSubscribeRequest *widget = new InfoEventSubscribeRequest(bareJid, m_client);
     ui->stackedWidget->addWidget(widget);
     updatePage();
 
+    connect(widget, SIGNAL(needDestory()),
+            this, SLOT(destorySlot()) );
     emit countChanged(ui->stackedWidget->count());
 }
 
@@ -109,13 +111,22 @@ void InfoEventStackWidget::animeSlot(qreal amount)
         QWidget::setVisible(true);
 }
 
+void InfoEventStackWidget::destorySlot()
+{
+    ui->stackedWidget->removeWidget(qobject_cast<QWidget*>(sender()));
+    updatePage();
+    emit countChanged(ui->stackedWidget->count());
+    sender()->deleteLater();
+}
+
 void InfoEventStackWidget::updatePage()
 {
     ui->pageLabel->setText(QString("%1 / %2")
                            .arg(ui->stackedWidget->currentIndex() + 1)
                            .arg(ui->stackedWidget->count()));
 
-    if (ui->stackedWidget->currentIndex() == 0)
+    if (ui->stackedWidget->currentIndex() == 0
+        || ui->stackedWidget->currentIndex() == -1)
         ui->previousButton->setEnabled(false);
     else if (!ui->previousButton->isEnabled())
         ui->previousButton->setEnabled(true);

@@ -30,6 +30,7 @@ private slots:
     void nextSlot();
     void closeSlot();
     void animeSlot(qreal amount);
+    void destorySlot();
 
 private:
     Ui::InfoEventStackWidget *ui;

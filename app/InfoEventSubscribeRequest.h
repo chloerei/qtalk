@@ -7,15 +7,16 @@ namespace Ui {
     class InfoEventSubscribeRequest;
 }
 
+class QXmppClient;
+
 class InfoEventSubscribeRequest : public QWidget {
     Q_OBJECT
 public:
-    explicit InfoEventSubscribeRequest(QString bareJid, QWidget *parent = 0);
+    explicit InfoEventSubscribeRequest(QString bareJid, QXmppClient *client, QWidget *parent = 0);
     ~InfoEventSubscribeRequest();
 
 signals:
-    void accept(const QString &bareJid);
-    void deny(const QString &bareJid);
+    void needDestory();
 
 private slots:
     void acceptSlot();
@@ -26,6 +27,7 @@ protected:
 
 private:
     Ui::InfoEventSubscribeRequest *ui;
+    QXmppClient *m_client;
 };
 
 #endif // INFOEVENTSUBSCRIBEREQUEST_H
