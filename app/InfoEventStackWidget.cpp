@@ -117,6 +117,9 @@ void InfoEventStackWidget::destorySlot()
     updatePage();
     emit countChanged(ui->stackedWidget->count());
     sender()->deleteLater();
+
+    if (ui->stackedWidget->count() == 0)
+        closeSlot();
 }
 
 void InfoEventStackWidget::updatePage()

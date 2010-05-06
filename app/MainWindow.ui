@@ -31,7 +31,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="presenceComboBox">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -44,7 +44,10 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="showEventButton">
+       <widget class="QToolButton" name="showInfoEventButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="minimumSize">
          <size>
           <width>32</width>
