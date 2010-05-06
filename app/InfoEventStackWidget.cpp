@@ -2,11 +2,13 @@
 #include "ui_InfoEventStackWidget.h"
 #include <QXmppClient.h>
 #include <InfoEventSubscribeRequest.h>
+#include <QTimeLine>
 
 InfoEventStackWidget::InfoEventStackWidget(QXmppClient *client, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::InfoEventStackWidget),
-    m_client(client)
+    m_client(client),
+    m_timeLine(new QTimeLine(150, this))
 {
     ui->setupUi(this);
     connect(ui->closeButton, SIGNAL(clicked()),
@@ -15,6 +17,9 @@ InfoEventStackWidget::InfoEventStackWidget(QXmppClient *client, QWidget *parent)
             this, SLOT(previousSlot()) );
     connect(ui->nextButton , SIGNAL(clicked()),
             this, SLOT(nextSlot()) );
+
+    connect(m_timeLine, SIGNAL(valueChanged(qreal)),
+            this, SLOT(animeSlot(qreal)) );
 }
 
 InfoEventStackWidget::~InfoEventStackWidget()
@@ -27,6 +32,16 @@ void InfoEventStackWidget::addSubscribeRequest(const QString &bareJid)
     InfoEventSubscribeRequest *widget = new InfoEventSubscribeRequest(bareJid);
     ui->stackedWidget->addWidget(widget);
     updatePage();
+}
+
+void InfoEventStackWidget::setAnimeVisible(bool visible)
+{
+    if (isVisible() == visible)
+        return;
+
+    m_timeLine->setDirection( visible ? QTimeLine::Forward
+                                      : QTimeLine::Backward);
+    m_timeLine->start();
 }
 
 void InfoEventStackWidget::changeEvent(QEvent *e)
@@ -64,8 +79,27 @@ void InfoEventStackWidget::nextSlot()
 void InfoEventStackWidget::closeSlot()
 {
     if (isVisible()) {
-        setVisible(false);
+        setAnimeVisible(false);
     }
+}
+
+void InfoEventStackWidget::animeSlot(qreal amount)
+{
+    if (amount == 0) {
+        QWidget::setVisible(false);
+        return;
+    }
+
+    if (amount == 1.0) {
+        layout()->setSizeConstraint(QLayout::SetDefaultConstraint);
+        setFixedHeight(sizeHint().height());
+        return;
+    }
+
+    setFixedHeight(sizeHint().height() * amount);
+
+    if (!isVisible())
+        QWidget::setVisible(true);
 }
 
 void InfoEventStackWidget::updatePage()
