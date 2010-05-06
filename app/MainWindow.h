@@ -60,6 +60,7 @@ private slots:
     void showEventStack();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
+    void presenceReceived(const QXmppPresence&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
     void changeTrayIcon(TrayIconType type);
     void unreadMessageCleared();
