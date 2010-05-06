@@ -35,16 +35,12 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    enum TrayIconType
-    {
-        online,
-        newMessage
-    };
 
 private slots:
     void readPreferences();
     void writePreferences();
     void login();
+    void clientDisconnected();
     void clientConnected();
     void rosterItemClicked(const QModelIndex &index);
     void getUnreadListClicked(const QModelIndex &index);
@@ -62,7 +58,6 @@ private slots:
     void messageReceived(const QXmppMessage&);
     void presenceReceived(const QXmppPresence&);
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
-    void changeTrayIcon(TrayIconType type);
     void unreadMessageCleared();
     void readAllUnreadMessage();
     void clientDisconnect();
@@ -85,6 +80,7 @@ private slots:
     void initTransferWindow();
     void infoEventCountChanged(int count);
     void presenceComboxChange(int index);
+    void updateTrayIcon();
 
 protected:
     void closeEvent(QCloseEvent *event);
