@@ -32,6 +32,8 @@ void InfoEventStackWidget::addSubscribeRequest(const QString &bareJid)
     InfoEventSubscribeRequest *widget = new InfoEventSubscribeRequest(bareJid);
     ui->stackedWidget->addWidget(widget);
     updatePage();
+
+    emit countChanged(ui->stackedWidget->count());
 }
 
 void InfoEventStackWidget::setAnimeVisible(bool visible)
@@ -42,6 +44,11 @@ void InfoEventStackWidget::setAnimeVisible(bool visible)
     m_timeLine->setDirection( visible ? QTimeLine::Forward
                                       : QTimeLine::Backward);
     m_timeLine->start();
+}
+
+int InfoEventStackWidget::count() const
+{
+    return ui->stackedWidget->count();
 }
 
 void InfoEventStackWidget::changeEvent(QEvent *e)

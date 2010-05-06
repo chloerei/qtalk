@@ -17,9 +17,13 @@ public:
     ~InfoEventStackWidget();
     void addSubscribeRequest(const QString &bareJid);
     void setAnimeVisible(bool visible);
+    int count() const;
 
 protected:
     void changeEvent(QEvent *e);
+
+signals:
+    void countChanged(int count);
 
 private slots:
     void previousSlot();

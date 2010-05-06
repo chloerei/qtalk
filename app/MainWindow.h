@@ -82,6 +82,7 @@ private slots:
     void receivedTransferJob(QXmppTransferJob *offer);
     void rosterContextMenu(const QPoint &position);
     void initTransferWindow();
+    void infoEventCountChanged(int count);
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -91,6 +92,8 @@ private:
     Preferences m_preferences;
     XmppClient *m_client;
     InfoEventStackWidget *m_infoEventStackWidget;
+    QIcon *m_infoEventNone;
+    QIcon *m_infoEventExist;
     RosterModel *m_rosterModel;
     QTreeView *m_rosterTreeView;
     QMap<QString, QPointer<ChatWindow> > m_chatWindows;
