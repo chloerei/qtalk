@@ -33,7 +33,7 @@
       <item>
        <widget class="QComboBox" name="presenceComboBox">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="minimumSize">
          <size>
@@ -41,12 +41,75 @@
           <height>32</height>
          </size>
         </property>
+        <item>
+         <property name="text">
+          <string>Online</string>
+         </property>
+         <property name="icon">
+          <iconset resource="application.qrc">
+           <normaloff>:/images/im-user.png</normaloff>:/images/im-user.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Chat</string>
+         </property>
+         <property name="icon">
+          <iconset resource="application.qrc">
+           <normaloff>:/images/im-user.png</normaloff>:/images/im-user.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Away</string>
+         </property>
+         <property name="icon">
+          <iconset resource="application.qrc">
+           <normaloff>:/images/im-user-away.png</normaloff>:/images/im-user-away.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Extended Away</string>
+         </property>
+         <property name="icon">
+          <iconset resource="application.qrc">
+           <normaloff>:/images/im-user-away.png</normaloff>:/images/im-user-away.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Do Not Disturb</string>
+         </property>
+         <property name="icon">
+          <iconset resource="application.qrc">
+           <normaloff>:/images/im-user-busy.png</normaloff>:/images/im-user-busy.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Invisible</string>
+         </property>
+         <property name="icon">
+          <iconset resource="application.qrc">
+           <normaloff>:/images/im-invisible-user.png</normaloff>:/images/im-invisible-user.png</iconset>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Offline</string>
+         </property>
+         <property name="icon">
+          <iconset resource="application.qrc">
+           <normaloff>:/images/im-user-offline.png</normaloff>:/images/im-user-offline.png</iconset>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="showInfoEventButton">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="minimumSize">
          <size>

@@ -84,6 +84,7 @@ private slots:
     void rosterContextMenu(const QPoint &position);
     void initTransferWindow();
     void infoEventCountChanged(int count);
+    void presenceComboxChange(int index);
 
 protected:
     void closeEvent(QCloseEvent *event);
