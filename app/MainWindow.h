@@ -85,6 +85,13 @@ private slots:
     void initTransferWindow();
     void infoEventCountChanged(int count);
     void presenceComboxChange(int index);
+    void setPresenceOnline();
+    void setPresenceChat();
+    void setPresenceAway();
+    void setPresenceXa();
+    void setPresenceDnd();
+    void reConnect();
+    void setPresenceOffline();
     void updateTrayIcon();
 
 protected:
