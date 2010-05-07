@@ -35,5 +35,6 @@
         <file>images/ktip.png</file>
         <file>images/preferences-system-power-management.png</file>
         <file>images/dialog-ok-apply.png</file>
+        <file>images/accessories-text-editor.png</file>
     </qresource>
 </RCC>

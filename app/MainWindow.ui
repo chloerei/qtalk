@@ -315,6 +315,18 @@
     <string>Allow Subcribe</string>
    </property>
   </action>
+  <action name="actionEditName">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/accessories-text-editor.png</normaloff>:/images/accessories-text-editor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Name</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit the roster name</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="application.qrc"/>

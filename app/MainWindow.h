@@ -53,6 +53,7 @@ private slots:
     void actionUnsubsribe();
     void actionDropSubsribe();
     void actionAllowSubsribe();
+    void actionEditName();
     void showEventStack();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
