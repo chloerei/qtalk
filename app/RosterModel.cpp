@@ -565,15 +565,22 @@ RosterModel::ItemType RosterModel::itemTypeAt(const QModelIndex &index) const
 
 QString RosterModel::jidAt(const QModelIndex &index) const
 {
-    TreeItem *item = (TreeItem *)index.internalPointer();
-    if (item->type() == RosterModel::contact) {
+    TreeItem *item = getItem(index);
+    if (itemTypeAt(index) == RosterModel::contact) {
         return item->data();
     } else if (item->type() == RosterModel::resource) {
         return item->parent()->data() + "/" + item->data();
     }
-    return "";
+    return QString();
 }
 
+QString RosterModel::groupAt(const QModelIndex &index) const
+{
+    if (itemTypeAt(index) == RosterModel::contact) {
+        return getItem(index)->parent()->data();
+    }
+    return QString();
+}
 
 TreeItem* RosterModel::getItem(const QModelIndex &index) const
 {
@@ -853,7 +860,7 @@ QSet<QString> RosterModel::getGroups() const
     foreach (TreeItem *item, m_rootItem->childItems()) {
         sets << item->data();
     }
-    sets.remove(m_noGroupItem->data());
+    //sets.remove(m_noGroupItem->data());
     return sets;
 }
 

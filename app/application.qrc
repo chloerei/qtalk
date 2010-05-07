@@ -36,5 +36,6 @@
         <file>images/preferences-system-power-management.png</file>
         <file>images/dialog-ok-apply.png</file>
         <file>images/accessories-text-editor.png</file>
+        <file>images/folder-new.png</file>
     </qresource>
 </RCC>

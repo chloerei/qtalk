@@ -54,6 +54,8 @@ private slots:
     void actionDropSubsribe();
     void actionAllowSubsribe();
     void actionEditName();
+    void actionMoveToNewGroup();
+    void actionMoveToGroup();
     void showEventStack();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);

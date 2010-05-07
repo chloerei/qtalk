@@ -36,6 +36,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     ItemType itemTypeAt(const QModelIndex &index) const;
     QString jidAt(const QModelIndex &index) const;
+    QString groupAt(const QModelIndex &index) const;
     void messageUnread(const QString &bareJid, const QString &resource);
     void messageReaded(const QString &bareJid, const QString &resource);
     void messageReadedAll(const QString &bareJid);
