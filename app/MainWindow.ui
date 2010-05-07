@@ -97,15 +97,6 @@
         </item>
         <item>
          <property name="text">
-          <string>Invisible</string>
-         </property>
-         <property name="icon">
-          <iconset resource="application.qrc">
-           <normaloff>:/images/im-invisible-user.png</normaloff>:/images/im-invisible-user.png</iconset>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>Offline</string>
          </property>
          <property name="icon">
