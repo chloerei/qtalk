@@ -336,6 +336,15 @@
     <string>New Group</string>
    </property>
   </action>
+  <action name="actionCopyToNewGroup">
+   <property name="icon">
+    <iconset resource="application.qrc">
+     <normaloff>:/images/folder-new.png</normaloff>:/images/folder-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Group</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="application.qrc"/>

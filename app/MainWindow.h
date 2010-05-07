@@ -56,6 +56,8 @@ private slots:
     void actionEditName();
     void actionMoveToNewGroup();
     void actionMoveToGroup();
+    void actionCopyToNewGroup();
+    void actionCopyToGroup();
     void showEventStack();
     void openContactInfoDialog(QString jid);
     void messageReceived(const QXmppMessage&);
