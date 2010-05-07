@@ -18,12 +18,14 @@ public:
     void addSubscribeRequest(const QString &bareJid);
     void setAnimeVisible(bool visible);
     int count() const;
+    bool isEmpty() const;
 
 protected:
     void changeEvent(QEvent *e);
 
 signals:
     void countChanged(int count);
+    void infoEventCleared();
 
 private slots:
     void previousSlot();

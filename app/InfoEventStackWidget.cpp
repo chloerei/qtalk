@@ -29,6 +29,8 @@ InfoEventStackWidget::~InfoEventStackWidget()
 
 void InfoEventStackWidget::addSubscribeRequest(const QString &bareJid)
 {
+    if (ui->stackedWidget->count() == 0)
+        setAnimeVisible(true);
     InfoEventSubscribeRequest *widget = new InfoEventSubscribeRequest(bareJid, m_client);
     ui->stackedWidget->addWidget(widget);
     updatePage();
@@ -36,6 +38,7 @@ void InfoEventStackWidget::addSubscribeRequest(const QString &bareJid)
     connect(widget, SIGNAL(needDestory()),
             this, SLOT(destorySlot()) );
     emit countChanged(ui->stackedWidget->count());
+
 }
 
 void InfoEventStackWidget::setAnimeVisible(bool visible)
@@ -51,6 +54,11 @@ void InfoEventStackWidget::setAnimeVisible(bool visible)
 int InfoEventStackWidget::count() const
 {
     return ui->stackedWidget->count();
+}
+
+bool InfoEventStackWidget::isEmpty() const
+{
+    return ui->stackedWidget->count() == 0;
 }
 
 void InfoEventStackWidget::changeEvent(QEvent *e)
@@ -118,8 +126,10 @@ void InfoEventStackWidget::destorySlot()
     emit countChanged(ui->stackedWidget->count());
     sender()->deleteLater();
 
-    if (ui->stackedWidget->count() == 0)
+    if (ui->stackedWidget->count() == 0) {
         closeSlot();
+        emit infoEventCleared();
+    }
 }
 
 void InfoEventStackWidget::updatePage()
