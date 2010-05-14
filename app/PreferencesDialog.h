@@ -18,6 +18,7 @@ class PreferencesDialog : public QDialog {
 public:
     explicit PreferencesDialog(QWidget *parent = 0);
     ~PreferencesDialog();
+    bool isLanguageChanged();
     bool isAccountChanged();
     bool isRosterPrefChanged();
 

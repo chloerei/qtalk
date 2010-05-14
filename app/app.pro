@@ -29,6 +29,8 @@ PRE_TARGETDEPS += $${QXMPP_DIR}/lib$${QXMPP_LIB}.a
 
 RESOURCES = application.qrc
 
+TRANSLATIONS = translations/qtalk_zh_CN.ts
+
 SOURCES += main.cpp \
            MainWindow.cpp \
            ChatWindow.cpp \

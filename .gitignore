@@ -1,4 +1,5 @@
 tags
+app/translations/*.qm
 app/qtalk
 app/qtalk_d
 app/QXmppClientLog.log
@@ -6,5 +7,5 @@ app/ui_*.h
 app/release/*
 app/debug/*
 *Makefile*
-project.pro.user*
+qtalk.pro.user*
 .directory

@@ -11,6 +11,7 @@ public:
     void save();
 
     // General
+    QString language;
     bool hideOffline;
     bool showResources;
     bool showSingleResource;

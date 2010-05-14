@@ -1,5 +1,7 @@
 #include "PrefGeneral.h"
 #include "ui_PrefGeneral.h"
+#include <QDir>
+#include <QDebug>
 
 PrefGeneral::PrefGeneral(QWidget *parent) :
     PrefWidget(parent),
@@ -10,6 +12,17 @@ PrefGeneral::PrefGeneral(QWidget *parent) :
             this, SIGNAL(rosterIconSizeChanged(int)) );
     connect(ui->iconSizeSpinBox, SIGNAL(valueChanged(int)),
             this, SLOT(iconSizeChanged()) );
+
+    const QString trPath = QCoreApplication::applicationDirPath() + "/translations";
+    const QStringList languageFiles = QDir(trPath).entryList(QStringList("qtalk*.qm"));
+
+    ui->languageComboBox->addItem(QString("en"), QString("en"));
+    foreach (const QString languageFile, languageFiles) {
+        int start = languageFile.indexOf("_") + 1;
+        int end = languageFile.lastIndexOf('.');
+        const QString language = languageFile.mid(start, end - start);
+        ui->languageComboBox->addItem(language, language);
+    }
 }
 
 PrefGeneral::~PrefGeneral()
@@ -41,6 +54,21 @@ QString PrefGeneral::sectionName() const
 
 void PrefGeneral::readData(Preferences *pref)
 {
+    QString language;
+    if (pref->language.isEmpty()) {
+        language = "en";
+    } else {
+        language = pref->language;
+    }
+
+    int index = ui->languageComboBox->findData(language);
+    if (index != -1) {
+        ui->languageComboBox->setCurrentIndex(index);
+    } else {
+        ui->languageComboBox->setCurrentIndex(0);
+    }
+
+    m_languageChange = false;
     m_hideOfflineChange = false;
     m_showResourcesChange = false;
     m_showSingleResourceChange = false;
@@ -56,6 +84,12 @@ void PrefGeneral::readData(Preferences *pref)
 
 void PrefGeneral::writeData(Preferences *pref)
 {
+    QString language = ui->languageComboBox->itemData(ui->languageComboBox->currentIndex()).toString();
+    if (pref->language != language) {
+        m_languageChange = true;
+        pref->language = language;
+    }
+
     if (pref->hideOffline != ui->hideOfflineCheckBox->isChecked()) {
         m_hideOfflineChange = true;
         pref->hideOffline = ui->hideOfflineCheckBox->isChecked();
@@ -74,6 +108,11 @@ void PrefGeneral::writeData(Preferences *pref)
     pref->rosterIconSize = ui->iconSizeSpinBox->value();
     pref->closeToTray = ui->closeToTrayCheckBox->isChecked();
     pref->closeToTrayNotice = ui->closeToTrayNoticeCheckBox->isChecked();
+}
+
+bool PrefGeneral::isLanguageChanged() const
+{
+    return m_languageChange;
 }
 
 bool PrefGeneral::isRosterPrefChanged() const

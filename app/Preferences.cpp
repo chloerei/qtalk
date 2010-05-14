@@ -11,6 +11,7 @@ void Preferences::load()
 
     // General
     settings.beginGroup("general");
+    language = settings.value("language").toString();
     hideOffline = settings.value("hideOffline", false).toBool();
     showResources = settings.value("showResources", true).toBool();
     showSingleResource = settings.value("showSingleResource", false).toBool();
@@ -50,6 +51,7 @@ void Preferences::save()
 
     // General
     settings.beginGroup("general");
+    settings.setValue("language", language);
     settings.setValue("hideOffline", hideOffline);
     settings.setValue("showResources", showResources);
     settings.setValue("showSingleResource", showSingleResource);

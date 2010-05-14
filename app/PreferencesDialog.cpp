@@ -36,6 +36,11 @@ PreferencesDialog::~PreferencesDialog()
     delete ui;
 }
 
+bool PreferencesDialog::isLanguageChanged()
+{
+    return m_prefGeneral->isLanguageChanged();
+}
+
 bool PreferencesDialog::isAccountChanged()
 {
     return m_prefAccount->isChanged();

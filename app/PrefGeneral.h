@@ -18,6 +18,7 @@ public:
     QString sectionName() const;
     void readData(Preferences *pref);
     void writeData(Preferences *pref);
+    bool isLanguageChanged() const;
     bool isRosterPrefChanged() const;
     bool isRosterIconSizeChanged() const;
 
@@ -32,6 +33,7 @@ protected:
 
 private:
     Ui::PrefGeneral *ui;
+    bool m_languageChange;
     bool m_hideOfflineChange;
     bool m_showResourcesChange;
     bool m_showSingleResourceChange;
