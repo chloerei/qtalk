@@ -193,6 +193,18 @@ void ChatWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
+void ChatWindow::changeEvent(QEvent *e)
+{
+    QMainWindow::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui.retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
 void ChatWindow::pausedTimeout()
 {
     changeSelfState(QXmppMessage::Paused);

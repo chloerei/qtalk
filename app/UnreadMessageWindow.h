@@ -18,6 +18,9 @@ signals:
     void unreadListClicked(const QModelIndex &index);
     void readAll();
 
+protected:
+    void changeEvent(QEvent *e);
+
 private:
     Ui::UnreadMessageWindow ui;
 };

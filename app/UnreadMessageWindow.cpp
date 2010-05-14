@@ -17,3 +17,15 @@ void UnreadMessageWindow::setModel(QAbstractListModel *model)
 {
     ui.listView->setModel(model);
 }
+
+void UnreadMessageWindow::changeEvent(QEvent *e)
+{
+    QMainWindow::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui.retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
