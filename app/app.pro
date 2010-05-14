@@ -15,11 +15,11 @@ INCLUDEPATH += ../lib/QXmppClient/source
 CONFIG(debug, debug|release) {
     QXMPP_LIB = QXmppClient_d
     QXMPP_DIR = ../lib/QXmppClient/source/debug
-    TARGET = app_d
+    TARGET = qtalk_d
 } else {
     QXMPP_LIB = QXmppClient
     QXMPP_DIR = ../lib/QXmppClient/source/release
-    TARGET = app
+    TARGET = qtalk
 }
 
 LIBS += -L$$QXMPP_DIR -l$$QXMPP_LIB

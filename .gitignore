@@ -1,6 +1,6 @@
 tags
-app/app
-app/app_d
+app/qtalk
+app/qtalk_d
 app/QXmppClientLog.log
 app/ui_*.h
 app/release/*
