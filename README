@@ -11,7 +11,7 @@ Qt 4.6.2 or higher.
 Checkout source
 ===============
 
-git clone http://github.com/chloerei/qtalk
+git clone git://github.com/chloerei/qtalk.git
 
 Checkout submodule
 ==================
@@ -24,7 +24,7 @@ Build
 =====
 
 qmake
-make release
+make
 
 Run
 ===
