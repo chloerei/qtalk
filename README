@@ -1,15 +1,32 @@
 Author : Rei
 Email  : chloerei@gmail.com
 
-A XMPP GUI client. use QXMPP(http://code.google.com/p/qxmpp/)
+A XMPP GUI client. use QXMPP library(http://code.google.com/p/qxmpp/), base on Qt.
+
+Dependence
+==========
+
+Qt 4.6.2 or higher.
 
 Checkout source
 ===============
 
-git clone ###
+git clone http://github.com/chloerei/qtalk
 
 Checkout submodule
 ==================
 
+cd qtalk
 git submodule init
 git submodule update
+
+Build
+=====
+
+qmake
+make release
+
+Run
+===
+
+./app/qtalk

@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setOrganizationName("chloerei");
     QCoreApplication::setOrganizationDomain("chloerei.com");
-    QCoreApplication::setApplicationName("qxmpp");
+    QCoreApplication::setApplicationName("qtalk");
 
     MainWindow mainWindow;
     mainWindow.show();
