@@ -9,6 +9,7 @@
 #include <QXmppClient.h>
 #include <Preferences.h>
 #include <QXmppVCard.h>
+#include <QTranslator>
 
 class AddContactDialog;
 class ChatWindow;
@@ -119,10 +120,12 @@ private:
     CloseNoticeDialog *m_closeToTrayDialog;
     TransferManagerWindow *m_transferManagerWindow;
     AddContactDialog *m_addContactDialog;
+    QTranslator m_translator;
 
     
     void setupTrayIcon();
     void createUnreadMessageWindow();
+    void retranslate();
 };
 
 #endif
