@@ -34,7 +34,6 @@ TRANSLATIONS = translations/qtalk_zh_CN.ts
 SOURCES += main.cpp \
            MainWindow.cpp \
            ChatWindow.cpp \
-           XmppClient.cpp \
            XmppMessage.cpp \
            RosterModel.cpp \
            UnreadMessageWindow.cpp \
@@ -56,7 +55,6 @@ SOURCES += main.cpp \
     InfoEventSubscribeRequest.cpp
 HEADERS += MainWindow.h \
            ChatWindow.h \
-           XmppClient.h \
            XmppMessage.h \
            RosterModel.h  \
            UnreadMessageWindow.h \

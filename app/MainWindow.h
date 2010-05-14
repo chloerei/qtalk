@@ -28,7 +28,6 @@ class RosterTreeView;
 class TransferManagerWindow;
 class UnreadMessageModel;
 class UnreadMessageWindow;
-class XmppClient;
 
 class MainWindow : public QMainWindow
 {
@@ -102,7 +101,7 @@ protected:
 private:
     Ui::MainWindow ui;
     Preferences m_preferences;
-    XmppClient *m_client;
+    QXmppClient *m_client;
     InfoEventStackWidget *m_infoEventStackWidget;
     QIcon *m_infoEventNone;
     QIcon *m_infoEventExist;
