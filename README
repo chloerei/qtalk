@@ -3,6 +3,11 @@ Email  : chloerei@gmail.com
 
 A XMPP GUI client. use QXMPP library(http://code.google.com/p/qxmpp/), base on Qt.
 
+License
+=======
+
+GPLv3
+
 Dependence
 ==========
 
