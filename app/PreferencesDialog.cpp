@@ -78,6 +78,7 @@ void PreferencesDialog::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
+        retranslation();
         break;
     default:
         break;
@@ -89,4 +90,11 @@ void PreferencesDialog::addSection(PrefWidget *widget)
     ui->sections->addItem(new QListWidgetItem(widget->sectionIcon(), widget->sectionName()));
     ui->pages->addWidget(widget);
     m_sections << widget;
+}
+
+void PreferencesDialog::retranslation()
+{
+    for (int i = 0; i < ui->sections->count(); i++) {
+        ui->sections->item(i)->setText(m_sections.at(i)->sectionName());
+    }
 }

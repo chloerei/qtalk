@@ -30,6 +30,8 @@ ChatWindow::ChatWindow(QString jid, QXmppClient *client, QWidget *parent) :
 {
     ui.setupUi(this);
 
+    setWindowTitle(QString(tr("Contact: %1")).arg(m_jid));
+
     m_editor = new MessageEdit();
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(m_editor);
@@ -37,7 +39,7 @@ ChatWindow::ChatWindow(QString jid, QXmppClient *client, QWidget *parent) :
     ui.editorWarpwidget->setLayout(layout);
     m_editor->setFocus();
 
-    m_sendButton->setText("Send");
+    m_sendButton->setText(tr("Send"));
     m_sendButton->setFixedHeight(m_statusBar->sizeHint().height());
     m_statusBar->addPermanentWidget(m_sendTip);
     m_statusBar->addPermanentWidget(m_sendButton);
@@ -130,22 +132,22 @@ void ChatWindow::changeState(QXmppMessage::State state)
     QString stateStr;
     switch (state) {
         case QXmppMessage::None :
-            stateStr = "None";
+            stateStr = tr("None");
             break;
         case QXmppMessage::Active :
-            stateStr = "Active";
+            stateStr = tr("Active");
             break;
         case QXmppMessage::Inactive :
-            stateStr = "Inactive";
+            stateStr = tr("Inactive");
             break;
         case QXmppMessage::Gone :
-            stateStr = "Gone";
+            stateStr = tr("Gone");
             break;
         case QXmppMessage::Composing :
-            stateStr = "Composing";
+            stateStr = tr("Composing");
             break;
         case QXmppMessage::Paused :
-            stateStr = "Paused";
+            stateStr = tr("Paused");
             break;
         default:
             break;
@@ -229,7 +231,7 @@ void ChatWindow::openContactInfoDialog()
 void ChatWindow::sendFileSlot()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
-                                                    "Select File",
+                                                    tr("Select File"),
                                                     QDesktopServices::storageLocation(QDesktopServices::DesktopLocation));
 
     if (fileName.isEmpty())

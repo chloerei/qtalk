@@ -45,6 +45,7 @@ private:
     PrefChatWindow *m_prefChatWindow;
 
     void addSection(PrefWidget *widget);
+    void retranslation();
 };
 
 #endif // PREFERENCESDIALOG_H

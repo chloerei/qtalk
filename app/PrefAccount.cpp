@@ -21,7 +21,7 @@ QIcon PrefAccount::sectionIcon() const
 
 QString PrefAccount::sectionName() const
 {
-    return "Account";
+    return tr("Account");
 }
 
 void PrefAccount::changeEvent(QEvent *e)

@@ -32,7 +32,7 @@ QIcon PrefChatWindow::sectionIcon() const
 
 QString PrefChatWindow::sectionName() const
 {
-    return "ChatWindow";
+    return tr("ChatWindow");
 }
 
 void PrefChatWindow::readData(Preferences *pref)

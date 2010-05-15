@@ -49,7 +49,7 @@ void PrefGeneral::changeEvent(QEvent *e)
 
 QString PrefGeneral::sectionName() const
 {
-    return QString("General");
+    return tr("General");
 }
 
 void PrefGeneral::readData(Preferences *pref)
