@@ -114,7 +114,13 @@ void ChatWindow::appendMessage(const QXmppMessage &o_message)
         } else {
             ui.messageBrowser->append(message.html());
         }
+
+        if (!isActiveWindow()) {
+            // notice new message
+            activateWindow();
+        }
     }
+
 }
 
 void ChatWindow::readPref(Preferences *pref)
