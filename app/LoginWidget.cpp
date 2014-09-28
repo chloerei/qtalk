@@ -97,7 +97,7 @@ void LoginWidget::unlock()
 
 void LoginWidget::showState(QString str)
 {
-    ui->stateLabel->setText(str);;
+    ui->stateLabel->setText(str);
 }
 
 void LoginWidget::clickedLogin()
